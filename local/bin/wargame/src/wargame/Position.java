@@ -24,7 +24,7 @@ public class Position implements IConfig {
 	}
 
 	public boolean estValide() {
-		if (x<0 || x>=LARGEUR_CARTE || y<0 || y>=HAUTEUR_CARTE) 
+		if (x < 0 || x >= LARGEUR_CARTE || y < 0 || y >= HAUTEUR_CARTE) 
 			return false; 
 		else 
 			return true;
