@@ -2,7 +2,8 @@ package wargame;
 
 public interface ISoldat {
 	static enum TypesH {
-		HUMAIN (10,3,10,2), NAIN (20,1,20,0), ELF (20,5,10,6), HOBBIT (5,3,5,2);
+		HUMAIN (10,3,10,2), NAIN (20,1,20,0), ELFE (20,5,10,6), HOBBIT (5,3,5,2);
+		
 		private final int POINTS_DE_VIE, PORTEE_VISUELLE, PUISSANCE, TIR;
 
 		TypesH(int points, int portee, int puissance, int tir) {
@@ -10,10 +11,22 @@ public interface ISoldat {
 			PUISSANCE = puissance; TIR = tir;
 		}
 
-		public int getPoints() { return POINTS_DE_VIE; }
-		public int getPortee() { return PORTEE_VISUELLE; }
-		public int getPuissance() { return PUISSANCE; }
-		public int getTir() { return TIR; }
+		public int getPoints() { 
+			return POINTS_DE_VIE; 
+		}
+
+		public int getPortee() { 
+			return PORTEE_VISUELLE; 
+		}
+
+		public int getPuissance() { 
+			return PUISSANCE; 
+		}
+
+		public int getTir() { 
+			return TIR; 
+		}
+
 
 		public static TypesH getTypeHAlea() {
 			return values()[(int)(Math.random()*values().length)];

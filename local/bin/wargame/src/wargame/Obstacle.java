@@ -3,6 +3,7 @@ package wargame;
 import java.awt.*;
 
 public class Obstacle extends Element {
+	
 	public enum TypeObstacle {
 		ROCHER (COULEUR_ROCHER), FORET (COULEUR_FORET), EAU (COULEUR_EAU);
 
@@ -20,7 +21,8 @@ public class Obstacle extends Element {
 	private TypeObstacle TYPE;
 
 	Obstacle(TypeObstacle type, Position pos) { 
-		TYPE = type; this.pos = pos; 
+		TYPE = type; 
+		this.pos = pos; 
 	}
 
 	public String toString() { 
