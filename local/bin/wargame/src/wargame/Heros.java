@@ -1,24 +1,24 @@
 package wargame;
 
-public class Heros extends Soldat implements ICarte{
-	
-	
-	Heros(TypesH type_heros){
-		this.vie = type_heros.getPoints();
-		this.portee = type_heros.getPortee();
-		this.puissance = type_heros.getPuissance();
-		this.tir = type_heros.getTir();
-		this.position = trouvePositionVide(); //ICarte pour la définition de la fonction
-		
+public class Heros extends Soldat implements ICarte
+{	
+	Heros(TypesH type_heros)
+	{
+		vie = type_heros.getPoints();
+		portee = type_heros.getPortee();
+		puissance = type_heros.getPuissance();
+		tir = type_heros.getTir();
+		//position = trouvePositionVide();
 	}
 	
-	/* Crée un hero perso */
-	Heros(int heal, int range, int power, int shoot){
-		this.vie = heal;
-		this.portee = range;
-		this.puissance = power;
-		this.tir = shoot;
-		this.position = trouvePositionVide();
+	/* Crée un heros personnalisable. */
+	Heros(int vie, int portee, int puissance, int tir)
+	{
+		this.vie = vie;
+		this.portee = portee;
+		this.puissance = puissance;
+		this.tir = tir;
+	//	this.position = trouvePositionVide();
 	}
 
 }

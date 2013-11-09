@@ -3,8 +3,8 @@ package wargame;
 import java.awt.Graphics;
 
 public interface ICarte {
-	Element getElement(Position pos);
-
+ //	Element getElement(Position pos);
+/*
 	Position trouvePositionVide(); // Trouve aléatoirement une position vide sur la carte
 	Position trouvePositionVide(Position pos); // Trouve une position vide choisie aléaléatoirement parmi les 8 positions adjacentes de pos
 
@@ -14,7 +14,9 @@ public interface ICarte {
 	boolean deplaceSoldat(Position pos, Soldat soldat);
 	void mort(Soldat perso);
 	boolean actionHeros(Position pos, Position pos2);
-	void jouerSoldats(PanneauJeu pj);
+//	void jouerSoldats(PanneauJeu pj);
 	
 	void toutDessiner(Graphics g);
+	
+	*/
 }
