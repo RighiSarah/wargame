@@ -3,7 +3,10 @@ package wargame;
 import java.util.Scanner;
 
 public class Soldat implements ISoldat, IConfig{
-	Heros heros = new Heros();
+	protected int vie, portee, puissance, tir; 
+	
+	
+	
 	public void joueTour(int tour){
 		Scanner sc = new Scanner(System.in);
 		for (int i = 0; i < IConfig.NB_HEROS; i++) {
@@ -65,6 +68,38 @@ public class Soldat implements ISoldat, IConfig{
 		sc.close();
 	}
 	
+	public int getVie() {
+		return vie;
+	}
+
+	public void setVie(int vie) {
+		this.vie = vie;
+	}
+
+	public int getPortee() {
+		return portee;
+	}
+
+	public void setPortee(int portee) {
+		this.portee = portee;
+	}
+
+	public int getPuissance() {
+		return puissance;
+	}
+
+	public void setPuissance(int puissance) {
+		this.puissance = puissance;
+	}
+
+	public int getTir() {
+		return tir;
+	}
+
+	public void setTir(int tir) {
+		this.tir = tir;
+	}
+
 	public void combat(Soldat soldat){
 		
 	}
