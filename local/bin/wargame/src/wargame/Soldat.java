@@ -1,25 +1,21 @@
 package wargame;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
 public abstract class Soldat extends Charset implements ISoldat, IConfig
 {
 	protected int vie, portee, puissance, tir;
-	protected Point position;
-
-
 
 	/** Est mort ? */
 	protected boolean est_mort = false;
 	
-	Soldat()
-	{
-		
-	}
+	Soldat() {}
 
+	abstract protected void dessineVie(Graphics g, int x, int y);
+	
 	public int getVie() 
 	{
 		return vie;
@@ -59,15 +55,7 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	{
 		this.tir = tir;
 	}
-	
-	public Point getPosition() {
-		return position;
-	}
-
-	public void setPosition(Point position) {
-		this.position = position;
-	}
-	
+		
 	/** Mettre le status du personnage à mort. */
 	public void setMort()
 	{

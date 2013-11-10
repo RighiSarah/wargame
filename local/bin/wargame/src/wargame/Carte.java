@@ -184,7 +184,20 @@ public class Carte extends JPanel implements ActionListener
 		/* Affichage des personnages. */
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null)
-				soldat[i].dessiner(g, i % IConfig.LARGEUR_CARTE, i / IConfig.LARGEUR_CARTE);		
+			{
+				int x = i % IConfig.LARGEUR_CARTE;
+				int y = i / IConfig.LARGEUR_CARTE;
+				soldat[i].dessiner(g, x, y);		
+			}
+		
+		/* Affichage des barres de vie. */
+		for(int i = 0; i < soldat.length; i++)
+			if(soldat[i] != null)
+			{
+				int x = i % IConfig.LARGEUR_CARTE;
+				int y = i / IConfig.LARGEUR_CARTE;				
+				soldat[i].dessineVie(g, x, y);
+			}
 	}
     
 	public void actionPerformed(ActionEvent e) 

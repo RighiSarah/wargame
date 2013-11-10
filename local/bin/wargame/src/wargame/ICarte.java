@@ -5,7 +5,6 @@ import java.awt.Point;
 public interface ICarte {
  //	Element getElement(Position pos);
 /*
-	Position trouvePositionVide(Position pos); // Trouve une position vide choisie aléaléatoirement parmi les 8 positions adjacentes de pos
 
 	Heros trouveHeros(); // Trouve aléatoirement un héros sur la carte
 	Heros trouveHeros(Position pos); // Trouve un héros choisi aléatoirement parmi les 8 positions adjacentes de pos
@@ -15,7 +14,6 @@ public interface ICarte {
 	boolean actionHeros(Position pos, Position pos2);
 //	void jouerSoldats(PanneauJeu pj);	
 	*/
-	
 	
 	/** Genere aléatoirement une carte. */
 	void generer();
