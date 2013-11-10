@@ -8,7 +8,8 @@ import java.util.Scanner;
 public abstract class Soldat extends Charset implements ISoldat, IConfig
 {
 	protected int vie, portee, puissance, tir;
-
+	protected String nom;
+	
 	/** Est mort ? */
 	protected boolean est_mort = false;
 	

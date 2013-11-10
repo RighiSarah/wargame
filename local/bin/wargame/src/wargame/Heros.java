@@ -16,6 +16,23 @@ public class Heros extends Soldat
 	/* Vie max du Héros. */
 	private final int VIE_MAX;
 
+	protected void setImage() throws IOException
+	{
+		switch(nom)
+		{
+			case "archer":				
+				if(archer == null) archer = ImageIO.read(new File(IConfig.ARCHER));
+				image = archer;
+				break;
+			case "elfe":				
+				if(elfe == null) elfe = ImageIO.read(new File(IConfig.ELFE));
+				image = elfe;
+				break;
+				
+			default: break;
+		}
+	}
+	
 	Heros(TypesH type_heros) throws IOException
 	{
 		super();
@@ -24,20 +41,9 @@ public class Heros extends Soldat
 		portee = type_heros.getPortee();
 		puissance = type_heros.getPuissance();
 		tir = type_heros.getTir();
+		nom = type_heros.getNom();
 		
-		switch(type_heros.getNom())
-		{
-			case "archer":				
-				if(archer == null) archer = ImageIO.read(new File("archer.png"));
-				image = archer;
-				break;
-			case "elfe":				
-				if(elfe == null) elfe = ImageIO.read(new File("elfe.png"));
-				image = elfe;
-				break;
-				
-			default: break;
-		}
+		setImage();
 	}
 	
 	/** Dessine la barre de vie du Héros. */

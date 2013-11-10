@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 
 public class Monstre extends Soldat 
 {	
@@ -16,6 +17,24 @@ public class Monstre extends Soldat
 	/* Vie max du monstre. */
 	private final int VIE_MAX;
 
+	protected void setImage() throws IOException
+	{
+		switch(nom)
+		{
+			case "gobelin":				
+				if(gobelin == null) gobelin = ImageIO.read(new File(IConfig.GOBELIN));
+				image = gobelin;
+				break;
+			case "orc":				
+				if(orc == null) orc = ImageIO.read(new File(IConfig.ORC));
+				image = orc;
+				this.setOffset(20); // La lance de l'orc prend un peu de place...
+				break;
+				
+			default: break;
+		}
+	}
+	
 	Monstre(TypesM type_monstre) throws IOException
 	{
 		super();
@@ -24,21 +43,9 @@ public class Monstre extends Soldat
 		portee = type_monstre.getPortee();
 		puissance = type_monstre.getPuissance();
 		tir = type_monstre.getTir();
+		nom = type_monstre.getNom();
 		
-		switch(type_monstre.getNom())
-		{
-			case "gobelin":				
-				if(gobelin == null) gobelin = ImageIO.read(new File("gobelin.png"));
-				image = gobelin;
-				break;
-			case "orc":				
-				if(orc == null) orc = ImageIO.read(new File("orc.png"));
-				image = orc;
-				this.setOffset(20); // La lance de l'orc prend un peu de place...
-				break;
-				
-			default: break;
-		}
+		setImage();
 	}
 	
 	/** Dessine la barre de vie du Monstre. */

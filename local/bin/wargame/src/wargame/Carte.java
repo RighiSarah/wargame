@@ -55,13 +55,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];
 	}
 	
-	private void genererCarte()
+	private void chargerTileset()
 	{
-		int x, y;
-		
-		soldat = new Soldat[IConfig.LARGEUR_CARTE * IConfig.HAUTEUR_CARTE];
-		
-		/* Chargement du tileset. */
 		if(tileset == null)
 			try {
 				tileset = new Tileset(IConfig.NOM_TILESET);
@@ -69,7 +64,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			catch(IOException e) {
 				System.out.println(e);
 				return;
-			}	
+			}		
+	}
+	
+	private void genererCarte()
+	{
+		int x, y;
+		
+		soldat = new Soldat[IConfig.LARGEUR_CARTE * IConfig.HAUTEUR_CARTE];
+		chargerTileset();
 		
 		/* Couche d'herbe. */
 		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++)
@@ -167,8 +170,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		Point point = new Point();
 
 		do {
-			point.setLocation(dec * (IConfig.LARGEUR_CARTE / 2) + (int)(Math.random() * (IConfig.LARGEUR_CARTE / 2)), 
-					          dec * (IConfig.HAUTEUR_CARTE / 2)  + (int)(Math.random() * (IConfig.HAUTEUR_CARTE / 2)));
+			point.setLocation(dec * (IConfig.LARGEUR_CARTE / 2) + dec + (int)(Math.random() * (IConfig.LARGEUR_CARTE / 2)), 
+					          (int)(Math.random() * IConfig.HAUTEUR_CARTE));
 			
 			num_tile = carte[point.x + IConfig.LARGEUR_CARTE * point.y];
 			tile = tileset.getTile(num_tile);
@@ -201,7 +204,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 	
 	/** Charge une carte.
-	 * 
 	 * @param num Numéro de la sauvegarde.
 	 */
 	void charge(int num)
@@ -214,12 +216,21 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			monstre = (Monstre[])ois.readObject();
 			heros   = (Heros[])ois.readObject();
 			soldat  = (Soldat[])ois.readObject();
-
+			
+			/** Les images ne sont pas sérializées... */
+			for(int i = 0; i < IConfig.NB_HEROS; i++)
+				heros[i].setImage();
+			
+			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
+				monstre[i].setImage();
+			
+			chargerTileset(); // Charge uniquement si tileset null.
+			generer = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
 		}
 		catch(java.io.IOException e) {
 			e.printStackTrace();
 		}
-		catch (ClassNotFoundException e) {
+		catch(ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
