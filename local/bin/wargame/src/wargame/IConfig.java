@@ -4,6 +4,9 @@ import java.awt.Color;
 
 public interface IConfig 
 {
+	/** Nombre de sauvegardes possibles. */
+	int NB_SAUVEGARDES = 10;
+	
 	/** Nom du tileset. */
 	String NOM_TILESET = "tileset.png";
 
@@ -24,10 +27,10 @@ public interface IConfig
 	int POSITION_X = 100; 
 	int POSITION_Y = 50;
 	
-	/** Nombre de Héros. (>= 2) */
+	/** Nombre de Héros. */
 	int NB_HEROS = 20; 
 	
-	/** Nombre de Monstres. (>= 2) */
+	/** Nombre de Monstres. */
 	int NB_MONSTRES = 35; 
 
 	/** Nombre d'obstacles. */
