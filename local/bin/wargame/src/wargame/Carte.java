@@ -118,9 +118,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Chargement des soldats de base. */
 		try {
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
+			{
 				heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea());
+				heros[i].setDirection(Charset.GAUCHE);
+			}
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
+			{
 				monstre[i] = new Monstre(ISoldat.TypesM.getTypeMAlea());
+				monstre[i].setDirection(Charset.DROITE);
+			}
 		} 
 		catch(IOException e) {
 			System.out.println(e);
@@ -181,7 +187,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 	
 	/** Sauvegarde une carte.
-	 * 
 	 * @param num Numéro de la sauvegarde.
 	 */
 	public void sauvegarde(int num)
@@ -219,13 +224,21 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			
 			/** Les images ne sont pas sérializées... */
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
+			{
 				heros[i].setImage();
+				heros[i].setDirection(Charset.GAUCHE);
+			}
 			
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
+			{
 				monstre[i].setImage();
+				monstre[i].setDirection(Charset.DROITE);
+			}
 			
 			chargerTileset(); // Charge uniquement si tileset null.
 			generer = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
+			
+			ois.close();
 		}
 		catch(java.io.IOException e) {
 			e.printStackTrace();
@@ -254,7 +267,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Affichage des personnages. */
 		for(int i = 0; i < soldat.length; i++)
-			if(soldat[i] != null)
+			if(soldat[i] != null && soldat[i].estVisible())
 			{
 				int x = i % IConfig.LARGEUR_CARTE;
 				int y = i / IConfig.LARGEUR_CARTE;
@@ -263,7 +276,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Affichage des barres de vie. */
 		for(int i = 0; i < soldat.length; i++)
-			if(soldat[i] != null)
+			if(soldat[i] != null && !soldat[i].estMort())
 			{
 				int x = i % IConfig.LARGEUR_CARTE;
 				int y = i / IConfig.LARGEUR_CARTE;				

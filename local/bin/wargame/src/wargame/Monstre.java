@@ -28,7 +28,7 @@ public class Monstre extends Soldat
 			case "orc":				
 				if(orc == null) orc = ImageIO.read(new File(IConfig.ORC));
 				image = orc;
-				this.setOffset(20); // La lance de l'orc prend un peu de place...
+			//	this.setOffset(20);
 				break;
 				
 			default: break;

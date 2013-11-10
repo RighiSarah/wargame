@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
@@ -35,7 +36,7 @@ public class Charset implements ActionListener
 	protected char animation = 0;
 	
 	/** Délai entre chaque animation. */
-	protected int delai = 150;
+	protected int delai = 200;
 			
 	/** Timer. */
 	Timer timer;
