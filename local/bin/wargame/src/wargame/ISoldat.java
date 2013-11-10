@@ -1,8 +1,9 @@
 package wargame;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public interface ISoldat 
+public interface ISoldat extends Serializable
 {
 	public static final char MONSTRE = 1;
 	public static final char HUMAIN = 2;

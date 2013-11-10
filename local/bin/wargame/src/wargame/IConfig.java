@@ -7,6 +7,9 @@ public interface IConfig
 	/** Nombre de sauvegardes possibles. */
 	int NB_SAUVEGARDES = 10;
 	
+	/** Nom d'un fichier de sauvegarder. */
+	String NOM_SAUVEGARDE = "wargame";
+	
 	/** Nom du tileset. */
 	String NOM_TILESET = "tileset.png";
 

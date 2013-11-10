@@ -4,7 +4,12 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -12,10 +17,8 @@ import javax.swing.Timer;
 /** Classe de la Carte du jeu.
 *	@author ABHAMON Ronan 
 */
-public class Carte extends JPanel implements ActionListener
-{
-	static final long serialVersionUID = 0;
-	
+public class Carte extends JPanel implements ActionListener, Serializable
+{	
 	/** Nombre de FPS pour la carte. */
 	private static final double FPS = 60.0;
 	
@@ -172,6 +175,53 @@ public class Carte extends JPanel implements ActionListener
 		} while(soldat[num_tile] != null || !tile.estPraticable());
 
 		return point;
+	}
+	
+	/** Sauvegarde une carte.
+	 * 
+	 * @param num Numéro de la sauvegarde.
+	 */
+	public void sauvegarde(int num)
+	{
+		try {
+			FileOutputStream fichier = new FileOutputStream(IConfig.NOM_SAUVEGARDE + num + ".ser");
+			ObjectOutputStream oos = new ObjectOutputStream(fichier);
+			
+			oos.writeObject(carte);
+			oos.writeObject(monstre);
+			oos.writeObject(heros);
+			oos.writeObject(soldat);
+
+			oos.flush();
+			oos.close();
+		}
+		catch(java.io.IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/** Charge une carte.
+	 * 
+	 * @param num Numéro de la sauvegarde.
+	 */
+	void charge(int num)
+	{
+		try {
+			FileInputStream fichier = new FileInputStream(IConfig.NOM_SAUVEGARDE + num + ".ser");
+			ObjectInputStream ois = new ObjectInputStream(fichier);
+			
+			carte   = (char[])ois.readObject();
+			monstre = (Monstre[])ois.readObject();
+			heros   = (Heros[])ois.readObject();
+			soldat  = (Soldat[])ois.readObject();
+
+		}
+		catch(java.io.IOException e) {
+			e.printStackTrace();
+		}
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
     protected void paintComponent(Graphics g) 

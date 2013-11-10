@@ -1,9 +1,11 @@
 package wargame;
 
+import java.io.Serializable;
+
 /** Case d'un tileset.
  * @author ABHAMON Ronan 
 */
-public class Tile 
+public class Tile
 {
 	/** Praticabilité. Une personne peut-elle marcher dessus ? */
 	private boolean praticable;

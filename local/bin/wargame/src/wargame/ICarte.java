@@ -32,4 +32,16 @@ public interface ICarte {
 	 * @return     La position vide.
 	 * */
 	Point trouvePositionVide(char type);
+	
+	/** Sauvegarde une carte.
+	 * 
+	 * @param num Numéro de la sauvegarde.
+	 */
+	void sauvegarde(int num);
+	
+	/** Charge une carte.
+	 * 
+	 * @param num Numéro de la sauvegarde.
+	 */
+	void charge(int num);
 }

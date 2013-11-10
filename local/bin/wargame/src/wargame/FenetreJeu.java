@@ -13,8 +13,6 @@ import java.awt.event.ActionListener;
 
 public class FenetreJeu extends JFrame
 {
-	private static final long serialVersionUID = 1;
-
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;
@@ -101,7 +99,8 @@ public class FenetreJeu extends JFrame
 	    nouveau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				((Carte)carte).generer();				
+				((Carte)carte).generer();			
+				((Carte)carte).sauvegarde(5);
 			}
 		});
 	    		
