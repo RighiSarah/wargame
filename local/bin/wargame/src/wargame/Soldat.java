@@ -7,7 +7,10 @@ import java.util.Scanner;
 
 public abstract class Soldat extends Charset implements ISoldat, IConfig
 {
-	protected int vie, portee, puissance, tir; 
+	protected int vie, portee, puissance, tir;
+	protected Point position;
+
+
 
 	/** Est mort ? */
 	protected boolean est_mort = false;
@@ -57,6 +60,14 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		this.tir = tir;
 	}
 	
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+	
 	/** Mettre le status du personnage à mort. */
 	public void setMort()
 	{
@@ -103,7 +114,7 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 					/*******************************************/
 					/* A CORRIGER - VERIFIER POSITION PERSONNE */
 					/*******************************************/
-		if ( 1 ) { // position de la personne mettre la fonction
+		if ( true ) { // position de la personne mettre la fonction
 			type_combat = 1;
 			attaque_attaquant = this.getTir();
 			attaque_defenseur = soldat.getTir();
@@ -116,21 +127,21 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		
 		//penser a faire le rand d'attaque entre 0 et la puissance a chaque coup
 
-		while ( vie_defenseur > 0 && vie_attaquant > 0) {
-			( tour == 0 ) ? 
-					(type_combat == 0) ? degat = alea(0,attaque_attaquant) : degat = attaque_attaquant //attaquant
-			:		(type_combat == 0) ? degat = alea(0,attaque_defenseur) : degat = attaque_defenseur; // défenseur
-			// Affichage du tour
-			System.out.println("Attaque"+(tour == 0) ? "l'attaquant" : "du défenseur");
-			// nombre de dégat fait 
-			System.out.println("Degat fait par " + (tour == 0) ? "l'attaquant : " : "le défenseur : " + degat);
-			// calcule des dégats
-			(tour == 0 ) ? vie_defenseur -= degat : vie_attaquant -= degat;
-			// affichage de la vie de la personne apres degat 
-			System.out.println("Vie restant : "+(tour == 0) ? vie_def : vie_attaquant);
-			// changement du tour
-			(tour == 0) ? tour = 1 : tour = 0;
-		}
+//		while ( vie_defenseur > 0 && vie_attaquant > 0) {
+//			( tour == 0 ) ? 
+//					(type_combat == 0) ? degat = alea(0,attaque_attaquant) : degat = attaque_attaquant //attaquant
+//			:		(type_combat == 0) ? degat = alea(0,attaque_defenseur) : degat = attaque_defenseur; // défenseur
+//			// Affichage du tour
+//			System.out.println("Attaque"+(tour == 0) ? "l'attaquant" : "du défenseur");
+//			// nombre de dégat fait 
+//			System.out.println("Degat fait par " + (tour == 0) ? "l'attaquant : " : "le défenseur : " + degat);
+//			// calcule des dégats
+//			(tour == 0 ) ? vie_defenseur -= degat : vie_attaquant -= degat;
+//			// affichage de la vie de la personne apres degat 
+//			System.out.println("Vie restant : "+(tour == 0) ? vie_def : vie_attaquant);
+//			// changement du tour
+//			(tour == 0) ? tour = 1 : tour = 0;
+//		}
 		
 		soldat.setVie(vie_defenseur);
 		this.setVie(vie_attaquant);
