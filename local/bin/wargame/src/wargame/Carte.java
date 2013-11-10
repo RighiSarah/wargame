@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.swing.JPanel;
@@ -22,11 +23,17 @@ public class Carte extends JPanel implements ActionListener
 	/** Tileset de la carte. */
 	private Tileset tileset;
 	
-	/** Tableau des personnages de la carte. */
-	private Charset []charset;
-	
 	/** Carte. */
 	protected char []carte;
+	
+	/** Monstres. */
+	private Monstre []monstre;
+	
+	/** Table de jeu de la carte. */
+	private Soldat []soldat;
+	
+	/* Héros. */
+	private Heros []heros;
 	
 	/** Timer. */
 	Timer timer;
@@ -39,25 +46,26 @@ public class Carte extends JPanel implements ActionListener
 	    timer.setInitialDelay(0);
 	    timer.start();
 	    
+	    /* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];
-		
-	    /* Personnages. */
-	    charset = new Charset[2];
-	    		
-		try {
-			charset[0] = new Charset("elfe.png");
-			charset[1] = new Charset("archer.png");
-			tileset = new Tileset("tileset.png");
-		} 
-		catch(IOException e) {
-			System.out.println(e);
-		}
 	}
 	
-	/** Genere aléatoirement une carte. */
-	public void generer()
+	private void genererCarte()
 	{
 		int x, y;
+		
+		soldat = new Soldat[IConfig.LARGEUR_CARTE * IConfig.HAUTEUR_CARTE];
+		
+		/* Chargement du tileset. */
+		if(tileset == null)
+			try {
+				tileset = new Tileset(IConfig.NOM_TILESET);
+			} 
+			catch(IOException e) {
+				System.out.println(e);
+				return;
+			}	
+		
 		/* Couche d'herbe. */
 		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++)
 			tileset.setHerbe(this, i % IConfig.LARGEUR_CARTE, i / IConfig.LARGEUR_CARTE);
@@ -89,6 +97,43 @@ public class Carte extends JPanel implements ActionListener
 		}
 	}
 	
+	private void genererSoldats()
+	{
+		/* Tableaux de soldats. */
+		heros = new Heros[IConfig.NB_HEROS];
+		monstre = new Monstre[IConfig.NB_MONSTRES];
+
+		/* Chargement des soldats de base. */
+		try {
+			for(int i = 0; i < IConfig.NB_HEROS; i++)
+				heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea());
+			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
+				monstre[i] = new Monstre(ISoldat.TypesM.getTypeMAlea());
+		} 
+		catch(IOException e) {
+			System.out.println(e);
+			return;
+		}	
+
+		/* Positionnement des soldats. */
+		for(int i = 0; i < IConfig.NB_HEROS; i++) {
+			Point point = trouvePositionVide(Soldat.HUMAIN);
+			soldat[point.x + IConfig.LARGEUR_CARTE * point.y] = heros[i];
+		}
+				
+		for(int i = 0; i < IConfig.NB_MONSTRES; i++) {
+			Point point = trouvePositionVide(Soldat.MONSTRE);
+			soldat[point.x + IConfig.LARGEUR_CARTE * point.y] = monstre[i];
+		}
+	}
+	
+	/** Genere aléatoirement une carte. */
+	public void generer()
+	{
+		genererCarte();
+		genererSoldats();
+	}
+	
 	/* Teste si une case existe sur la Carte.
 	 * @param x Coordonnée x.
 	 * @param y Coordonnée y.
@@ -97,6 +142,29 @@ public class Carte extends JPanel implements ActionListener
 	public boolean existe(int x, int y)
 	{
 		return !(x < 0 || y < 0 || x >= IConfig.LARGEUR_CARTE || y >= IConfig.HAUTEUR_CARTE);
+	}
+	
+	/** Trouve une position vide aléatoirement sur la carte. 
+	 * Utilisable pour placer des Soldats.
+	 * @param type Type de Soldat (Soldat.HOMME ou Soldat.MONSTRE)
+	 * @return     La position vide.
+	 * */
+	public Point trouvePositionVide(char type)
+	{	
+		int dec = type == Soldat.HUMAIN ? 1 : 0;
+		int num_tile;
+		Tile tile;
+		Point point = new Point();
+
+		do {
+			point.setLocation(dec * (IConfig.LARGEUR_CARTE / 2) + (int)(Math.random() * (IConfig.LARGEUR_CARTE / 2)), 
+					          dec * (IConfig.HAUTEUR_CARTE / 2)  + (int)(Math.random() * (IConfig.HAUTEUR_CARTE / 2)));
+			
+			num_tile = carte[point.x + IConfig.LARGEUR_CARTE * point.y];
+			tile = tileset.getTile(num_tile);
+		} while(soldat[num_tile] != null || !tile.estPraticable());
+
+		return point;
 	}
 	
     protected void paintComponent(Graphics g) 
@@ -114,8 +182,9 @@ public class Carte extends JPanel implements ActionListener
 			}
 		
 		/* Affichage des personnages. */
-		for(int i = 0; i < charset.length; i++)
-			charset[i].dessiner(g, 2 + i, 3+i);
+		for(int i = 0; i < soldat.length; i++)
+			if(soldat[i] != null)
+				soldat[i].dessiner(g, i % IConfig.LARGEUR_CARTE, i / IConfig.LARGEUR_CARTE);		
 	}
     
 	public void actionPerformed(ActionEvent e) 

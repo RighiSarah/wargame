@@ -1,20 +1,37 @@
 package wargame;
 
-public class Monstre extends Soldat {
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+public class Monstre extends Soldat 
+{	
+	/* Images des Monstres. */
+	static protected BufferedImage gobelin, orc;
 	
-	
-	Monstre(TypesM type_monstre){
-		this.vie = type_monstre.getPoints();
-		this.portee = type_monstre.getPortee();
-		this.puissance = type_monstre.getPuissance();
-		this.tir = type_monstre.getTir();
-	//	this.position = trouvePositionVide();
-	}
-	/* Crée un monstre perso */
-	Monstre(int heal, int range, int power, int shoot){
-		this.vie = heal;
-		this.portee = range;
-		this.puissance = power;
-		this.tir = shoot;
+	Monstre(TypesM type_monstre) throws IOException
+	{
+		super();
+		
+		vie = type_monstre.getPoints();
+		portee = type_monstre.getPortee();
+		puissance = type_monstre.getPuissance();
+		tir = type_monstre.getTir();
+		
+		switch(type_monstre.getNom())
+		{
+			case "gobelin":				
+				if(gobelin == null) gobelin = ImageIO.read(new File("gobelin.png"));
+				image = gobelin;
+				break;
+			case "orc":				
+				if(orc == null) orc = ImageIO.read(new File("orc.png"));
+				image = orc;
+				break;
+				
+			default: break;
+		}
 	}
 }

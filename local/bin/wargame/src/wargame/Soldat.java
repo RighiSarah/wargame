@@ -1,118 +1,96 @@
 package wargame;
 
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
 import java.util.Scanner;
 
-public class Soldat extends Position implements ISoldat, IConfig{
+public abstract class Soldat extends Charset implements ISoldat, IConfig
+{
 	protected int vie, portee, puissance, tir; 
-	protected Position position;
 
-	public void joueTour(int tour){
-		Scanner sc = new Scanner(System.in);
-		for (int i = 0; i < IConfig.NB_HEROS; i++) {
-			System.out.println("Que voulez vous faire ?");
-			System.out.println("[1] - Repos");
-			System.out.println("[2] - Combattre");
-			System.out.println("[3] - Déplacement");
-			int choix = sc.nextInt();
-			switch (choix) {
-				case 1 :
-					System.out.println("Vous vous arretez sur un petit rocher et faite une pause.");
-					break;
-				case 2 :
-					//this.combat(this.monstre);
-					break;
-				case 3 :
-					do {
-						int deplacement = 0;
-						System.out.println("[1] - Nord");
-						System.out.println("[2] - Nord Est");
-						System.out.println("[3] - Est");
-						System.out.println("[4] - Sud Est");
-						System.out.println("[5] - Sud");
-						System.out.println("[6] - Sud Ouest");
-						System.out.println("[7] - Ouest");
-						int choix = sc.nextInt();
-						switch (choix) {
-							case 1 :
-								//+1 X 0 Y
-								deplacement = this.seDeplace( new Position( position.getX() + 1, position.getY() );
-								break;
-							case 2 :
-								// 1 X 1 Y
-								deplacement = this.seDeplace( new Position( position.getX() + 1, position.getY() + 1 );
-								break;
-							case 3 : 
-								// 0 X 1 Y
-								deplacement = this.seDeplace( new Position( position.getX(), position.getY() + 1 );
-								break;
-							case 4 : 
-								// -1 X 1 Y
-								deplacement = this.seDeplace( new Position( position.getX() - 1, position.getY() + 1 );
-								break;
-							case 5 : 
-								// -1 X 0 Y
-								deplacement = this.seDeplace( new Position( position.getX() - 1, position.getY() );
-								break;
-							case 6 : 
-								// -1 X -1 Y
-								deplacement = this.seDeplace( new Position( position.getX() - 1, position.getY() - 1 );
-								break;
-							case 7 : 
-								// 0 X -1 Y
-								deplacement = this.seDeplace( new Position( position.getX(), position.getY() - 1 );
-								break;
-							default :
-								System.out.println("Déplacement invalide");
-								break;
-						}
-						if(deplacement == 0)
-							System.out.println("Erreur la case est occupée ou est hors map");
-						
-					}while(deplacement != 1);
-					break;
-				default :
-					break;
-			}
-			
-			
-			
-		}
-		sc.close();
-	}
+	/** Est mort ? */
+	protected boolean est_mort = false;
 	
-	public int getVie() {
+	Soldat()
+	{
+		
+	}
+
+	public int getVie() 
+	{
 		return vie;
 	}
 
-	public void setVie(int vie) {
+	public void setVie(int vie) 
+	{
 		this.vie = vie;
 	}
 
-	public int getPortee() {
+	public int getPortee() 
+	{
 		return portee;
 	}
 
-	public void setPortee(int portee) {
+	public void setPortee(int portee) 
+	{
 		this.portee = portee;
 	}
 
-	public int getPuissance() {
+	public int getPuissance() 
+	{
 		return puissance;
 	}
 
-	public void setPuissance(int puissance) {
+	public void setPuissance(int puissance) 
+	{
 		this.puissance = puissance;
 	}
 
-	public int getTir() {
+	public int getTir() 
+	{
 		return tir;
 	}
 
-	public void setTir(int tir) {
+	public void setTir(int tir) 
+	{
 		this.tir = tir;
 	}
+	
+	/** Mettre le status du personnage à mort. */
+	public void setMort()
+	{
+		est_mort = true;
+		direction = HAUT;
+		animation = 0;
+	    timer.setDelay(350);
+	}
+	
+	/** Teste si le personnage est mort. 
+	 * @return true si mort, false sinon.
+	 */
+	public boolean estMort()
+	{
+		return est_mort;
+	}
 
-	public void combat(Soldat soldat){
+	/** Update le status du soldat.
+	 *  @param e Evenement appellant, le timer.
+	 */
+    public void actionPerformed(ActionEvent e)
+    {    
+    	if(est_visible)	{
+    		if(est_mort) {
+    			if(++direction >= N_DIRECTIONS)
+    				est_visible = false;
+    		}
+    		else if(++animation >= N_ANIMATIONS)
+    			animation = 0;
+    	}
+	}
+	
+	public void combat(Soldat soldat)
+	{
 		/* Récupération des variables */
 		int vie_attaquant = this.getVie();
 		int vie_defenseur = soldat.getVie();
@@ -158,12 +136,9 @@ public class Soldat extends Position implements ISoldat, IConfig{
 		this.setVie(vie_attaquant);
 	}
 	
-	public void seDeplace(Position newPos){
-		if ( this.estValide() && this.estvide() ) { // définir est vide
-			this.position = newPosition;
-			return 1;
-		}
-		return 0;
+	public void seDeplace(Point newPos)
+	{
+	
 		
 	}
 	
@@ -171,5 +146,21 @@ public class Soldat extends Position implements ISoldat, IConfig{
 		return min + (int)(Math.random() * (max - min + 1));
 	}
 
-	
+	@Override
+	public int getPoints() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTour() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void joueTour(int tour) {
+		// TODO Auto-generated method stub
+		
+	}
 }

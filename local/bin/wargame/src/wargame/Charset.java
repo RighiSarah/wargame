@@ -10,9 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
-/** Classe de chargement de Charset.
- *	@author ABHAMON Ronan 
- */
+/** Classe de chargement de Charset. */
 public class Charset implements ActionListener
 {
 	/** Nombre d'animations pour une direction. */
@@ -28,25 +26,22 @@ public class Charset implements ActionListener
 	public final static char GAUCHE  = 3;
 
 	/** Direction actuelle. */
-	private char direction = BAS;
+	protected char direction = BAS;
 			
 	/** Frame d'animation courante. */
-	private char animation = 0;
+	protected char animation = 0;
 	
 	/** Délai entre chaque animation. */
-	private int delai = 150;
+	protected int delai = 150;
 			
 	/** Timer. */
 	Timer timer;
 	
-	/** Est mort ? */
-	private boolean est_mort = false;
-	
 	/** Est visible ? */
-	private boolean est_visible = true;
+	protected boolean est_visible = true;
 	
 	/** Image du charset. */
-	private BufferedImage image;
+	protected BufferedImage image;
 	
 	/** Crée un charset vide. */
 	public Charset()
@@ -75,7 +70,7 @@ public class Charset implements ActionListener
 	 * @param x Destination sur la carte.
 	 * @param y Destination sur la carte.
 	 */ 
-	public void dessiner(Graphics g, int x, int y)
+	protected void dessiner(Graphics g, int x, int y)
 	{
 		if(image == null)
 			return;
@@ -96,7 +91,7 @@ public class Charset implements ActionListener
 					sx, sy, sx + width, sy + height, null);
 	}
 	
-	/** Définir la direction du personnage. 
+	/** Définir la direction du charset. 
 	 * @param direction Direction.
 	 */
 	public void setDirection(char direction)
@@ -105,23 +100,6 @@ public class Charset implements ActionListener
 			return;
 		
 		this.direction = direction;
-	}
-	
-	/** Mettre le status du personnage à mort. */
-	public void setMort()
-	{
-		est_mort = true;
-		direction = HAUT;
-		animation = 0;
-	    timer.setDelay(350);
-	}
-	
-	/** Teste si le personnage est mort. 
-	 * @return true si mort, false sinon.
-	 */
-	public boolean estMort()
-	{
-		return est_mort;
 	}
 	
 	/** Teste si le personnage est visible.
@@ -139,14 +117,8 @@ public class Charset implements ActionListener
     {    
     	/* Update seulement si le charset est affichable. */
     	if(est_visible)	{
-    		/* Petite animation s'il est mort. */
-    		if(est_mort) {
-    			if(++direction >= N_DIRECTIONS)
-    				est_visible = false;
-    		}
-    		
     		/* Affichage normal. */
-    		else if(++animation >= N_ANIMATIONS)
+    		if(++animation >= N_ANIMATIONS)
     			animation = 0;
     	}
 	}

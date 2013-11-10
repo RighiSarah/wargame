@@ -179,8 +179,8 @@ public class Tileset
 	}
 	
 	/** Retourne un tile du tileset.
-	 * @param x Coordonnée x du Tile.
-	 * @param y Coordonnée y du Tile.
+	 * @param  x Coordonnée x du Tile.
+	 * @param  y Coordonnée y du Tile.
 	 * @return Le tile ou null si non trouvé.
 	 */
 	public Tile getTile(int x, int y)
@@ -191,6 +191,18 @@ public class Tileset
 		return tile[x + LARGEUR * y];
 	}
 	
+	/** Retourne un tile du tileset.
+	 * @param num Numéro du tile.
+	 * @return    Le tile ou null si non trouvé.
+	 */
+	public Tile getTile(int num)
+	{
+		if(num >= LARGEUR * HAUTEUR)
+			return null;
+		
+		return tile[num];	
+	}
+	
 	/* Teste si un Tile existe dans le tileset.
 	 * @param x Coordonnée x du Tile.
 	 * @param y Coordonnée y du Tile.
@@ -198,7 +210,7 @@ public class Tileset
 	 */
 	public boolean existe(int x, int y)
 	{
-		return !(x < 0 || y < 0 || x >= LARGEUR || y >= HAUTEUR);
+		return (x >= 0 && y >= 0 && x < LARGEUR && y <= HAUTEUR);
 	}
 	
 	/** Retourne les coordonnées d'un numéro de tile du tileset. 
