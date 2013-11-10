@@ -8,6 +8,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 1;
@@ -32,13 +35,20 @@ public class FenetreJeu extends JFrame
 	/** Liste des slots de chargement. */
 	private JMenuItem []slot;
 
+	/** Carte du jeu. */
+    JPanel carte;
+
 	public static void main(String[] args)
 	{
 		FenetreJeu fenetre = new FenetreJeu();
+		fenetre.setVisible(true);
 	}
 	 
 	public FenetreJeu()
 	{
+		/* Création d'une carte vide. */
+		carte = new Carte();
+		
 		/* Création des menus principaux. */
 		menu        = new JMenuBar();
 		jeu         = new JMenu("Jeu");
@@ -77,11 +87,24 @@ public class FenetreJeu extends JFrame
 	    this.setJMenuBar(menu);
 	    this.setVisible(true);
 	    
+	    /* Actions des menus. */
 	    
-	    JPanel carte = new Carte();
-		
-		((Carte)carte).generer();
-		
+	    /* Quitter. */
+	    quitter.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) 
+	    	{
+	    		System.exit(0);
+	    	}       
+	    });
+	    
+	    /* Nouvelle partie. */
+	    nouveau.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				((Carte)carte).generer();				
+			}
+		});
+	    		
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte);

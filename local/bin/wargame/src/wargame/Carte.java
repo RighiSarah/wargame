@@ -28,11 +28,14 @@ public class Carte extends JPanel implements ActionListener
 	/** Monstres. */
 	private Monstre []monstre;
 	
+	/** Héros. */
+	private Heros []heros;
+	
 	/** Table de jeu de la carte. */
 	private Soldat []soldat;
 	
-	/* Héros. */
-	private Heros []heros;
+	/** La carte est-elle générée ? */
+	private boolean generer = false;
 	
 	/** Timer. */
 	Timer timer;
@@ -98,6 +101,10 @@ public class Carte extends JPanel implements ActionListener
 	
 	private void genererSoldats()
 	{
+		/* Mise à 0 de la carte. */
+		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.HAUTEUR_CARTE; i++)
+			soldat[i] = null;
+		
 		/* Tableaux de soldats. */
 		heros = new Heros[IConfig.NB_HEROS];
 		monstre = new Monstre[IConfig.NB_MONSTRES];
@@ -129,6 +136,7 @@ public class Carte extends JPanel implements ActionListener
 	/** Genere aléatoirement une carte. */
 	public void generer()
 	{
+		generer = true;
 		genererCarte();
 		genererSoldats();
 	}
@@ -171,6 +179,9 @@ public class Carte extends JPanel implements ActionListener
 		Point dest = new Point();
 		Point src;
 
+		if(!generer)
+			return;
+		
 		/* Affichage de la carte. */
 		for(int i = 0; i< IConfig.LARGEUR_CARTE; i++)
 			for(int j = 0; j < IConfig.HAUTEUR_CARTE; j++) {
@@ -200,7 +211,7 @@ public class Carte extends JPanel implements ActionListener
 	}
     
 	public void actionPerformed(ActionEvent e) 
-	{
-    	repaint();
+	{	
+		repaint();
 	}
 }

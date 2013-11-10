@@ -25,6 +25,9 @@ public class Charset implements ActionListener
 	public final static char BAS     = 2;
 	public final static char GAUCHE  = 3;
 
+	/** Offset sur l'axe Y. */
+	private int offset = 0;
+	
 	/** Direction actuelle. */
 	protected char direction = BAS;
 			
@@ -87,7 +90,7 @@ public class Charset implements ActionListener
 		dx += (IConfig.NB_PIX_CASE - width) / 2;
 		dy += IConfig.NB_PIX_CASE - height;
 		
-		g.drawImage(image, dx, dy, dx + width, dy + height, 
+		g.drawImage(image, dx, dy + offset, dx + width, dy + offset + height, 
 					sx, sy, sx + width, sy + height, null);
 	}
 	
@@ -100,6 +103,14 @@ public class Charset implements ActionListener
 			return;
 		
 		this.direction = direction;
+	}
+	
+	/** Modifie l'offset du charset.
+	 * @param y Offset.
+	 */
+	public void setOffset(int y)
+	{
+		offset = y;
 	}
 	
 	/** Teste si le personnage est visible.
