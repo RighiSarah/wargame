@@ -69,8 +69,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					
 					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible())
 						caseactionnee = caseclick;
-					else {
-						System.out.println("Case :" + caseclick);
+					else { 
+						System.out.println("Case :" + caseclick); // Affichage temporaire
 						caseactionnee = -1;
 					}
 				}
@@ -302,7 +302,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					int dyc = dy + j;
 					int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 					
-					if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() )
+					if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
 						soldat[caseactionnee].dessineDeplacement(g, dxc, dyc, Color.RED);
 				}
 			}
