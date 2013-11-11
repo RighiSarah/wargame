@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
-import java.util.Scanner;
 
 public abstract class Soldat extends Charset implements ISoldat, IConfig
 {
@@ -172,8 +171,8 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	{
 		Stroke s = ((Graphics2D) g).getStroke();        // Sauvegarde du trait courant.
 		((Graphics2D) g).setStroke(new BasicStroke(3)); // Changement du trait.
-		g.setColor(c);
-		g.drawRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
+		g.setColor( new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(c.getAlpha() / 2.5) ));
+		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
 		((Graphics2D) g).setStroke(s); // Restauration du trait.
 	}
 }
