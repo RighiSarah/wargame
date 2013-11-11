@@ -48,7 +48,12 @@ public class Heros extends Soldat
 		setImage();
 	}
 	//protected void dessineDeplacement(Graphics g, int x, int y);
-	/** Dessine la barre de vie du Héros. */
+	
+	/** Dessine la barre de vie du Héros.
+	 * @param g : Zone de dessin. 
+	 * @param x : Coordonnée X du personnage.
+	 * @param y : Coordonnée Y du personnage.
+	 */
 	protected void dessineVie(Graphics g, int x, int y)
 	{
 		Color color;
@@ -74,15 +79,5 @@ public class Heros extends Soldat
 		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)VIE_MAX);
 		g.setColor(color);
 		g.fillRect(dx + 1 , dy + 1 + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
-	}
-
-	@Override
-	protected void dessineDeplacement(Graphics g, int x, int y, Color c) {
-		Stroke s = ((Graphics2D) g).getStroke(); // SV
-		((Graphics2D) g).setStroke(new BasicStroke(3)); //Change
-		g.setColor(c);
-		g.drawRect(x, y, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
-		((Graphics2D) g).setStroke(s); //Remise normal
-		
 	}
 }

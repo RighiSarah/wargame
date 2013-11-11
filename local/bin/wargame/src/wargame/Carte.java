@@ -43,6 +43,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** La carte est-elle générée ? */
 	private boolean generer = false;
 	
+	/** Indique la case courante sélectionnée. */
 	private int caseactionnee = -1;
 	
 	/** Timer. */
@@ -58,15 +59,18 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	    
 	    /* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
+		
+		/* Capture de la souris. */
 		addMouseListener(new MouseAdapter() { 
 			public void mouseClicked(MouseEvent e) { 
 				if(generer == true) {
-					int caseclick = (e.getX() / IConfig.NB_PIX_CASE) + IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
-					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].est_visible ) {
+					int caseclick = (e.getX() / IConfig.NB_PIX_CASE) + 
+								    IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
+					
+					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible())
 						caseactionnee = caseclick;
-					}
 					else {
-						System.out.println(caseclick);
+						System.out.println("Case :" + caseclick);
 						caseactionnee = -1;
 					}
 				}
@@ -181,7 +185,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public boolean existe(int x, int y)
 	{
-		return !(x < 0 || y < 0 || x >= IConfig.LARGEUR_CARTE || y >= IConfig.HAUTEUR_CARTE);
+		return (x >= 0 && y >= 0 && x < IConfig.LARGEUR_CARTE && y < IConfig.HAUTEUR_CARTE);
 	}
 	
 	/** Trouve une position vide aléatoirement sur la carte. 
@@ -281,25 +285,29 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		for(int i = 0; i< IConfig.LARGEUR_CARTE; i++)
 			for(int j = 0; j < IConfig.HAUTEUR_CARTE; j++) {
 				int num_tile = (int)carte[i + j * IConfig.LARGEUR_CARTE];
+				
 				dest.setLocation(i, j);
 				src = tileset.getCoord(num_tile);
 				tileset.dessiner(g, src, dest);
 			}
 		
-		if( caseactionnee != -1 ) {
-			int dy = caseactionnee / IConfig.LARGEUR_CARTE;
+		/* Case sélectionnée. */
+		if(caseactionnee != -1 ){
 			int dx = caseactionnee % IConfig.LARGEUR_CARTE;
-			for (int i = -1 ; i <= 1;i++) {
+			int dy = caseactionnee / IConfig.LARGEUR_CARTE;
+			
+			for(int i = -1; i <= 1; i++) {
 				for(int j = -1; j <= 1; j++) {
 					int dxc = dx + i;
 					int dyc = dy + j;
 					int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
-					//Pas touche je changrais les nom plus tard
-					if(existe(dxc, dyc) && tileset.getTile(caseVoisine).estPraticable() )
-						soldat[caseactionnee].dessineDeplacement(g, dxc * IConfig.NB_PIX_CASE, dyc * IConfig.NB_PIX_CASE, Color.RED);
+					
+					if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() )
+						soldat[caseactionnee].dessineDeplacement(g, dxc, dyc, Color.RED);
 				}
 			}
-			soldat[caseactionnee].dessineDeplacement(g, dx * IConfig.NB_PIX_CASE, dy * IConfig.NB_PIX_CASE, Color.BLUE);
+			
+			soldat[caseactionnee].dessineDeplacement(g, dx, dy, Color.BLUE);
 		}
 		
 		/* Affichage des personnages. */
@@ -319,9 +327,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				int y = i / IConfig.LARGEUR_CARTE;				
 				soldat[i].dessineVie(g, x, y);
 			}
-		
 	}
-    
     
 	public void actionPerformed(ActionEvent e) 
 	{	

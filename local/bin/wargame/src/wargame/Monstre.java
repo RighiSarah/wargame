@@ -75,7 +75,4 @@ public class Monstre extends Soldat
 		g.setColor(color);
 		g.fillRect(dx + 1 , dy + 1 + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
 	}
-
-	@Override
-	protected void dessineDeplacement(Graphics g, int x, int y, Color c) { /* Cant move monster*/ }
 }
