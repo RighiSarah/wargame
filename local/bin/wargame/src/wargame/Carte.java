@@ -81,7 +81,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 		});
 		
-		
 		addMouseMotionListener(new MouseAdapter() {
 			public void mouseMoved(MouseEvent e) {
 				if(generer == true){
@@ -97,6 +96,16 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 		});
 		
+	}
+	
+	private int getNumCase(int x, int y)
+	{
+		return x + IConfig.LARGEUR_CARTE * y;	
+	}
+	
+	private Point getCoordCase(int numCase)
+	{
+		return new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
 	}
 	
 	private void chargerTileset()
@@ -120,7 +129,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Couche d'herbe. */
 		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++)
-			tileset.setHerbe(this, i % IConfig.LARGEUR_CARTE, i / IConfig.LARGEUR_CARTE);
+			tileset.setHerbe(this, getCoordCase(i).x, getCoordCase(i).y);
 		
 		/* Rochers. */
 		for(int i = 0; i < IConfig.NB_ROCHERS; i++)
@@ -180,24 +189,46 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Positionnement des soldats. */
 		for(int i = 0; i < IConfig.NB_HEROS; i++) {
 			Point point = trouvePositionVide(Soldat.HUMAIN);
-			soldat[point.x + IConfig.LARGEUR_CARTE * point.y] = heros[i];
-			soldat[point.x + IConfig.LARGEUR_CARTE * point.y].setNumCase(point.x + point.y + + IConfig.LARGEUR_CARTE);
+			int numCase = getNumCase(point.x, point.y);
+					
+			soldat[numCase] = heros[i];
+			soldat[numCase].setNumCase(numCase);
 		}
 				
 		for(int i = 0; i < IConfig.NB_MONSTRES; i++) {
 			Point point = trouvePositionVide(Soldat.MONSTRE);
-			soldat[point.x + IConfig.LARGEUR_CARTE * point.y] = monstre[i];
-			soldat[point.x + IConfig.LARGEUR_CARTE * point.y].setNumCase(point.x + point.y + + IConfig.LARGEUR_CARTE);
+			int numCase = getNumCase(point.x, point.y);
+			
+			soldat[numCase] = monstre[i];
+			soldat[numCase].setNumCase(numCase);
 		}
 	
 	}
-	
+
+	/** Déplace un soldat sur la carte.
+	 * 
+	 * @param soldat Soldat à deplacer.
+	 * @param x      Coordonnée X où poser le soldat.
+	 * @param y      Coordonnée Y où poser le soldat.
+	 * @return       true si case correcte, false sinon.
+	 */
+	boolean deplaceSoldat(Soldat soldat, int x, int y)
+	{
+		if(!existe(x, y))
+			return false;
+		
+		soldat.setSeDeplace(true);
+		
+		return true;
+	}
+
 	/** Genere aléatoirement une carte. */
 	public void generer()
 	{
 		generer = true;
 		genererCarte();
 		genererSoldats();
+		caseactionnee = -1;
 	}
 	
 	/* Teste si une case existe sur la Carte.
@@ -226,7 +257,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			point.setLocation(dec * (IConfig.LARGEUR_CARTE / 2) + dec + (int)(Math.random() * (IConfig.LARGEUR_CARTE / 2)), 
 					          (int)(Math.random() * IConfig.HAUTEUR_CARTE));
 			
-			num_tile = carte[point.x + IConfig.LARGEUR_CARTE * point.y];
+			num_tile = carte[getNumCase(point.x, point.y)];
 			tile = tileset.getTile(num_tile);
 		} while(soldat[num_tile] != null || !tile.estPraticable());
 
@@ -306,7 +337,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Affichage de la carte. */
 		for(int i = 0; i< IConfig.LARGEUR_CARTE; i++)
 			for(int j = 0; j < IConfig.HAUTEUR_CARTE; j++) {
-				int num_tile = (int)carte[i + j * IConfig.LARGEUR_CARTE];
+				int num_tile = (int)carte[getNumCase(i, j)];
 				
 				dest.setLocation(i, j);
 				src = tileset.getCoord(num_tile);
@@ -315,8 +346,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Case sélectionnée. */
 		if(caseactionnee != -1 ){
-			int dx = caseactionnee % IConfig.LARGEUR_CARTE;
-			int dy = caseactionnee / IConfig.LARGEUR_CARTE;
+			Point coord = getCoordCase(caseactionnee);
+			int dx = coord.x;
+			int dy = coord.y;
 			
 			for(int i = -1; i <= 1; i++) {
 				for(int j = -1; j <= 1; j++) {
@@ -336,8 +368,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null && soldat[i].estVisible())
 			{
-				int x = i % IConfig.LARGEUR_CARTE;
-				int y = i / IConfig.LARGEUR_CARTE;
+				int x = getCoordCase(i).x;
+				int y = getCoordCase(i).y;
+				
 				soldat[i].dessiner(g, x, y);		
 			}
 		
@@ -345,8 +378,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null && !soldat[i].estMort())
 			{
-				int x = i % IConfig.LARGEUR_CARTE;
-				int y = i / IConfig.LARGEUR_CARTE;				
+				int x = getCoordCase(i).x;
+				int y = getCoordCase(i).y;
+				
 				soldat[i].dessineVie(g, x, y);
 				
 				if(soldat[i] == soldat_pointe){

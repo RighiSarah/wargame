@@ -10,14 +10,21 @@ import java.awt.event.ActionEvent;
 
 public abstract class Soldat extends Charset implements ISoldat, IConfig
 {
+	/** Informations de base d'un soldat. */
 	protected int vie, portee, puissance, tir;
 	protected String nom;
-	protected int num_case;
 	
-	
+	/** Numéro de la case où se situe le soldat. */
+	private int numCase;
 
 	/** Est mort ? */
-	protected boolean est_mort = false;
+	private boolean estMort = false;
+	
+	/** En train de se deplacer. */
+	private boolean seDeplace = false;
+	
+	/** Offset utilisé pendant le déplacement. */
+	protected int offset = 0;
 	
 	Soldat() {}
 
@@ -63,18 +70,30 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		this.tir = tir;
 	}
 	
-	public int getNumCase() {
-		return num_case;
+	public int getNumCase() 
+	{
+		return numCase;
 	}
 
-	public void setNumCase(int num_case) {
-		this.num_case = num_case;
+	public void setNumCase(int num_case) 
+	{
+		this.numCase = num_case;
 	}
 		
+	public void setSeDeplace(boolean value)
+	{
+		seDeplace = value;
+	}
+	
+	public boolean getSeDeplace(boolean value)
+	{
+		return seDeplace;
+	}
+	
 	/** Mettre le status du personnage à mort. */
 	public void setMort()
 	{
-		est_mort = true;
+		estMort = true;
 		direction = HAUT;
 		animation = 0;
 	    timer.setDelay(350);
@@ -85,7 +104,7 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	 */
 	public boolean estMort()
 	{
-		return est_mort;
+		return estMort;
 	}
 
 	/** Update le status du soldat.
@@ -94,7 +113,7 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
     public void actionPerformed(ActionEvent e)
     {    
     	if(est_visible)	{
-    		if(est_mort) {
+    		if(estMort) {
     			if(++direction >= N_DIRECTIONS)
     				est_visible = false;
     		}
@@ -182,8 +201,10 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	{
 		Stroke s = ((Graphics2D) g).getStroke();        // Sauvegarde du trait courant.
 		((Graphics2D) g).setStroke(new BasicStroke(3)); // Changement du trait.
+		
 		g.setColor( new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(c.getAlpha() / 2.5) ));
 		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
+		
 		((Graphics2D) g).setStroke(s); // Restauration du trait.
 	}
 }
