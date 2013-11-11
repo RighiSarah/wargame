@@ -70,7 +70,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible())
 						caseactionnee = caseclick;
 					else {
-						System.out.println("Case :" + caseclick);
+						System.out.println("Case :" + caseclick); //affichage temporaire
 						caseactionnee = -1;
 					}
 				}
