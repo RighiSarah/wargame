@@ -175,6 +175,5 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		g.setColor(c);
 		g.drawRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
 		((Graphics2D) g).setStroke(s); // Restauration du trait.
-		
 	}
 }

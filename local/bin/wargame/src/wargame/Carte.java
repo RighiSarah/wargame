@@ -176,6 +176,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		generer = true;
 		genererCarte();
 		genererSoldats();
+		caseactionnee = -1;
 	}
 	
 	/* Teste si une case existe sur la Carte.
@@ -262,6 +263,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			
 			chargerTileset(); // Charge uniquement si tileset null.
 			generer = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
+			
+			caseactionnee = -1;
 			
 			ois.close();
 		}
