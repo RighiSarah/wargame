@@ -293,9 +293,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				for(int j = -1; j <= 1; j++) {
 					int dxc = dx + i;
 					int dyc = dy + j;
-					//int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
+					int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 					//Pas touche je changrais les nom plus tard
-					if(existe(dxc, dyc))
+					if(existe(dxc, dyc) && tileset.getTile(caseVoisine).estPraticable() )
 						soldat[caseactionnee].dessineDeplacement(g, dxc * IConfig.NB_PIX_CASE, dyc * IConfig.NB_PIX_CASE, Color.RED);
 				}
 			}
