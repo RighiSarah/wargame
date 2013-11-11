@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,6 +47,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Indique la case courante sélectionnée. */
 	private int caseactionnee = -1;
 	
+	/** Indique le soldat actuellement pointé par le curseur de la souris */
+	private Soldat soldat_pointe = null;
+	
 	/** Timer. */
 	Timer timer;
 	
@@ -74,6 +78,22 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						caseactionnee = -1;
 					}
 				}
+			}
+		});
+		
+		
+		addMouseMotionListener(new MouseAdapter() {
+			public void mouseMoved(MouseEvent e) {
+				if(generer == true){
+					int coord_curseur = (e.getX() / IConfig.NB_PIX_CASE) + 
+						    IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
+					if(soldat[coord_curseur] != null && soldat[coord_curseur].estVisible())
+						soldat_pointe = soldat[coord_curseur];
+					else
+						soldat_pointe = null;
+						
+				}
+				
 			}
 		});
 		
@@ -161,11 +181,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		for(int i = 0; i < IConfig.NB_HEROS; i++) {
 			Point point = trouvePositionVide(Soldat.HUMAIN);
 			soldat[point.x + IConfig.LARGEUR_CARTE * point.y] = heros[i];
+			soldat[point.x + IConfig.LARGEUR_CARTE * point.y].setNumCase(point.x + point.y + + IConfig.LARGEUR_CARTE);
 		}
 				
 		for(int i = 0; i < IConfig.NB_MONSTRES; i++) {
 			Point point = trouvePositionVide(Soldat.MONSTRE);
 			soldat[point.x + IConfig.LARGEUR_CARTE * point.y] = monstre[i];
+			soldat[point.x + IConfig.LARGEUR_CARTE * point.y].setNumCase(point.x + point.y + + IConfig.LARGEUR_CARTE);
 		}
 	
 	}
@@ -176,7 +198,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		generer = true;
 		genererCarte();
 		genererSoldats();
-		caseactionnee = -1;
 	}
 	
 	/* Teste si une case existe sur la Carte.
@@ -264,8 +285,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			chargerTileset(); // Charge uniquement si tileset null.
 			generer = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
 			
-			caseactionnee = -1;
-			
 			ois.close();
 		}
 		catch(java.io.IOException e) {
@@ -329,6 +348,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				int x = i % IConfig.LARGEUR_CARTE;
 				int y = i / IConfig.LARGEUR_CARTE;				
 				soldat[i].dessineVie(g, x, y);
+				
+				if(soldat[i] == soldat_pointe){
+					g.drawString("coucou", y, x);
+					
+				}
 			}
 	}
     

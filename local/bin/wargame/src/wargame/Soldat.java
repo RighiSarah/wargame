@@ -13,7 +13,10 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 {
 	protected int vie, portee, puissance, tir;
 	protected String nom;
+	protected int num_case;
 	
+	
+
 	/** Est mort ? */
 	protected boolean est_mort = false;
 	
@@ -59,6 +62,14 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	public void setTir(int tir) 
 	{
 		this.tir = tir;
+	}
+	
+	public int getNumCase() {
+		return num_case;
+	}
+
+	public void setNumCase(int num_case) {
+		this.num_case = num_case;
 	}
 		
 	/** Mettre le status du personnage à mort. */
