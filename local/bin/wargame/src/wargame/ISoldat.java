@@ -113,5 +113,6 @@ public interface ISoldat extends Serializable
 	
 	void joueTour(int tour);
 	void combat(Soldat soldat);
-	void seDeplace(Point newPos);
+	
+	public void setSeDeplace(boolean value);	
 }

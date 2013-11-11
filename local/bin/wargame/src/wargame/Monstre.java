@@ -68,11 +68,11 @@ public class Monstre extends Soldat
 		
 		/* Contenant. */
 		g.setColor(Color.black);
-		g.drawRect(dx, dy, 4, IConfig.NB_PIX_CASE - 2);
+		g.drawRect(dx + offsetX, dy + offsetY, 4, IConfig.NB_PIX_CASE - 2);
 		
 		/* Contenu. */
 		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)VIE_MAX);
 		g.setColor(color);
-		g.fillRect(dx + 1 , dy + 1 + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
+		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
 	}
 }

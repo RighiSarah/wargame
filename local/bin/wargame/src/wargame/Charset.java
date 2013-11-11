@@ -42,7 +42,7 @@ public class Charset implements ActionListener
 	Timer timer;
 	
 	/** Est visible ? */
-	protected boolean est_visible = true;
+	protected boolean estVisible = true;
 	
 	/** Image du charset. */
 	protected BufferedImage image;
@@ -68,13 +68,15 @@ public class Charset implements ActionListener
 		image = ImageIO.read(f); /* IOException ? */
 	}
 	
-	/** Dessine le charset.
+	/** Dessine le charset avec un offset x et y.
 	 * 	Ne fait rien si l'image du charset n'existe pas encore.
 	 * @param g Zone de dessin.
 	 * @param x Destination sur la carte.
 	 * @param y Destination sur la carte.
+	 * @param dx Offset x
+	 * @param dy Offset dy
 	 */ 
-	protected void dessiner(Graphics g, int x, int y)
+	protected void dessinerAvecOffset(Graphics g, int x, int y, int offsetX, int offsetY)
 	{
 		if(image == null)
 			return;
@@ -91,8 +93,22 @@ public class Charset implements ActionListener
 		dx += (IConfig.NB_PIX_CASE - width) / 2;
 		dy += IConfig.NB_PIX_CASE - height;
 		
-		g.drawImage(image, dx, dy + offset, dx + width, dy + offset + height, 
-					sx, sy, sx + width, sy + height, null);
+		g.drawImage(image, dx + offsetX, 
+				           dy + offsetY + offset, 
+					       dx + offsetX + width, 
+					       dy + offsetY + offset + height, 
+					       sx, sy, sx + width, sy + height, null);
+	}
+	
+	/** Dessine le charset.
+	 * 	Ne fait rien si l'image du charset n'existe pas encore.
+	 * @param g Zone de dessin.
+	 * @param x Destination sur la carte.
+	 * @param y Destination sur la carte.
+	 */ 
+	protected void dessiner(Graphics g, int x, int y)
+	{
+		dessinerAvecOffset(g, x, y, 0, 0);
 	}
 	
 	/** Définir la direction du charset. 
@@ -119,7 +135,7 @@ public class Charset implements ActionListener
 	 */
 	public boolean estVisible()
 	{
-		return est_visible;
+		return estVisible;
 	}
 	
 	/** Update le status du charset.
@@ -128,7 +144,7 @@ public class Charset implements ActionListener
     public void actionPerformed(ActionEvent e)
     {    
     	/* Update seulement si le charset est affichable. */
-    	if(est_visible)	{
+    	if(estVisible)	{
     		/* Affichage normal. */
     		if(++animation >= N_ANIMATIONS)
     			animation = 0;

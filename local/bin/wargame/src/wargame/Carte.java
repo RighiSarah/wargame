@@ -202,24 +202,21 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			soldat[numCase] = monstre[i];
 			soldat[numCase].setNumCase(numCase);
 		}
-	
 	}
 
 	/** Déplace un soldat sur la carte.
-	 * 
-	 * @param soldat Soldat à deplacer.
-	 * @param x      Coordonnée X où poser le soldat.
-	 * @param y      Coordonnée Y où poser le soldat.
-	 * @return       true si case correcte, false sinon.
+	 * @param soldat    Soldat à deplacer.
+	 * @param direction Direction du soldat.
+	 * @param x         Offset X d'origine.
+	 * @param y         Offset Y d'origine.
 	 */
-	boolean deplaceSoldat(Soldat soldat, int x, int y)
+	void deplaceSoldat(Soldat soldat, char direction, int x, int y)
 	{
-		if(!existe(x, y))
-			return false;
-		
 		soldat.setSeDeplace(true);
+		soldat.setDirection(direction);
 		
-		return true;
+		soldat.offsetX = x;
+		soldat.offsetY = y;
 	}
 
 	/** Genere aléatoirement une carte. */
@@ -228,7 +225,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		generer = true;
 		genererCarte();
 		genererSoldats();
-		caseactionnee = -1;
+		caseactionnee = -1;		
 	}
 	
 	/* Teste si une case existe sur la Carte.
@@ -371,7 +368,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				int x = getCoordCase(i).x;
 				int y = getCoordCase(i).y;
 				
-				soldat[i].dessiner(g, x, y);		
+				soldat[i].dessinerAvecOffset(g, getCoordCase(soldat[i].getNumCase()).x, 
+												getCoordCase(soldat[i].getNumCase()).y, 
+						                        soldat[i].offsetX, soldat[i].offsetY);
 			}
 		
 		/* Affichage des barres de vie. */

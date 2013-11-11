@@ -14,13 +14,12 @@ public interface ICarte {
 	*/
 	
 	/** Déplace un soldat sur la carte.
-	 * 
-	 * @param soldat Soldat à deplacer.
-	 * @param x      Coordonnée X où poser le soldat.
-	 * @param y      Coordonnée Y où poser le soldat.
-	 * @return       true si case correcte, false sinon.
+	 * @param soldat    Soldat à deplacer.
+	 * @param direction Direction du soldat.
+	 * @param x         Offset X d'origine.
+	 * @param y         Offset Y d'origine.
 	 */
-	boolean deplaceSoldat(Soldat soldat, int x, int y);
+	void deplaceSoldat(Soldat soldat, char direction, int x, int y);
 
 	/** Genere aléatoirement une carte. */
 	void generer();

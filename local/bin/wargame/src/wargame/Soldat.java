@@ -24,8 +24,9 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	private boolean seDeplace = false;
 	
 	/** Offset utilisé pendant le déplacement. */
-	protected int offset = 0;
-	
+	protected int offsetX = 0;
+	protected int offsetY = 0;
+
 	Soldat() {}
 
 	abstract protected void dessineVie(Graphics g, int x, int y);
@@ -85,11 +86,6 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		seDeplace = value;
 	}
 	
-	public boolean getSeDeplace(boolean value)
-	{
-		return seDeplace;
-	}
-	
 	/** Mettre le status du personnage à mort. */
 	public void setMort()
 	{
@@ -112,10 +108,29 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	 */
     public void actionPerformed(ActionEvent e)
     {    
-    	if(est_visible)	{
+    	/* Mise à jour du déplacement. */
+    	if(seDeplace) {
+    		if(offsetX > 0)      offsetX += 4;
+    		else if(offsetX < 0) offsetX -= 4;
+    		
+    		if(offsetY > 0)      offsetY += 4;
+    		else if(offsetY < 0) offsetY -= 4;
+    		
+    		if(Math.abs((int)offsetX) >= IConfig.NB_PIX_CASE || Math.abs((int)offsetY) >= IConfig.NB_PIX_CASE)
+    		{
+    			/* Mise à jour de la nouvelle position. */
+    			
+    			/* Remise à zéro du déplacement. */
+    			offsetX = offsetY = 0;
+    			seDeplace = false;
+    		}
+    	}
+    	
+    	/* Mise à jour de l'animation. */
+        if(estVisible) {
     		if(estMort) {
     			if(++direction >= N_DIRECTIONS)
-    				est_visible = false;
+    				estVisible = false;
     		}
     		else if(++animation >= N_ANIMATIONS)
     			animation = 0;
@@ -167,12 +182,6 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		
 		soldat.setVie(vie_defenseur);
 		this.setVie(vie_attaquant);
-	}
-	
-	public void seDeplace(Point newPos)
-	{
-	
-		
 	}
 	
 	public int alea (int min , int max) {
