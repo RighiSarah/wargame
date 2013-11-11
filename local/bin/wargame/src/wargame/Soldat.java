@@ -1,5 +1,6 @@
 package wargame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -16,6 +17,7 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	Soldat() {}
 
 	abstract protected void dessineVie(Graphics g, int x, int y);
+	abstract protected void dessineDeplacement(Graphics g, int x, int y, Color c);
 	
 	public int getVie() 
 	{

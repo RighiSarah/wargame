@@ -1,9 +1,12 @@
 package wargame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,6 +43,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** La carte est-elle générée ? */
 	private boolean generer = false;
 	
+	private int caseactionnee = -1;
+	
 	/** Timer. */
 	Timer timer;
 	
@@ -52,7 +57,22 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	    timer.start();
 	    
 	    /* Création d'une carte vide. */
-		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];
+		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
+		addMouseListener(new MouseAdapter() { 
+			public void mouseClicked(MouseEvent e) { 
+				if(generer == true) {
+					int caseclick = (e.getX() / IConfig.NB_PIX_CASE) + IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
+					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].est_visible ) {
+						caseactionnee = caseclick;
+					}
+					else {
+						System.out.println(caseclick);
+						caseactionnee = -1;
+					}
+				}
+			}
+		});
+		
 	}
 	
 	private void chargerTileset()
@@ -143,6 +163,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			Point point = trouvePositionVide(Soldat.MONSTRE);
 			soldat[point.x + IConfig.LARGEUR_CARTE * point.y] = monstre[i];
 		}
+	
 	}
 	
 	/** Genere aléatoirement une carte. */
@@ -265,6 +286,22 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				tileset.dessiner(g, src, dest);
 			}
 		
+		if( caseactionnee != -1 ) {
+			int dy = caseactionnee / IConfig.LARGEUR_CARTE;
+			int dx = caseactionnee % IConfig.LARGEUR_CARTE;
+			for (int i = -1 ; i <= 1;i++) {
+				for(int j = -1; j <= 1; j++) {
+					int dxc = dx + i;
+					int dyc = dy + j;
+					//int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
+					//Pas touche je changrais les nom plus tard
+					if(existe(dxc, dyc))
+						soldat[caseactionnee].dessineDeplacement(g, dxc * IConfig.NB_PIX_CASE, dyc * IConfig.NB_PIX_CASE, Color.RED);
+				}
+			}
+			soldat[caseactionnee].dessineDeplacement(g, dx * IConfig.NB_PIX_CASE, dy * IConfig.NB_PIX_CASE, Color.BLUE);
+		}
+		
 		/* Affichage des personnages. */
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null && soldat[i].estVisible())
@@ -282,7 +319,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				int y = i / IConfig.LARGEUR_CARTE;				
 				soldat[i].dessineVie(g, x, y);
 			}
+		
 	}
+    
     
 	public void actionPerformed(ActionEvent e) 
 	{	
