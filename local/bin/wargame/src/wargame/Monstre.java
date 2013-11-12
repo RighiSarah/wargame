@@ -13,9 +13,6 @@ public class Monstre extends Soldat
 {	
 	/* Images des Monstres. */
 	static protected BufferedImage gobelin, orc;
-	
-	/* Vie max du monstre. */
-	private final int VIE_MAX;
 
 	protected void setImage() throws IOException
 	{
@@ -39,40 +36,12 @@ public class Monstre extends Soldat
 	{
 		super();
 		
-		VIE_MAX = vie = type_monstre.getPoints();
+		vieMax = vie = type_monstre.getPoints();
 		portee = type_monstre.getPortee();
 		puissance = type_monstre.getPuissance();
 		tir = type_monstre.getTir();
 		nom = type_monstre.getNom();
 		
 		setImage();
-	}
-	
-	/** Dessine la barre de vie du Monstre. */
-	protected void dessineVie(Graphics g, int x, int y)
-	{
-		Color color;
-
-		/* Couleur de la barre de vie. */
-		int res = ((int)(100.0 * vie / (double)VIE_MAX));
-		
-		if(res >= 70)
-			color = Color.gray;
-		else if(res >= 40)
-			color = Color.lightGray;
-		else
-			color = Color.red;
-		
-		int dx = x * IConfig.NB_PIX_CASE + IConfig.NB_PIX_CASE;
-		int dy = y * IConfig.NB_PIX_CASE + 2;
-		
-		/* Contenant. */
-		g.setColor(Color.black);
-		g.drawRect(dx + offsetX, dy + offsetY, 4, IConfig.NB_PIX_CASE - 2);
-		
-		/* Contenu. */
-		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)VIE_MAX);
-		g.setColor(color);
-		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
 	}
 }

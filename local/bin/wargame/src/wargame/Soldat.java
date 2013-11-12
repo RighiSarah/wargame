@@ -8,9 +8,10 @@ import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 
-public abstract class Soldat extends Charset implements ISoldat, IConfig
+public abstract class Soldat extends Charset implements ISoldat
 {
 	/** Informations de base d'un soldat. */
+	protected int vieMax;
 	protected int vie, portee, puissance, tir;
 	protected String nom;
 	
@@ -23,24 +24,30 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 	/** En train de se deplacer. */
 	private boolean seDeplace = false;
 	
+	/** Le tour est effectué */
+	private boolean tourEffectue = false;
+	
 	/** Offset utilisé pendant le déplacement. */
 	protected int offsetX = 0;
 	protected int offsetY = 0;
 
 	Soldat() {}
-
-	abstract protected void dessineVie(Graphics g, int x, int y);
 	
 	public int getVie() 
 	{
 		return vie;
 	}
+	
+	public int getVieMax() 
+	{
+		return vieMax;
+	}
 
 	public void setVie(int vie) 
 	{
-		this.vie = vie;
+		this.vie = ((vie > vieMax) ? vieMax : vie);
 	}
-
+	
 	public int getPortee() 
 	{
 		return portee;
@@ -103,6 +110,14 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		return estMort;
 	}
 
+	public boolean getAJoue() {
+		return tourEffectue;
+	}
+	
+	public void setAJoue(boolean value) {
+		tourEffectue = value;
+	}
+	
 	/** Update le status du soldat.
 	 *  @param e Evenement appellant, le timer.
 	 */
@@ -110,11 +125,11 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
     {    
     	/* Mise à jour du déplacement. */
     	if(seDeplace) {
-    		if(offsetX > 0)      offsetX += 4;
-    		else if(offsetX < 0) offsetX -= 4;
+    		if(offsetX > 0)      offsetX += IConfig.VITESSE_DEPLACEMENT;
+    		else if(offsetX < 0) offsetX -= IConfig.VITESSE_DEPLACEMENT;
     		
-    		if(offsetY > 0)      offsetY += 4;
-    		else if(offsetY < 0) offsetY -= 4;
+    		if(offsetY > 0)      offsetY += IConfig.VITESSE_DEPLACEMENT;
+    		else if(offsetY < 0) offsetY -= IConfig.VITESSE_DEPLACEMENT;
     		
     		if(Math.abs((int)offsetX) >= IConfig.NB_PIX_CASE || Math.abs((int)offsetY) >= IConfig.NB_PIX_CASE)
     		{
@@ -128,7 +143,7 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
     			if(offsetY > 0) y++;
     			else if(offsetY < 0) y--;
     			
-    			numCase = x * IConfig.LARGEUR_CARTE + y;
+    			numCase = x + IConfig.LARGEUR_CARTE * y;
     			
     			/* Remise à zéro du déplacement. */
     			offsetX = offsetY = 0;
@@ -221,5 +236,37 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
 		
 		((Graphics2D) g).setStroke(s); // Restauration du trait.
+	}
+	
+	/** Dessine la barre de vie du Héros.
+	 * @param g : Zone de dessin. 
+	 * @param x : Coordonnée X du personnage.
+	 * @param y : Coordonnée Y du personnage.
+	 */
+	protected void dessineVie(Graphics g, int x, int y)
+	{
+		Color color;
+
+		/* Couleur de la barre de vie. */
+		int res = ((int)(100.0 * vie / (double)vieMax));
+		
+		if(res >= 70)
+			color = Color.green;
+		else if(res >= 40)
+			color = Color.orange;
+		else
+			color = Color.red;
+		
+		int dx = x * IConfig.NB_PIX_CASE + IConfig.NB_PIX_CASE;
+		int dy = y * IConfig.NB_PIX_CASE + 2;
+		
+		/* Contenant. */
+		g.setColor(Color.black);
+		g.drawRect(dx + offsetX, dy + offsetY, 4, IConfig.NB_PIX_CASE - 2);
+		
+		/* Contenu. */
+		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)vieMax);
+		g.setColor(color);
+		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
 	}
 }

@@ -67,84 +67,79 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Capture de la souris. */
 		addMouseListener(new MouseAdapter() { 
-			public void mouseClicked(MouseEvent e) { 
-				if(generer == true) {
-					int caseclick = (e.getX() / IConfig.NB_PIX_CASE) + 
-								    IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
+		public void mouseClicked(MouseEvent e) { 
+			if(!generer)
+				return;
+				int caseclick = getNumCase(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
+									
+				if(caseclick == caseactionnee && !soldat[caseclick].getAJoue()) {
+					int regen = alea(1,IConfig.REGEN_MAX);
+					int vie = soldat[caseclick].getVie();
 					
-					if(caseclick == caseactionnee) {
-						int regen = alea(1,IConfig.REGEN_MAX);
-						System.out.println("REPOS GAIN DE : "+regen+" PV");
+					if(vie == soldat[caseclick].getVieMax()) {
+						System.out.println("VIE MAX");
+						return;
 					}
 					
-					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible() ) {
-						caseactionnee = caseclick;
-					}
-					else {
-						/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
-						//HESITATION ICI EN PARLER 
-						if(caseactionnee != -1) {
-							int distance = getDistance(caseactionnee,caseclick);
-							if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee()) {
-								if(distance == 1)
-									System.out.println("CAC");
-								else
-									System.out.println("DISTANCE");							
-							}
-							//Deplacement temporaire
-							if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && !(soldat[caseclick] instanceof Heros) && !(soldat[caseclick] instanceof Monstre) ) {
-								soldat[caseclick] = soldat[caseactionnee];
-								System.out.println(soldat[caseactionnee].estVisible);
-								soldat[caseactionnee] = null;
-								
-								int sx = getCoordCase(caseactionnee).x;
-								int sy = getCoordCase(caseactionnee).y;
-								int dx = getCoordCase(caseclick).x;
-								int dy = getCoordCase(caseclick).y;
-								int x = 0;
-								int y = 0;
-								
-								char direction = Charset.HAUT;
-								
-								if(dx > sx) {
-									x = 2; 
-									direction = Charset.DROITE;
-								}
-								else if(dx < sx) {
-									x = -2;
-									direction = Charset.GAUCHE;
-								}
-
-								if(dy > sy) {
-									y = 2; 
-									direction = Charset.BAS;
-								}
-								else if(dy < sy) {
-									y = -2;
-									direction = Charset.HAUT;
-								}
-								
-								deplaceSoldat(soldat[caseclick], direction, x, y);
-							}
+					soldat[caseclick].setAJoue(true);
+					soldat[caseclick].setVie(vie + regen);
+					System.out.println("REPOS GAIN DE : "+regen+" PV");
+				}
+	
+				if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible() ) {
+					//if(!soldat[caseclick].getAJoue())
+					caseactionnee = caseclick;
+				}
+				else {
+					/* MERCI DE NE PAS TOUCHER PEU IMPORTE LA MODIF */
+					//HESITATION ICI EN PARLER 
+					if(caseactionnee != -1) {
+						int distance = getDistance(caseactionnee,caseclick);
+						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee()) {
+							if(distance == 1)
+								System.out.println("CAC");
+							else
+								System.out.println("DISTANCE");							
 						}
-						/*Point coord = getCoordCase(caseclick);	
-						if(tileset.getTile(carte[caseclick]).estPraticable()) {
-							for(int i = -1; i <= 1; i++) {
-								for(int j = -1; j <= 1; j++) {
-									int dxc = coord.x + i;
-									int dyc = coord.y + j;
-									int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
-									if(existe(dxc,dyc) ) {
-										if(caseVoisine == caseactionnee) {
-											System.out.println("YOLOOOOOOOOOOOOOOO");
-										}
-									}	
-								}
+						//Deplacement temporaire
+						//Si la distance a laquel on a cliqué est de 1 et que la case est praticable , qu'il n'y a ni monstre ni heros dessus et que le soldat a pas joué.
+						if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && soldat[caseclick] == null && !soldat[caseactionnee].getAJoue() ) {
+							
+							soldat[caseactionnee].setAJoue(true);
+							soldat[caseclick] = soldat[caseactionnee];
+							soldat[caseactionnee] = null;
+								
+							int sx = getCoordCase(caseactionnee).x;
+							int sy = getCoordCase(caseactionnee).y;
+							int dx = getCoordCase(caseclick).x;
+							int dy = getCoordCase(caseclick).y;
+							int x = 0;
+							int y = 0;
+							
+							char direction = Charset.HAUT;
+							
+							if(dx > sx) {
+								x = 2; 
+								direction = Charset.DROITE;
 							}
-						}*/
-						caseactionnee = -1;
-						/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
+							else if(dx < sx) {
+								x = -2;
+								direction = Charset.GAUCHE;
+							}
+								if(dy > sy) {
+								y = 2; 
+								direction = Charset.BAS;
+							}
+							else if(dy < sy) {
+								y = -2;
+								direction = Charset.HAUT;
+							}
+							
+							deplaceSoldat(soldat[caseclick], direction, x, y);
+						}
 					}
+					caseactionnee = -1;
+					/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
 				}
 			}
 		});
@@ -429,18 +424,22 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			int dx = coord.x;
 			int dy = coord.y;
 			
-			for(int i = -1; i <= 1; i++) {
-				for(int j = -1; j <= 1; j++) {
-					int dxc = dx + i;
-					int dyc = dy + j;
-					int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
-					
-					if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
-						soldat[caseactionnee].dessineDeplacement(g, dxc, dyc, Color.RED);
+			if(soldat[caseactionnee].getAJoue())
+				soldat[caseactionnee].dessineDeplacement(g, dx, dy, Color.GRAY);
+			else {
+				for(int i = -1; i <= 1; i++) {
+					for(int j = -1; j <= 1; j++) {
+						int dxc = dx + i;
+						int dyc = dy + j;
+						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
+						
+						if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
+							soldat[caseactionnee].dessineDeplacement(g, dxc, dyc, Color.RED);
+					}
 				}
+				
+				soldat[caseactionnee].dessineDeplacement(g, dx, dy, Color.BLUE);
 			}
-			
-			soldat[caseactionnee].dessineDeplacement(g, dx, dy, Color.BLUE);
 		}
 		
 		/* Affichage des personnages. */
@@ -462,7 +461,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				int x = getCoordCase(i).x;
 				int y = getCoordCase(i).y;
 				
-				soldat[i].dessineVie(g, x, y);
+				soldat[i].dessineVie(g, getCoordCase(soldat[i].getNumCase()).x, getCoordCase(soldat[i].getNumCase()).y);
 				
 				if(soldat[i] == soldat_pointe){
 					g.drawString("coucou", y, x);

@@ -29,10 +29,13 @@ public interface IConfig
 	/** Nombre de pixels par case. */
 	int NB_PIX_CASE = 32;
 	
+	/** Nombre de pixels par deplacement */
+	int VITESSE_DEPLACEMENT = 8;
+	
 	/** Position de la fenêtre. */
 	int POSITION_X = 100; 
 	int POSITION_Y = 50;
-	
+
 	/** Nombre de Héros. */
 	int NB_HEROS = 20; 
 	
@@ -44,6 +47,7 @@ public interface IConfig
 	int NB_ARBRES = 3;	
 	int NB_PAILLES = 4;
 	
+	/** Regen max d'un pégus */
 	int REGEN_MAX = 10;
 	
 	/** Couleur du texte. */
