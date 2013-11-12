@@ -4,9 +4,11 @@ package wargame;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
+/**
+ * Classe représenant un héros
+ */
 public class Heros extends Soldat
 {	
 	private static final long serialVersionUID = -3793338387029787601L;
