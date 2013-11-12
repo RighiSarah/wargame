@@ -67,11 +67,11 @@ public interface IConfig
 	
 	Color MESSAGE_POSITIF = Color.RED;
 	Color MESSAGE_NEGATIF = Color.GREEN;
-	Color MESSAGE_NEUTRE = Color.DARK_GRAY;
+	Color MESSAGE_NEUTRE = new Color(240, 240, 0, 220);
     
     
-    /** Marge par rapport au rectangle d'un message */
-    int MARGE_X_MESSAGE = 5;
+    /** Marge interne de l'infobulle */
+    int MARGE_INFOBULLE = 5;
  
     
 }

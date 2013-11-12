@@ -268,4 +268,14 @@ public abstract class Soldat extends Charset implements ISoldat
 		g.setColor(color);
 		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
 	}
+	
+	public String toString(){
+		String chaine = nom;
+		chaine += "\nVie: " + this.vie + " /" + this.vieMax;
+		chaine += "\nPuissance: " + this.puissance;
+		chaine += "\nTir: " + this.tir;
+		chaine += "\nPortee: " + this.portee;
+		
+		return chaine;
+	}
 }

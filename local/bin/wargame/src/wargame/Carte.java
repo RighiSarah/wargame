@@ -478,11 +478,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				soldat[i].dessineVie(g, getCoordCase(soldat[i].getNumCase()).x, getCoordCase(soldat[i].getNumCase()).y);
 			}
 		
-		if(soldat_pointe != null && message == "")
-			Infobulle.dessiner(g, getCoordCase(soldat_pointe.getNumCase()).x, getCoordCase(soldat_pointe.getNumCase()).y, "coucou\nles\namis\ncomment allez vous ?", IConfig.MESSAGE_NEGATIF);
+		/* Affichage de l'infobulle si un soldat est pointé */
+		if(soldat_pointe != null){ 
+			Point coord = getCoordCase(soldat_pointe.getNumCase());
+			Infobulle.dessiner(g, coord.x, coord.y, soldat_pointe.toString(), Color.BLACK, IConfig.MESSAGE_NEUTRE);
+		}
 		
 		if (message != null)
-			Infobulle.dessiner(g, getCoordCase(caseactionnee).x , getCoordCase(caseactionnee).y, message, couleurMessage);
+			Infobulle.dessiner(g, getCoordCase(caseactionnee).x , getCoordCase(caseactionnee).y, message, couleurMessage, Color.YELLOW); // Attention, redéfinir les couleurs car je l'ai modifié
 	}
     
 	public void actionPerformed(ActionEvent e) 
