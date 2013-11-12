@@ -1,10 +1,12 @@
 package wargame;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
@@ -16,6 +18,7 @@ final class Infobulle extends Rectangle implements ActionListener
 	private static String message;
 	private static Timer timer;
 
+	/* Ajout d'un boolean pour afficher ou non le rectangle */
 	public static void dessiner(Graphics g, int x, int y, String message, Color c)
 	{
 		int i = 0;
@@ -23,18 +26,19 @@ final class Infobulle extends Rectangle implements ActionListener
 		
 		FontMetrics fm = g.getFontMetrics(); 
 		 
-		int startX = x * IConfig.NB_PIX_CASE;
-		int startY = y * IConfig.NB_PIX_CASE;
+		int startX = x * IConfig.NB_PIX_CASE + IConfig.NB_PIX_CASE;
+		int startY = y * IConfig.NB_PIX_CASE - IConfig.NB_PIX_CASE;
 		int hauteur_ligne = g.getFontMetrics().getHeight();
 		int largeur_rectangle = fm.stringWidth(Infobulle.stringTailleMax(lignes));
 		
 		Color old = g.getColor();  
-		g.setColor(c);   
-		g.fillRect( startX, startY, largeur_rectangle, lignes.length * hauteur_ligne);   
+		g.setColor(Color.YELLOW);  
+		g.fillRect( startX + IConfig.MARGE_X_MESSAGE, startY, largeur_rectangle , lignes.length * hauteur_ligne);   
 
-		g.setColor(Color.WHITE);
+		g.setColor(c);
+		
 		for (String ligne : lignes){
-			g.drawString( ligne, startX, startY += g.getFontMetrics().getHeight() ); 
+			g.drawString( ligne, startX + IConfig.MARGE_X_MESSAGE, startY += g.getFontMetrics().getHeight() ); 
 			i++;
 		}
 		

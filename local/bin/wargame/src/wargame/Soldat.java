@@ -227,12 +227,11 @@ public abstract class Soldat extends Charset implements ISoldat
 		
 	}
 
-	protected void dessineDeplacement(Graphics g, int x, int y, Color c) 
+	protected void dessineDeplacement(Graphics g, int x, int y, Color c, int alpha) 
 	{
 		Stroke s = ((Graphics2D) g).getStroke();        // Sauvegarde du trait courant.
 		((Graphics2D) g).setStroke(new BasicStroke(3)); // Changement du trait.
-		
-		g.setColor( new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(c.getAlpha() / 2.5) ));
+		g.setColor( new Color(c.getRed(), c.getGreen(), c.getBlue(), IConfig.DEFAULT_ALPHA ));
 		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
 		
 		((Graphics2D) g).setStroke(s); // Restauration du trait.

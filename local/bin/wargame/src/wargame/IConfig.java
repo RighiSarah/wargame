@@ -53,10 +53,25 @@ public interface IConfig
 	/** Couleur du texte. */
     Color COULEUR_TEXTE = Color.black;
     
-    /** Couleur d'une case utilisée. */
-    Color COULEUR_NEUTRE = Color.magenta;
+    /** Couleur d'une case d'un soldat utilisé */
+    Color SOLDAT_UTILISE = Color.GRAY;
     
-    /** Couleur de déplacement. */
-    Color COULEUR_DEPLACEMENT = Color.red;
+    /** Couleur de la case du soldat [ Heros ]  séléctionné */
+    Color SOLDAT_SELECTIONNEE = Color.BLUE;
+    
+    /** Couleur des cases de déplacement possible */
+    Color SOLDAT_DEPLACEMENT_POSSIBLE = Color.RED;
+    
+    /** Valeur de Alpha par Défaut */
+	int DEFAULT_ALPHA = 100;
+	
+	Color MESSAGE_POSITIF = Color.RED;
+	Color MESSAGE_NEGATIF = Color.GREEN;
+	Color MESSAGE_NEUTRE = Color.DARK_GRAY;
+    
+    
+    /** Marge par rapport au rectangle d'un message */
+    int MARGE_X_MESSAGE = 5;
+ 
     
 }
