@@ -65,10 +65,10 @@ public interface IConfig
     /** Valeur de Alpha par Défaut */
 	int DEFAULT_ALPHA = 100;
 	
+	/** Couleurs de l'arrière plan de l'infobulle */
 	Color MESSAGE_POSITIF = Color.RED;
 	Color MESSAGE_NEGATIF = Color.GREEN;
 	Color MESSAGE_NEUTRE = new Color(240, 240, 0, 220);
-    
     
     /** Marge interne de l'infobulle */
     int MARGE_INFOBULLE = 5;

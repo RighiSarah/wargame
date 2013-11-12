@@ -4,12 +4,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 
 public abstract class Soldat extends Charset implements ISoldat
 {
+	private static final long serialVersionUID = 1L;
+	
 	/** Informations de base d'un soldat. */
 	protected int vieMax;
 	protected int vie, portee, puissance, tir;
