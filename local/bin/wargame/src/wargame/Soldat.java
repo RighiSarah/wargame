@@ -119,6 +119,16 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
     		if(Math.abs((int)offsetX) >= IConfig.NB_PIX_CASE || Math.abs((int)offsetY) >= IConfig.NB_PIX_CASE)
     		{
     			/* Mise à jour de la nouvelle position. */
+    			int x = numCase % IConfig.LARGEUR_CARTE;
+    			int y = numCase / IConfig.LARGEUR_CARTE;
+
+    			if(offsetX > 0) x++;
+    			else if(offsetX < 0) x--;
+
+    			if(offsetY > 0) y++;
+    			else if(offsetY < 0) y--;
+    			
+    			numCase = x * IConfig.LARGEUR_CARTE + y;
     			
     			/* Remise à zéro du déplacement. */
     			offsetX = offsetY = 0;
@@ -182,10 +192,6 @@ public abstract class Soldat extends Charset implements ISoldat, IConfig
 		
 		soldat.setVie(vie_defenseur);
 		this.setVie(vie_attaquant);
-	}
-	
-	public int alea (int min , int max) {
-		return min + (int)(Math.random() * (max - min + 1));
 	}
 
 	@Override

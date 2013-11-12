@@ -43,7 +43,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** La carte est-elle générée ? */
 	private boolean generer = false;
 	
-	/** Indique la case courante sélectionnée. */
+	/** Indique la case courante sélectionnée.
+	 * Correspond également au soldat selectionné dans le combat.
+	 */
 	private int caseactionnee = -1;
 	
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
@@ -70,15 +72,62 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					int caseclick = (e.getX() / IConfig.NB_PIX_CASE) + 
 								    IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
 					
-					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible()) {
+					if(caseclick == caseactionnee) {
+						int regen = alea(1,IConfig.REGEN_MAX);
+						System.out.println("REPOS GAIN DE : "+regen+" PV");
+					}
+					
+					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible() ) {
 						caseactionnee = caseclick;
-						//deplaceSoldat(soldat[caseclick], (char)3, 0, 0); TEST MERCI DE PAS TOUCHER !!!!
 					}
 					else {
 						/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
 						//HESITATION ICI EN PARLER 
-						Point coord = getCoordCase(caseclick);	
-						//System.out.println("my case"+caseclick+"x:"+coord.x+"y:"+coord.y);
+						if(caseactionnee != -1) {
+							int distance = getDistance(caseactionnee,caseclick);
+							if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee()) {
+								if(distance == 1)
+									System.out.println("CAC");
+								else
+									System.out.println("DISTANCE");							
+							}
+							//Deplacement temporaire
+							if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && !(soldat[caseclick] instanceof Heros) && !(soldat[caseclick] instanceof Monstre) ) {
+								soldat[caseclick] = soldat[caseactionnee];
+								System.out.println(soldat[caseactionnee].estVisible);
+								soldat[caseactionnee] = null;
+								
+								int sx = getCoordCase(caseactionnee).x;
+								int sy = getCoordCase(caseactionnee).y;
+								int dx = getCoordCase(caseclick).x;
+								int dy = getCoordCase(caseclick).y;
+								int x = 0;
+								int y = 0;
+								
+								char direction = Charset.HAUT;
+								
+								if(dx > sx) {
+									x = 2; 
+									direction = Charset.DROITE;
+								}
+								else if(dx < sx) {
+									x = -2;
+									direction = Charset.GAUCHE;
+								}
+
+								if(dy > sy) {
+									y = 2; 
+									direction = Charset.BAS;
+								}
+								else if(dy < sy) {
+									y = -2;
+									direction = Charset.HAUT;
+								}
+								
+								deplaceSoldat(soldat[caseclick], direction, x, y);
+							}
+						}
+						/*Point coord = getCoordCase(caseclick);	
 						if(tileset.getTile(carte[caseclick]).estPraticable()) {
 							for(int i = -1; i <= 1; i++) {
 								for(int j = -1; j <= 1; j++) {
@@ -86,15 +135,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 									int dyc = coord.y + j;
 									int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 									if(existe(dxc,dyc) ) {
-										//System.out.println(caseVoisine);
 										if(caseVoisine == caseactionnee) {
 											System.out.println("YOLOOOOOOOOOOOOOOO");
 										}
 									}	
 								}
 							}
-						}
-						//System.out.println("Case :" + caseclick); affichage temporaire
+						}*/
 						caseactionnee = -1;
 						/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
 					}
@@ -117,6 +164,20 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 		});
 		
+	}
+	private int getDistance(int case1,int case2)
+	{
+		if (case1 == -1) return 0;
+		Point coordCase1 = getCoordCase(case1);	
+		Point coordCase2 = getCoordCase(case2);
+		
+		int dx = Math.abs(coordCase1.x - coordCase2.x);
+		int dy = Math.abs(coordCase1.y - coordCase2.y);
+	
+		if(dx == 1 && dy == 1)
+			return 1;
+		
+		return dx + dy;
 	}
 	
 	private int getNumCase(int x, int y)
@@ -413,5 +474,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void actionPerformed(ActionEvent e) 
 	{	
 		repaint();
+	}
+	
+	public int alea (int min , int max) {
+		return min + (int)(Math.random() * (max - min + 1));
 	}
 }

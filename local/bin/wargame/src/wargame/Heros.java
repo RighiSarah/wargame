@@ -15,9 +15,14 @@ public class Heros extends Soldat
 {	
 	/* Images des Héros. */
 	static protected BufferedImage archer, elfe;
+	
 	/* Vie max du Héros. */
 	private final int VIE_MAX;
-
+	
+	public int getVieMax() {
+		return VIE_MAX;
+	}
+	
 	protected void setImage() throws IOException
 	{
 		switch(nom)

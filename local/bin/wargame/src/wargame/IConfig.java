@@ -44,6 +44,8 @@ public interface IConfig
 	int NB_ARBRES = 3;	
 	int NB_PAILLES = 4;
 	
+	int REGEN_MAX = 10;
+	
 	/** Couleur du texte. */
     Color COULEUR_TEXTE = Color.black;
     
@@ -52,4 +54,5 @@ public interface IConfig
     
     /** Couleur de déplacement. */
     Color COULEUR_DEPLACEMENT = Color.red;
+    
 }
