@@ -2,6 +2,9 @@ package wargame;
 
 import java.awt.Point;
 
+/**
+ * Interface comprenant les méthodes et attributs d'une classe carte
+ */
 public interface ICarte {
  //	Element getElement(Position pos);
 /*

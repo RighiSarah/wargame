@@ -1,10 +1,6 @@
 package wargame;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,9 +9,12 @@ import javax.imageio.ImageIO;
 
 public class Heros extends Soldat
 {	
+	private static final long serialVersionUID = -3793338387029787601L;
+	
 	/* Images des Héros. */
 	static protected BufferedImage archer, elfe;
 	
+	/** Change l'image du héros selon son type */
 	protected void setImage() throws IOException
 	{
 		switch(nom)
@@ -33,6 +32,11 @@ public class Heros extends Soldat
 		}
 	}
 	
+	/** 
+	 * Constructeur du héros 
+	 * @param type_heros Type du monstre
+	 * @throws IOException Si l'image de peut pas être chargée
+	 */
 	Heros(TypesH type_heros) throws IOException
 	{
 		super();

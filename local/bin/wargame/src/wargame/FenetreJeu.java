@@ -16,8 +16,13 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Classe permettant de dessiner la fenêtre du jeu (avec ses menus...)
+ */
 public class FenetreJeu extends JFrame
 {
+	private static final long serialVersionUID = 7794325642011100784L;
+	
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;

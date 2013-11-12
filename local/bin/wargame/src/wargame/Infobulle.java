@@ -4,19 +4,30 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+//import javax.swing.Timer;
 
-import javax.swing.Timer;
-
+/**
+ * Classe implémentant une méthode statique permettant de dessiner une infobulle sur la carte
+ */
 final class Infobulle extends Rectangle
 {
-	private static final long serialVersionUID = 1L;
-	private static Timer timer;
+	private static final long serialVersionUID = 3889208541227481368L;
+//	private static Timer timer;
 
+	/**
+	 * Constructeur privé, ce n'est pas une classe faite pour être instanciée
+	 */
 	private Infobulle(){}
 	
-	/* Ajout d'un boolean pour afficher ou non le rectangle */
+	/**
+	 * Fonction statique permettant de dessiner une infobulle sur la carte
+	 * @param g Graphics dans lequel on va dessiner l'infobulle
+	 * @param x coordonnée x de la case de la carte
+	 * @param y coordonnée y de la case de la carte
+	 * @param message message à écrire dans l'infobulle 
+	 * @param string_color couleur du texte
+	 * @param background_color couleur d'arrière plan de l'infobulle
+	 */
 	public static void dessiner(Graphics g, int x, int y, String message, Color string_color, Color background_color)
 	{
 		/* Sauvegarde de l'ancienne couleur pour la remettre ensuite */

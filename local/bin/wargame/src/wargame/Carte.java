@@ -22,6 +22,8 @@ import javax.swing.Timer;
 */
 public class Carte extends JPanel implements ActionListener, Serializable
 {	
+	private static final long serialVersionUID = 1845646587235566472L;
+
 	/** Nombre de FPS pour la carte. */
 	private static final double FPS = 60.0;
 	
@@ -53,7 +55,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	private Color couleurMessage = Color.BLACK;;
 	
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
-	private Soldat soldat_pointe = null;
+	private Soldat soldatPointe = null;
 	
 	/** Timer. */
 	Timer timer;
@@ -158,23 +160,27 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 		});
 		
+		/* Écouteur permettant de savoir si le curseur pointe sur un soldat */
 		addMouseMotionListener(new MouseAdapter() {
 			public void mouseMoved(MouseEvent e) {
-				if(generer == true){
+				/* On vérifie que la carte a bien été générée */
+				if(generer){
+					/* récupération de la case de la carte correspondant aux coordonnées du curseur */
 					int coord_curseur = (e.getX() / IConfig.NB_PIX_CASE) + 
 						    IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
+					
 					if(soldat[coord_curseur] != null && soldat[coord_curseur].estVisible())
-						soldat_pointe = soldat[coord_curseur];
+						soldatPointe = soldat[coord_curseur];
 					else
-						soldat_pointe = null;
-						
+						soldatPointe = null;	
 				}
-				
 			}
 		});
-		
 	}
-	private int getDistance(int case1,int case2)
+	
+	
+	/* Méthode récupérant la distance (en terme de nombre de cases) entre case1 et case2 */
+	private int getDistance(int case1, int case2)
 	{
 		if (case1 == -1) return 0;
 		Point coordCase1 = getCoordCase(case1);	
@@ -189,16 +195,19 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		return dx + dy;
 	}
 	
+	/* Méthode récupérant le numéro de la case correspondant aux coordonnées x et y d'une case */
 	private int getNumCase(int x, int y)
 	{
 		return x + IConfig.LARGEUR_CARTE * y;	
 	}
 	
+	/* Méthode donnant les coordonnées de la case numéro numCase */
 	private Point getCoordCase(int numCase)
 	{
 		return new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
 	}
 	
+	/* Méthode chargeant un nouveau Tileset */
 	private void chargerTileset()
 	{
 		if(tileset == null)
@@ -211,6 +220,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}		
 	}
 	
+	/* Méthode générant la carte */
 	private void genererCarte()
 	{
 		int x, y;
@@ -249,6 +259,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}
 	}
 	
+	/* Méthode générant tous les soldats */
 	private void genererSoldats()
 	{
 		/* Mise à 0 de la carte. */
@@ -319,7 +330,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		caseactionnee = -1;		
 	}
 	
-	/* Teste si une case existe sur la Carte.
+	/** Teste si une case existe sur la Carte.
 	 * @param x Coordonnée x.
 	 * @param y Coordonnée y.
 	 * @return  true si existe, false sinon.
@@ -388,7 +399,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			heros   = (Heros[])ois.readObject();
 			soldat  = (Soldat[])ois.readObject();
 			
-			/** Les images ne sont pas sérializées... */
+			/* Les images ne sont pas sérializées... */
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
 			{
 				heros[i].setImage();
@@ -460,28 +471,24 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null && soldat[i].estVisible())
 			{
-				int x = getCoordCase(i).x;
-				int y = getCoordCase(i).y;
+				Point p = getCoordCase(soldat[i].getNumCase());
 				
-				soldat[i].dessinerAvecOffset(g, getCoordCase(soldat[i].getNumCase()).x, 
-												getCoordCase(soldat[i].getNumCase()).y, 
-						                        soldat[i].offsetX, soldat[i].offsetY);
+				soldat[i].dessinerAvecOffset(g, p.x, p.y, soldat[i].offsetX, soldat[i].offsetY);
 			}
 		
 		/* Affichage des barres de vie. */
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null && !soldat[i].estMort())
 			{
-				int x = getCoordCase(i).x;
-				int y = getCoordCase(i).y;
+				Point p = getCoordCase(soldat[i].getNumCase());
 				
-				soldat[i].dessineVie(g, getCoordCase(soldat[i].getNumCase()).x, getCoordCase(soldat[i].getNumCase()).y);
+				soldat[i].dessineVie(g, p.x, p.y);
 			}
 		
 		/* Affichage de l'infobulle si un soldat est pointé */
-		if(soldat_pointe != null){ 
-			Point coord = getCoordCase(soldat_pointe.getNumCase());
-			Infobulle.dessiner(g, coord.x, coord.y, soldat_pointe.toString(), Color.BLACK, IConfig.MESSAGE_NEUTRE);
+		if(soldatPointe != null){ 
+			Point p = getCoordCase(soldatPointe.getNumCase());
+			Infobulle.dessiner(g, p.x, p.y, soldatPointe.toString(), Color.BLACK, IConfig.MESSAGE_NEUTRE);
 		}
 		
 		if (message != null)

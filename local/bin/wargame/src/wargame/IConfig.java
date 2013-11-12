@@ -2,6 +2,9 @@ package wargame;
 
 import java.awt.Color;
 
+/**
+ * Interface comprenant la configuration du projet
+ */
 public interface IConfig 
 {
 	/** Nombre de sauvegardes possibles. */

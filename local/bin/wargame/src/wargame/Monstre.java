@@ -1,19 +1,22 @@
 package wargame;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 
+/**
+ * Classe représenant un monstre
+ */
 public class Monstre extends Soldat 
 {	
-	/* Images des Monstres. */
+	private static final long serialVersionUID = -2866246699288761404L;
+	
+	/** Images des Monstres. */
 	static protected BufferedImage gobelin, orc;
 
+	/** Change l'image du monstre selon son type */
 	protected void setImage() throws IOException
 	{
 		switch(nom)
@@ -32,15 +35,20 @@ public class Monstre extends Soldat
 		}
 	}
 	
+	/** 
+	 * Constructeur du monstre 
+	 * @param type_monstre Type du monstre
+	 * @throws IOException Si l'image de peut pas être chargée
+	 */
 	Monstre(TypesM type_monstre) throws IOException
 	{
 		super();
 		
-		vieMax = vie = type_monstre.getPoints();
-		portee = type_monstre.getPortee();
-		puissance = type_monstre.getPuissance();
-		tir = type_monstre.getTir();
-		nom = type_monstre.getNom();
+		this.vieMax = this.vie = type_monstre.getPoints();
+		this.portee = type_monstre.getPortee();
+		this.puissance = type_monstre.getPuissance();
+		this.tir = type_monstre.getTir();
+		this.nom = type_monstre.getNom();
 		
 		setImage();
 	}

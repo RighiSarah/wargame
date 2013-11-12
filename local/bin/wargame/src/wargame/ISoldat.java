@@ -1,13 +1,19 @@
 package wargame;
 
-import java.awt.Point;
 import java.io.Serializable;
 
+/** 
+ * Interface comprenant les attributs et méthodes d'un soldat.
+ * Comprend aussi les différentes valeurs des caractéristiques des monstres et héros.
+ */
 public interface ISoldat extends Serializable
 {
 	public static final char MONSTRE = 1;
 	public static final char HUMAIN = 2;
 
+	/**
+	 * Énumération permettant d'avoir les caractéristiques des différents héros
+	 */
 	static enum TypesH 
 	{
 		HUMAIN(40, 3, 10, 2, "archer"), 
@@ -58,6 +64,9 @@ public interface ISoldat extends Serializable
 		}
 	}
 
+	/**
+	 * Énumération permettant d'avoir les principales caractéristiques des différents monstres
+	 */
 	public static enum TypesM 
 	{
 		TROLL(100, 1, 30, 0, "troll"), 

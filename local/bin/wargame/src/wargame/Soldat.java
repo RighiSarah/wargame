@@ -7,6 +7,10 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 
+
+/**
+ * Classe abstraite représentant la base d'un soldat
+ */
 public abstract class Soldat extends Charset implements ISoldat
 {
 	private static final long serialVersionUID = 1L;
@@ -91,16 +95,16 @@ public abstract class Soldat extends Charset implements ISoldat
 		
 	public void setSeDeplace(boolean value)
 	{
-		seDeplace = value;
+		this.seDeplace = value;
 	}
 	
-	/** Mettre le status du personnage à mort. */
+	/** Mettre le statut du personnage à mort. */
 	public void setMort()
 	{
-		estMort = true;
-		direction = HAUT;
-		animation = 0;
-	    timer.setDelay(350);
+		this.estMort = true;
+		this.direction = HAUT;
+		this.animation = 0;
+	    this.timer.setDelay(350);
 	}
 	
 	/** Teste si le personnage est mort. 
@@ -119,8 +123,8 @@ public abstract class Soldat extends Charset implements ISoldat
 		tourEffectue = value;
 	}
 	
-	/** Update le status du soldat.
-	 *  @param e Evenement appellant, le timer.
+	/** Met à jour le statut du soldat.
+	 *  @param e Évènement appellant, le timer.
 	 */
     public void actionPerformed(ActionEvent e)
     {    
@@ -158,56 +162,15 @@ public abstract class Soldat extends Charset implements ISoldat
     			if(++direction >= N_DIRECTIONS)
     				estVisible = false;
     		}
-    		else if(++animation >= N_ANIMATIONS)
+    		else if(++animation >= N_ANIMATIONS){
     			animation = 0;
+    		}
     	}
 	}
 	
 	public void combat(Soldat soldat)
 	{
-		/* Récupération des variables */
-		int vie_attaquant = this.getVie();
-		int vie_defenseur = soldat.getVie();
-		
-		int attaque_attaquant = 0;
-		int attaque_defenseur = 0;
-		
-		int tour = 0; //0 - attaquant ( il attaque toujours en premier )  | 1 - def
-		int type_combat = 0; // 0 pour corps a corps - 1 pour distance
-					/*******************************************/
-					/* A CORRIGER - VERIFIER POSITION PERSONNE */
-					/*******************************************/
-		if ( true ) { // position de la personne mettre la fonction
-			type_combat = 1;
-			attaque_attaquant = this.getTir();
-			attaque_defenseur = soldat.getTir();
-		}
-		else {
-			type_combat = 0;
-			attaque_attaquant = this.getPuissance();
-			attaque_defenseur = soldat.getPuissance();
-		}
-		
-		//penser a faire le rand d'attaque entre 0 et la puissance a chaque coup
 
-//		while ( vie_defenseur > 0 && vie_attaquant > 0) {
-//			( tour == 0 ) ? 
-//					(type_combat == 0) ? degat = alea(0,attaque_attaquant) : degat = attaque_attaquant //attaquant
-//			:		(type_combat == 0) ? degat = alea(0,attaque_defenseur) : degat = attaque_defenseur; // défenseur
-//			// Affichage du tour
-//			System.out.println("Attaque"+(tour == 0) ? "l'attaquant" : "du défenseur");
-//			// nombre de dégat fait 
-//			System.out.println("Degat fait par " + (tour == 0) ? "l'attaquant : " : "le défenseur : " + degat);
-//			// calcule des dégats
-//			(tour == 0 ) ? vie_defenseur -= degat : vie_attaquant -= degat;
-//			// affichage de la vie de la personne apres degat 
-//			System.out.println("Vie restant : "+(tour == 0) ? vie_def : vie_attaquant);
-//			// changement du tour
-//			(tour == 0) ? tour = 1 : tour = 0;
-//		}
-		
-		soldat.setVie(vie_defenseur);
-		this.setVie(vie_attaquant);
 	}
 
 	@Override
@@ -270,6 +233,10 @@ public abstract class Soldat extends Charset implements ISoldat
 		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
 	}
 	
+	/**
+	 * Caractéristiques d'un soldat
+	 * @return La chaine formatée comprenant les caractéristiques du soldat
+	 */
 	public String toString(){
 		String chaine = nom;
 		chaine += "\nVie: " + this.vie + " /" + this.vieMax;

@@ -1,7 +1,5 @@
 package wargame;
 
-import java.io.Serializable;
-
 /** Case d'un tileset.
  * @author ABHAMON Ronan 
 */
