@@ -464,8 +464,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				soldat[i].dessineVie(g, getCoordCase(soldat[i].getNumCase()).x, getCoordCase(soldat[i].getNumCase()).y);
 				
 				if(soldat[i] == soldat_pointe){
-					g.drawString("coucou", y, x);
-					
+					Infobulle.dessiner(g, getCoordCase(soldat[i].getNumCase()).x, getCoordCase(soldat[i].getNumCase()).y, "coucou\n les\n amis\n comment allez vous ?", Color.RED);
 				}
 			}
 	}
