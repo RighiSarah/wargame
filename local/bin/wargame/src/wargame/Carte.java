@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -71,11 +70,33 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					int caseclick = (e.getX() / IConfig.NB_PIX_CASE) + 
 								    IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
 					
-					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible())
+					if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible()) {
 						caseactionnee = caseclick;
+						//deplaceSoldat(soldat[caseclick], (char)3, 0, 0); TEST MERCI DE PAS TOUCHER !!!!
+					}
 					else {
-						System.out.println("Case :" + caseclick); //affichage temporaire
+						/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
+						//HESITATION ICI EN PARLER 
+						Point coord = getCoordCase(caseclick);	
+						//System.out.println("my case"+caseclick+"x:"+coord.x+"y:"+coord.y);
+						if(tileset.getTile(carte[caseclick]).estPraticable()) {
+							for(int i = -1; i <= 1; i++) {
+								for(int j = -1; j <= 1; j++) {
+									int dxc = coord.x + i;
+									int dyc = coord.y + j;
+									int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
+									if(existe(dxc,dyc) ) {
+										//System.out.println(caseVoisine);
+										if(caseVoisine == caseactionnee) {
+											System.out.println("YOLOOOOOOOOOOOOOOO");
+										}
+									}	
+								}
+							}
+						}
+						//System.out.println("Case :" + caseclick); affichage temporaire
 						caseactionnee = -1;
+						/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
 					}
 				}
 			}
