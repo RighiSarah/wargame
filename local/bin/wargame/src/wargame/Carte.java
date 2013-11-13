@@ -497,7 +497,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			Infobulle.dessiner(g, p.x, p.y, soldatPointe.toString(), IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
 		}
 		if (message != "" && caseactionnee != -1) {
-			Infobulle.dessiner(g, getCoordCase(caseactionnee).x + 1 , getCoordCase(caseactionnee).y, message, couleurMessage, IConfig.ARRIERE_PLAN);
+			Infobulle.dessiner(g, getCoordCase(caseactionnee).x + 1 , getCoordCase(caseactionnee).y, message, couleurMessage, null);
 		}
 	}
     
