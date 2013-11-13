@@ -87,6 +87,9 @@ public interface IConfig
     
     /** Marge interne de l'infobulle */
     int MARGE_INFOBULLE = 5;
+    
+    /** Nombre de musiques d'arrière plan */
+    int NOMBRE_MUSIQUE_ARRIERE_PLAN = 3;
  
     
 }

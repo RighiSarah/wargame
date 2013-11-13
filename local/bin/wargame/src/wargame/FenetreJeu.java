@@ -65,6 +65,9 @@ public class FenetreJeu extends JFrame
 	 
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
+	    /* On joue le son d'arrière plan */
+		Son.joueSonArriere();
+		
 		/* Création d'une carte vide. */
 		carte = new Carte();
 		
@@ -189,6 +192,8 @@ public class FenetreJeu extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setResizable(false);
 	    this.pack();
+	    
+
 	  }
 	}
 
