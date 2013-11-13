@@ -1,9 +1,12 @@
 package wargame;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -14,6 +17,8 @@ import javax.swing.event.MenuListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -65,6 +70,9 @@ public class FenetreJeu extends JFrame
 	 
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
+		this.setTitle("Wargame");
+        this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
+		
 	    /* On joue le son d'arrière plan */
 		Son.joueSonArriere();
 		
@@ -187,14 +195,12 @@ public class FenetreJeu extends JFrame
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte);
-        this.setTitle("Wargame");
+               
 	    this.setVisible(true);
 	    
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setResizable(false);
 	    this.pack();
-	    
-
 	  }
 	}
 
