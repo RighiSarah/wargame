@@ -35,7 +35,7 @@ public class Charset implements ActionListener
 	protected char animation = 0;
 	
 	/** Délai entre chaque animation. */
-	protected int delai = 200;
+	protected int delai = 100;
 			
 	/** Timer. */
 	Timer timer;

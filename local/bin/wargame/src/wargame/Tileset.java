@@ -30,7 +30,7 @@ public class Tileset
 	 */
 	public Tileset(String filename) throws IOException
 	{
-		File f = new File(filename);	
+		File f = new File(IConfig.CHEMIN_IMAGE + filename);	
 		image = ImageIO.read(f); /* IOException ? */
 		
 		LARGEUR = image.getWidth() / IConfig.NB_PIX_CASE;

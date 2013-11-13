@@ -22,11 +22,11 @@ public class Monstre extends Soldat
 		switch(nom)
 		{
 			case "gobelin":				
-				if(gobelin == null) gobelin = ImageIO.read(new File(IConfig.GOBELIN));
+				if(gobelin == null) gobelin = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.GOBELIN));
 				image = gobelin;
 				break;
 			case "orc":				
-				if(orc == null) orc = ImageIO.read(new File(IConfig.ORC));
+				if(orc == null) orc = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ORC));
 				image = orc;
 			//	this.setOffset(20);
 				break;

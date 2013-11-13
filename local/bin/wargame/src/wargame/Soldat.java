@@ -158,11 +158,12 @@ public abstract class Soldat extends Charset implements ISoldat
     			/* Remise à zéro du déplacement. */
     			offsetX = offsetY = 0;
     			seDeplace = false;
+    			animation = 0;
     		}
     	}
     	
     	/* Mise à jour de l'animation. */
-        if(estVisible) {
+        if(estVisible && seDeplace) {
     		if(estMort) {
     			if(++direction >= N_DIRECTIONS)
     				estVisible = false;
