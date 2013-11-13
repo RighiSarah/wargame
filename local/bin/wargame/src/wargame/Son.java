@@ -46,7 +46,7 @@ public final class Son {
 			public void meta(MetaMessage message) {
 				/* Si la musique est terminée */
 				if(message.getType() == 47){
-					int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN - 1 + 1));
+					int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
 					try {
 						/* On charge une autre séquence */
 						Sequence sequence;
