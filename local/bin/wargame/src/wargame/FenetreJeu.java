@@ -187,6 +187,7 @@ public class FenetreJeu extends JFrame
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte);
+        this.setTitle("Wargame");
 	    this.setVisible(true);
 	    
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
