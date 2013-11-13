@@ -168,9 +168,24 @@ public abstract class Soldat extends Charset implements ISoldat
     	}
 	}
 	
-	public void combat(Soldat soldat)
+	public void combat(Soldat soldat,int distance)
 	{
-
+		System.out.println(distance);
+		int degat = (distance == 1) ? alea(1,this.getPuissance()) : this.getTir();
+		int vie = soldat.getVie() - degat;
+		if(vie > 0) {
+			soldat.setVie(vie);
+			if( soldat.getPortee() >= distance ) {
+				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
+				vie = this.getVie() - degat;
+				if(vie > 0)
+					this.setVie(vie);
+				else
+					this.setMort();
+			}
+		}
+		else
+			soldat.setMort();			
 	}
 
 	@Override
@@ -191,11 +206,11 @@ public abstract class Soldat extends Charset implements ISoldat
 		
 	}
 
-	protected void dessineDeplacement(Graphics g, int x, int y, Color c, int alpha) 
+	protected void dessineDeplacement(Graphics g, int x, int y, Color c) 
 	{
 		Stroke s = ((Graphics2D) g).getStroke();        // Sauvegarde du trait courant.
 		((Graphics2D) g).setStroke(new BasicStroke(3)); // Changement du trait.
-		g.setColor( new Color(c.getRed(), c.getGreen(), c.getBlue(), IConfig.DEFAULT_ALPHA ));
+		g.setColor(c);
 		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
 		
 		((Graphics2D) g).setStroke(s); // Restauration du trait.
@@ -245,5 +260,9 @@ public abstract class Soldat extends Charset implements ISoldat
 		chaine += "\nPortee: " + this.portee;
 		
 		return chaine;
+	}
+	
+	public int alea (int min , int max) {
+		return min + (int)(Math.random() * (max - min + 1));
 	}
 }

@@ -38,8 +38,8 @@ final class Infobulle extends Rectangle
 		
 		FontMetrics fm = g.getFontMetrics(); 
 		
-		int start_x = x * IConfig.NB_PIX_CASE;
-		int start_y = y * IConfig.NB_PIX_CASE;
+		int start_x = x * IConfig.NB_PIX_CASE + IConfig.NB_PIX_CASE / 2;
+		int start_y = y * IConfig.NB_PIX_CASE + IConfig.NB_PIX_CASE / 2;
 		
 		/* La hauteur correspond au nombre de ligne * la hauteur de la police à laquelle on rajoute une marge */
 		int hauteur_rectangle = lignes.length * g.getFontMetrics().getHeight() + IConfig.MARGE_INFOBULLE;

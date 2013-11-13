@@ -52,7 +52,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	/** Message a afficher */
 	private String message = "";
-	private Color couleurMessage = Color.BLACK;;
+	private Color couleurMessage = Color.BLACK;
 	
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
@@ -76,47 +76,52 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		public void mouseClicked(MouseEvent e) { 
 			if(!generer)
 				return;
-				int caseclick = getNumCase(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
-									
-				if(caseclick == caseactionnee && !soldat[caseclick].getAJoue()) {
-					int regen = alea(1,IConfig.REGEN_MAX);
-					int vie = soldat[caseclick].getVie();
-					
-					if(vie == soldat[caseclick].getVieMax()) {
-						message = "Repos Impossible\nVie max atteinte";
-						couleurMessage = IConfig.MESSAGE_NEUTRE;
-						return;
-					}
-					
-					soldat[caseclick].setAJoue(true);
-					soldat[caseclick].setVie(vie + regen);
-					message = "+"+regen+"PV";
-					couleurMessage = IConfig.MESSAGE_POSITIF;
-					//Infobulle.dessiner(g, getint from 1 over 4 to 1 y_1 + y_2 dy_2 dy_1CoordCase(soldat[caseclick].getNumCase()).x, getCoordCase(soldat[caseclick].getNumCase()).y, "REPOS GAIN DE : "+regen+" PV", Color.RED);
-					//System.out.println("REPOS GAIN DE : "+regen+" PV");
+			
+			int caseclick = getNumCase(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
+				
+			/** On vient de cliquer sur la même case. I.e : On veut se reposer */
+			if(caseclick == caseactionnee && !soldat[caseclick].getAJoue()) {
+				int regen = alea(0,IConfig.REGEN_MAX);
+				int vie = soldat[caseclick].getVie();
+				
+				/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message*/
+				if(vie == soldat[caseclick].getVieMax()) {
+					message = "Repos Impossible\nVie max atteinte";
+					couleurMessage = IConfig.MESSAGE_NEUTRE;
+					return;
 				}
+				
+				/* Définition du message et de la couleur dans laquel l'écrire */
+				message = "+"+regen+"PV";
+				couleurMessage = IConfig.MESSAGE_POSITIF;
+				
+				/* On met a jour sa vie et on indique qu'il a joué */
+				soldat[caseclick].setVie(vie + regen);
+				soldat[caseclick].setAJoue(true);
+			}
 	
+				/** On change de héros si la case n'est pas vide et qu'il s'agit bien d'un soldat et que le soldat est affiché.
+				 * Sinon On vas faire une action en rapport avec le soldat selectionné.*/
 				if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible() ) {
-					//if(!soldat[caseclick].getAJoue())
 					caseactionnee = caseclick;
 				}
 				else {
-					/* MERCI DE NE PAS TOUCHER PEU IMPORTE LA MODIF */
-					//HESITATION ICI EN PARLER 
+					
 					if(caseactionnee != -1) {
 						int distance = getDistance(caseactionnee,caseclick);
-						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee()) {
-							if(distance == 1) {
-								message = "- 5 Pv";
-								couleurMessage = IConfig.MESSAGE_NEGATIF;
-							}
-							else {
-								message = "- 10 Pv"	;
-								couleurMessage = IConfig.MESSAGE_NEGATIF;
-							}
+						
+						/** On a un soldat selectionné et on clique sûr un monste.
+						 * I.e : Combat 
+						 */
+						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee() && !soldat[caseactionnee].getAJoue()) {
+								soldat[caseactionnee].combat(soldat[caseclick],distance);
+								soldat[caseactionnee].setAJoue(true);
+								return;
 						}
-						//Deplacement temporaire
-						//Si la distance a laquel on a cliqué est de 1 et que la case est praticable , qu'il n'y a ni monstre ni heros dessus et que le soldat a pas joué.
+
+						/** On a un soldat selectionné et on click sur une case autour [ a une distance de 1 autour du soldat ].
+						 * I.e : On veut se déplacer sur la nouvelle case.
+						 */
 						if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && soldat[caseclick] == null && !soldat[caseactionnee].getAJoue() ) {
 							
 							soldat[caseactionnee].setAJoue(true);
@@ -152,10 +157,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							deplaceSoldat(soldat[caseclick], direction, x, y);
 						}
 					}
+					/* Fin deplacement on re-initialise la case */
 					caseactionnee = -1;
-					message = "";
-					couleurMessage = Color.BLACK;
-					/* MERCI DE NE PAS TOUCHER PEUT IMPORTE LA MODIF */
+					couleurMessage = IConfig.MESSAGE_NEUTRE;
 				}
 			}
 		});
@@ -171,8 +175,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					
 					if(soldat[coord_curseur] != null && soldat[coord_curseur].estVisible())
 						soldatPointe = soldat[coord_curseur];
-					else
-						soldatPointe = null;	
+					else {
+						soldatPointe = null;
+						message = "";
+					}
 				}
 			}
 		});
@@ -444,13 +450,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 		
 		/* Case sélectionnée. */
-		if(caseactionnee != -1 ){
+		if(caseactionnee != -1 && message == ""){
 			Point coord = getCoordCase(caseactionnee);
 			int dx = coord.x;
 			int dy = coord.y;
 			
 			if(soldat[caseactionnee].getAJoue())
-				soldat[caseactionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_UTILISE, IConfig.DEFAULT_ALPHA);
+				soldat[caseactionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_UTILISE);
 			else {
 				for(int i = -1; i <= 1; i++) {
 					for(int j = -1; j <= 1; j++) {
@@ -459,11 +465,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 						
 						if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
-							soldat[caseactionnee].dessineDeplacement(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE, IConfig.DEFAULT_ALPHA);
+							soldat[caseactionnee].dessineDeplacement(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
 					}
 				}
 				
-				soldat[caseactionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE, IConfig.DEFAULT_ALPHA);
+				soldat[caseactionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
 			}
 		}
 		
@@ -486,13 +492,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 		
 		/* Affichage de l'infobulle si un soldat est pointé */
-		if(soldatPointe != null){ 
+		if(soldatPointe != null && message == ""){ 
 			Point p = getCoordCase(soldatPointe.getNumCase());
-			Infobulle.dessiner(g, p.x, p.y, soldatPointe.toString(), Color.BLACK, IConfig.MESSAGE_NEUTRE);
+			Infobulle.dessiner(g, p.x, p.y, soldatPointe.toString(), IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
 		}
-		
-		if (message != null)
-			Infobulle.dessiner(g, getCoordCase(caseactionnee).x , getCoordCase(caseactionnee).y, message, couleurMessage, Color.YELLOW); // Attention, redéfinir les couleurs car je l'ai modifié
+		if (message != "" && caseactionnee != -1) {
+			Infobulle.dessiner(g, getCoordCase(caseactionnee).x + 1 , getCoordCase(caseactionnee).y, message, couleurMessage, IConfig.ARRIERE_PLAN);
+		}
 	}
     
 	public void actionPerformed(ActionEvent e) 
@@ -502,5 +508,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	public int alea (int min , int max) {
 		return min + (int)(Math.random() * (max - min + 1));
+	}
+	
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }
