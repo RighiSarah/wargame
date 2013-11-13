@@ -4,6 +4,7 @@ import java.awt.Dimension;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -65,6 +66,10 @@ public class FenetreJeu extends JFrame
 	 
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
+		
+	    /* On joue le son d'arrière plan */
+		Son.joueSonArriere();
+		
 		/* Création d'une carte vide. */
 		carte = new Carte();
 		
@@ -184,11 +189,18 @@ public class FenetreJeu extends JFrame
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte);
-	    this.setVisible(true);
+               
+        
+        this.setTitle("Wargame");
+        this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
 	    
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setResizable(false);
 	    this.pack();
+	    
+	    /* Pour centrer la fenêtre */
+	    this.setLocationRelativeTo(null);
+	    this.setVisible(true);
 	  }
 	}
 

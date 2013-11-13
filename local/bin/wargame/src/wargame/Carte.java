@@ -67,10 +67,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @throws IOException 
 	 * @throws InvalidMidiDataException */
 	Carte() throws InvalidMidiDataException, IOException, MidiUnavailableException
-	{
-		/* On joue le son d'arrière plan */
-		Son.joueSonArriere();
-		
+	{		
 		/* Initialisation taux de rafraichissement. */
 		timer = new Timer((int)(1000.0 * 1.0 / FPS), this);
 	    timer.setInitialDelay(0);
