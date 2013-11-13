@@ -14,6 +14,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -60,9 +62,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Timer. */
 	Timer timer;
 	
-	/** Constructeur par défaut. */
-	Carte()
+	/** Constructeur par défaut. 
+	 * @throws MidiUnavailableException 
+	 * @throws IOException 
+	 * @throws InvalidMidiDataException */
+	Carte() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
+		/* On joue le son d'arrière plan */
+		Son.joueSonArriere();
+		
 		/* Initialisation taux de rafraichissement. */
 		timer = new Timer((int)(1000.0 * 1.0 / FPS), this);
 	    timer.setInitialDelay(0);
@@ -375,7 +383,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void sauvegarde(int num)
 	{
 		try {
-			FileOutputStream fichier = new FileOutputStream(IConfig.NOM_SAUVEGARDE + num + ".ser");
+			FileOutputStream fichier = new FileOutputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fichier);
 			
 			oos.writeObject(carte);
@@ -397,7 +405,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	void charge(int num)
 	{
 		try {
-			FileInputStream fichier = new FileInputStream(IConfig.NOM_SAUVEGARDE + num + ".ser");
+			FileInputStream fichier = new FileInputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectInputStream ois = new ObjectInputStream(fichier);
 			
 			carte   = (char[])ois.readObject();

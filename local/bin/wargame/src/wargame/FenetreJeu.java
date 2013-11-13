@@ -2,6 +2,8 @@ package wargame;
 
 import java.awt.Dimension;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -13,6 +15,7 @@ import javax.swing.event.MenuListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -54,13 +57,13 @@ public class FenetreJeu extends JFrame
 		return new SimpleDateFormat("dd-MM-yyyy HH-mm-ss").format( new Date(f.lastModified()));
     }
     
-	public static void main(String[] args)
+	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
 		FenetreJeu fenetre = new FenetreJeu();
 		fenetre.setVisible(true);
 	}
 	 
-	public FenetreJeu()
+	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
 		/* Création d'une carte vide. */
 		carte = new Carte();
@@ -145,7 +148,7 @@ public class FenetreJeu extends JFrame
 			{
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
-					File f = new File(IConfig.NOM_SAUVEGARDE + i + ".ser");
+					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");
 		    	
 					if(f.exists())
 						sauvegarde[i].setText(getDate(f));
@@ -162,7 +165,7 @@ public class FenetreJeu extends JFrame
 			{
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
-					File f = new File(IConfig.NOM_SAUVEGARDE + i + ".ser");
+					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");
 		    	
 					if(f.exists())
 					{
