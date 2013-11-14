@@ -68,7 +68,7 @@ public class FenetreJeu extends JFrame
 	{
 		
 	    /* On joue le son d'arrière plan */
-//		Son.joueSonArriere();
+		Son.joueSonArriere();
 		
 		/* Création d'une carte vide. */
 		carte = new Carte();
