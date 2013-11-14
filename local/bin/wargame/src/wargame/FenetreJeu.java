@@ -68,7 +68,7 @@ public class FenetreJeu extends JFrame
 	{
 		
 	    /* On joue le son d'arrière plan */
-		Son.joueSonArriere();
+//		Son.joueSonArriere();
 		
 		/* Création d'une carte vide. */
 		carte = new Carte();
@@ -198,8 +198,6 @@ public class FenetreJeu extends JFrame
 	    this.setResizable(false);
 	    this.pack();
 	    
-	    /* Pour centrer la fenêtre */
-	    this.setLocationRelativeTo(null);
 	    this.setVisible(true);
 	  }
 	}

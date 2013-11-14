@@ -74,7 +74,7 @@ public final class Son {
 	private static void joueWav(String son){
 		AudioClip ac = null;
 		try {
-			ac = Applet.newAudioClip(new URL("file://" + IConfig.CHEMIN_MUSIQUE + son));
+			ac = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + son));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

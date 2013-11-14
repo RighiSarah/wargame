@@ -325,6 +325,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	void deplaceSoldat(Soldat soldat, char direction, int x, int y)
 	{
+		Son.joueCourir();
 		soldat.setSeDeplace(true);
 		soldat.setDirection(direction);
 		
