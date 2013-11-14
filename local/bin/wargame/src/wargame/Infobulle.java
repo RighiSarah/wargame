@@ -14,7 +14,7 @@ final class Infobulle extends Rectangle
 	private static final long serialVersionUID = 3889208541227481368L;
 //	private static Timer timer;
 
-	/**
+	/**draw
 	 * Constructeur privé, ce n'est pas une classe faite pour être instanciée
 	 */
 	private Infobulle(){}
@@ -65,6 +65,7 @@ final class Infobulle extends Rectangle
 		/* Bordure du rectangle */
 		g.setColor(Color.DARK_GRAY);
 		g.drawRect(start_x - IConfig.MARGE_INFOBULLE, start_y, largeur_rectangle, hauteur_rectangle);
+		
 		
 		/* Pour chaque ligne, on l'écrit dans la couleur spécifiée */
 		g.setColor(string_color);

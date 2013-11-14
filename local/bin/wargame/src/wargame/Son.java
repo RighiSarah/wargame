@@ -31,7 +31,7 @@ public final class Son {
 	 * @throws MidiUnavailableException Si le fichier midi est indisponible
 	*/
 	public static void joueSonArriere() throws InvalidMidiDataException, IOException, MidiUnavailableException {
-		int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN - 1 + 1));
+		int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
 		Sequence sequence = MidiSystem.getSequence(new File(IConfig.CHEMIN_MUSIQUE + "arriere_plan" + num + ".mid"));
 				
 		/* Final pour pouvoir accéder au sequencer dans la méthode meta de la sous classe MetaEventListener */
@@ -46,7 +46,7 @@ public final class Son {
 			public void meta(MetaMessage message) {
 				/* Si la musique est terminée */
 				if(message.getType() == 47){
-					int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN - 1 + 1));
+					int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
 					try {
 						/* On charge une autre séquence */
 						Sequence sequence;

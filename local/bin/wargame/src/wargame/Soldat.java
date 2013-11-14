@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 
@@ -14,6 +15,10 @@ import java.awt.event.ActionEvent;
 public abstract class Soldat extends Charset implements ISoldat
 {
 	private static final long serialVersionUID = 1L;
+	
+	protected String message = "";
+	protected Color couleurMessage = IConfig.MESSAGE_NEGATIF;
+	protected Point coord = null;
 	
 	/** Informations de base d'un soldat. */
 	protected int vieMax;
@@ -170,15 +175,24 @@ public abstract class Soldat extends Charset implements ISoldat
 	}
 	
 	public void combat(Soldat soldat,int distance)
-	{
+	{	
 		System.out.println(distance);
 		int degat = (distance == 1) ? alea(1,this.getPuissance()) : this.getTir();
+		int numCase = soldat.getNumCase();
+		message = "-"+degat+"PV";
+		coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
+
+		
 		int vie = soldat.getVie() - degat;
 		if(vie > 0) {
 			soldat.setVie(vie);
 			if( soldat.getPortee() >= distance ) {
+				
 				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
 				vie = this.getVie() - degat;
+				numCase = this.getNumCase();
+				message = "-"+degat+"PV";
+				coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
 				if(vie > 0)
 					this.setVie(vie);
 				else
@@ -247,6 +261,8 @@ public abstract class Soldat extends Charset implements ISoldat
 		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)vieMax);
 		g.setColor(color);
 		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
+		if(message != null && coord != null)
+			Infobulle.dessiner(g, coord.x, coord.y, message, couleurMessage, IConfig.ARRIERE_PLAN);
 	}
 	
 	/**

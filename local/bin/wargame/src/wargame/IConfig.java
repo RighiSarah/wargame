@@ -73,7 +73,7 @@ public interface IConfig
     /** Couleur de la case du soldat [ Heros ]  séléctionné */
     Color SOLDAT_SELECTIONNEE = new Color(0, 0, 255, DEFAULT_ALPHA);
     
-    /** Couleur des cases de déplacement possible */
+    /** Couleur des cases de déplacement possiblebackground_color */
     Color SOLDAT_DEPLACEMENT_POSSIBLE = new Color(255, 0, 0, DEFAULT_ALPHA);
     
 	
