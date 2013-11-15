@@ -67,8 +67,7 @@ public class FenetreJeu extends JFrame
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
 		
-	    /* On joue le son d'arrière plan */
-		Son.joueSonArriere();
+	    
 		
 		/* Création d'une carte vide. */
 		carte = new Carte();
@@ -189,7 +188,9 @@ public class FenetreJeu extends JFrame
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte);
-               
+        
+        /* On joue le son d'arrière plan */
+		Son.joueSonArriere();
         
         this.setTitle("Wargame");
         this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
@@ -199,6 +200,8 @@ public class FenetreJeu extends JFrame
 	    this.pack();
 	    
 	    this.setVisible(true);
+	    
+	    
 	  }
 	}
 

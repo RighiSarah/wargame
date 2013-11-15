@@ -16,6 +16,8 @@ import java.io.Serializable;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -59,6 +61,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
 	
+	private JLabel image;
+	
 	/** Timer. */
 	Timer timer;
 	
@@ -76,6 +80,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	    /* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
 		
+		image = new JLabel( new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
+        this.add(image);
+        
 		/* Capture de la souris. */
 		addMouseListener(new MouseAdapter() { 
 		public void mouseClicked(MouseEvent e) { 
@@ -339,7 +346,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		generer = true;
 		genererCarte();
 		genererSoldats();
-		caseactionnee = -1;		
+		caseactionnee = -1;	
+		
+		if(image != null){
+			image.getParent().remove(image);
+			image = null;
+		}
 	}
 	
 	/** Teste si une case existe sur la Carte.
