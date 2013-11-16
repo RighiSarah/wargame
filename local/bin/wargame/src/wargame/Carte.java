@@ -558,6 +558,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		if (message != "" && caseactionnee != -1) {
 			Infobulle.dessiner(g, getCoordCase(caseactionnee).x + 1 , getCoordCase(caseactionnee).y, message, couleurMessage, null);
 		}
+	
+		FenetreJeu.gameHistory.setText(this.nbMonstresRestant+"Monstre restant - "+Carte.nbHerosRestant+"Heros restant");
 	}
     
 	public void actionPerformed(ActionEvent e) 

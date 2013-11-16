@@ -55,7 +55,7 @@ public abstract class Soldat extends Charset implements ISoldat
 
 	public void setVie(int vie) 
 	{
-		this.vie = ((vie > vieMax) ? vieMax : vie);
+		this.vie = ((vie > vieMax) ? vieMax : (vie < 0 ) ? 0 : vie);
 	}
 	
 	public int getPortee() 
@@ -163,15 +163,14 @@ public abstract class Soldat extends Charset implements ISoldat
     	}
     	
     	/* Mise à jour de l'animation. */
-        if(estVisible && seDeplace) {
-    		if(estMort) {
+        if(estVisible) {
+    		if(estMort)
     			if(++direction >= N_DIRECTIONS)
     				estVisible = false;
-    		}
-    		else if(++animation >= N_ANIMATIONS){
-    			animation = 0;
-    		}
-    	}
+    		if(seDeplace)
+    			if(++animation >= N_ANIMATIONS)
+    				animation = 0;
+        }
 	}
 	
 	public void combat(Soldat soldat,int distance)
@@ -184,6 +183,8 @@ public abstract class Soldat extends Charset implements ISoldat
 
 		
 		int vie = soldat.getVie() - degat;
+		soldat.setVie(vie);
+		System.out.println("VIE"+soldat.getVie());
 		if(vie > 0) {
 			soldat.setVie(vie);
 			if( soldat.getPortee() >= distance ) {
@@ -199,7 +200,7 @@ public abstract class Soldat extends Charset implements ISoldat
 					this.setMort();
 			}
 		}
-		else
+		else 
 			soldat.setMort();			
 	}
 

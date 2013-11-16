@@ -16,10 +16,10 @@ public interface ISoldat extends Serializable
 	 */
 	static enum TypesH 
 	{
-		HUMAIN(40, 3, 10, 2, "archer"), 
+		HUMAIN(40, 3, 10, 30, "archer"), 
 		NAIN(80, 1, 20, 0, "nain"), 
-		ELFE(70, 5, 10, 6, "elfe"), 
-		HOBBIT(20, 3, 5, 2, "hobbit");
+		ELFE(70, 5, 10, 30, "elfe"), 
+		HOBBIT(20, 3, 5, 30, "hobbit");
 		
 		private final int POINTS_DE_VIE, PORTEE_VISUELLE, PUISSANCE, TIR;
 		private final String NOM;

@@ -2,13 +2,12 @@ package wargame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,7 +36,10 @@ import java.util.Date;
 public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 7794325642011100784L;
-    JPanel b1 = new JPanel();
+    JPanel b1;
+    JSeparator separator;
+    static JLabel gameHistory;
+    static JLabel gameInfo;
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;
@@ -171,7 +173,9 @@ public class FenetreJeu extends JFrame
 				((Carte)carte).generer();							
 				sauvegarder.setEnabled(true);
 				
+				System.out.println(finTour.getSize());
 			    menu.add(Box.createHorizontalGlue()); 
+			    finTour.setPreferredSize(new Dimension(150,10));
 			    menu.add(finTour);
 			    setJMenuBar(menu);
 			}
@@ -259,27 +263,27 @@ public class FenetreJeu extends JFrame
 	    
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
-        this.add(carte);
+        this.add(carte,BorderLayout.NORTH);
 
         /* ICI C'EST LE BORDEL PAS TOUCHER MERCI [ nico ] */
-        JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
-        sep.setBackground(Color.green);
-        sep.setSize(new Dimension(this.getWidth(), 16));
+        separator = new JSeparator(SwingConstants.HORIZONTAL);
+        separator.setBackground(Color.DARK_GRAY);
+        separator.setSize(new Dimension(carte.getWidth(), 5));
         
-        this.add(sep,BorderLayout.SOUTH);
+        this.add(separator,BorderLayout.CENTER);
+
+        b1 = new JPanel();
+        gameHistory = new JLabel("Away gars crée une partie pour avoir des infos", JLabel.RIGHT);
+        gameInfo = new JLabel("Vas bouger la souris", JLabel.LEFT);
+        b1.setSize(new Dimension(carte.getWidth(), 16));
+        b1.setLayout(new BoxLayout(b1, BoxLayout.X_AXIS));
         
-        
-        b1.setPreferredSize(new Dimension(this.getWidth(), 16));
-        JLabel jlabel = new JLabel("This is a label");
-        jlabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        b1.add(jlabel);
-        
-        JLabel jlabel2 = new JLabel("This is a label2");
-        jlabel2.setAlignmentX(JLabel.LEFT_ALIGNMENT);
-        b1.add(jlabel2);
-        
+        b1.add(gameHistory);
+        b1.add(Box.createHorizontalGlue());
+        b1.add(gameInfo);
+
         this.add(b1,BorderLayout.SOUTH);
-        /* FIN DE MON BORDEL */
+	    
         
         /* On joue le son d'arrière plan */
 		Son.joueSonArriere();
@@ -295,5 +299,6 @@ public class FenetreJeu extends JFrame
 	    
 	    
 	  }
+   
 	}
 
