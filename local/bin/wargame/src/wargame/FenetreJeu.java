@@ -4,12 +4,15 @@ import java.awt.Dimension;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
@@ -33,6 +36,7 @@ public class FenetreJeu extends JFrame
 	private JMenu sauvegarder;
 	private JMenu charger;
 	private JMenu config;
+	private JButton finTour;
 
 	/* Options des menus. */
 	
@@ -79,7 +83,8 @@ public class FenetreJeu extends JFrame
 		sauvegarder = new JMenu("Sauvegarder");
 		charger     = new JMenu("Charger");
 		config		= new JMenu("Configuration");
-		
+		finTour 	= new JButton("Fin de tour");
+
 		/* Création des options des menus. */
 		nouveau = new JMenuItem("Nouvelle partie");
 		quitter = new JMenuItem("Quitter");
@@ -119,6 +124,9 @@ public class FenetreJeu extends JFrame
 		    	public void actionPerformed(ActionEvent arg0) 
 		    	{
 					((Carte)carte).charge(NUM);
+				    menu.add(Box.createHorizontalGlue()); 
+				    menu.add(finTour);
+				    setJMenuBar(menu);
 		    	}       
 		    });
 	    }
@@ -150,6 +158,10 @@ public class FenetreJeu extends JFrame
 			{ 
 				((Carte)carte).generer();							
 				sauvegarder.setEnabled(true);
+				
+			    menu.add(Box.createHorizontalGlue()); 
+			    menu.add(finTour);
+			    setJMenuBar(menu);
 			}
 		});
 	   
@@ -209,18 +221,29 @@ public class FenetreJeu extends JFrame
 						slot[i].setEnabled(false);
 				}
 			}
-
+	
 			public void menuDeselected(MenuEvent e) {}
 			public void menuCanceled(MenuEvent e) {}
+			
+		});
+	    
+	    finTour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				System.out.println("YEAHH");
+				if(Carte.generer)
+					Carte.reinitAJoue();
+			}
 		});
 	    
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte);
-        
+
+	    
         /* On joue le son d'arrière plan */
 		Son.joueSonArriere();
-        
+
         this.setTitle("Wargame");
         this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
 	    

@@ -31,9 +31,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Nombre de FPS pour la carte. */
 	private static final double FPS = 60.0;
 
-	protected int nbHerosRestant = IConfig.NB_HEROS;
+	protected static int nbHerosRestant = IConfig.NB_HEROS;
 	protected int nbMonstresRestant = IConfig.NB_MONSTRES;
-	protected int nbToPlay = nbHerosRestant - 1; 
+	protected static int nbToPlay = nbHerosRestant - 1; 
 	protected int tour = 0;
 	
 	public int getNbHerosRestant() {
@@ -69,10 +69,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	private Heros []heros;
 	
 	/** Table de jeu de la carte. */
-	private Soldat []soldat;
+	private static Soldat []soldat;
 	
 	/** La carte est-elle générée ? */
-	private boolean generer = false;
+	static boolean generer = false;
 	
 	/** Indique la case courante sélectionnée.
 	 * Correspond également au soldat selectionné dans le combat.
@@ -225,11 +225,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 	
 	/* Méthode pour reinitialiser le tour de tout les soldats */
-	public void reinitAJoue() {
+	public static void reinitAJoue() {
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE;i++)
 			if(soldat[i] != null)
 				soldat[i].setAJoue(false);	
-		this.nbToPlay = this.nbHerosRestant;
+		nbToPlay = nbHerosRestant;
 	}
 	
 	/* Méthode récupérant la distance (en terme de nombre de cases) entre case1 et case2 */
