@@ -49,11 +49,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 	
 	public void nbHerosRestantDec() {
-		this.nbHerosRestant--;
+		Carte.nbHerosRestant--;
 	}
 	
 	public void nbToPlayDef() {
-		this.nbToPlay--;
+		Carte.nbToPlay--;
 	}
 	
 	/** Tileset de la carte. */
@@ -449,6 +449,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	void charge(int num)
 	{
+		
+		if(image != null){
+			image.getParent().remove(image);
+			image = null;
+		}
+		
 		try {
 			FileInputStream fichier = new FileInputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectInputStream ois = new ObjectInputStream(fichier);
