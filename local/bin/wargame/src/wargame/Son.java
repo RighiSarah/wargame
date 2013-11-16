@@ -21,6 +21,7 @@ import javax.sound.midi.Sequencer;
  */
 public final class Son {
 
+	private static boolean sonEnable = true;
 	/* Constructeur privé, on ne veut pas qu'on instancie la classe */
 	private Son() {}
 	
@@ -36,7 +37,12 @@ public final class Son {
 				
 		/* Final pour pouvoir accéder au sequencer dans la méthode meta de la sous classe MetaEventListener */
 		final Sequencer sequencer = MidiSystem.getSequencer();
+
 	    sequencer.open();
+		if(getSon() == false) {
+			
+			return;
+		}
 	    sequencer.setSequence(sequence);
 
 	    sequencer.start();
@@ -44,6 +50,12 @@ public final class Son {
 	    /* Ajout d'un évènement pour être prévenu lorsque la musique est terminée */
 	    sequencer.addMetaEventListener(new MetaEventListener() {
 			public void meta(MetaMessage message) {
+				if(!getSon()) {
+					if(sequencer.isRunning()) {
+						sequencer.stop();
+						sequencer.close();
+					}
+				}
 				/* Si la musique est terminée */
 				if(message.getType() == 47){
 					int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
@@ -108,5 +120,13 @@ public final class Son {
 	 */
 	public static void joueMarcher(){
 		joueWav("marcher.wav");
+	}
+	
+	public static boolean getSon() {
+		return sonEnable;
+	}
+	
+	public static void setEnableSon(boolean set) {
+		sonEnable = set;
 	}
 }

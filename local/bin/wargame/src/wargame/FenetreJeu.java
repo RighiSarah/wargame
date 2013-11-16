@@ -32,6 +32,7 @@ public class FenetreJeu extends JFrame
 	private JMenu jeu;
 	private JMenu sauvegarder;
 	private JMenu charger;
+	private JMenu config;
 
 	/* Options des menus. */
 	
@@ -47,6 +48,9 @@ public class FenetreJeu extends JFrame
 	/** Liste des slots de chargement. */
 	private JMenuItem []slot;
 
+	/** activer / désactiver son */
+	private JMenuItem son;
+	
 	/** Carte du jeu. */
     JPanel carte;
 
@@ -66,9 +70,6 @@ public class FenetreJeu extends JFrame
 	 
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
-		
-	    
-		
 		/* Création d'une carte vide. */
 		carte = new Carte();
 		
@@ -77,10 +78,13 @@ public class FenetreJeu extends JFrame
 		jeu         = new JMenu("Jeu");
 		sauvegarder = new JMenu("Sauvegarder");
 		charger     = new JMenu("Charger");
+		config		= new JMenu("Configuration");
 		
 		/* Création des options des menus. */
 		nouveau = new JMenuItem("Nouvelle partie");
 		quitter = new JMenuItem("Quitter");
+		
+		son = new JMenuItem("Désactiver Son");
 		
 		sauvegarde = new JMenuItem[IConfig.NB_SAUVEGARDES];
 		slot = new JMenuItem[IConfig.NB_SAUVEGARDES];
@@ -119,11 +123,14 @@ public class FenetreJeu extends JFrame
 		    });
 	    }
 	    
+	    config.add(son);
+	    
 	    /* Ajout des menus dans la barre de menus. */
 	    menu.add(jeu);
 	    menu.add(sauvegarder);
 	    menu.add(charger);
-
+	    menu.add(config);
+	    
 	    this.setJMenuBar(menu);
 	    this.setVisible(true);
 	    
@@ -143,6 +150,28 @@ public class FenetreJeu extends JFrame
 			{ 
 				((Carte)carte).generer();							
 				sauvegarder.setEnabled(true);
+			}
+		});
+	   
+	    /* Activation désactivation son */
+	    son.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				if(Son.getSon()) {
+					Son.setEnableSon(false);
+					son.setText("Activer son");
+
+				}
+				else {
+					son.setText("Désactiver son");
+					Son.setEnableSon(true);
+					try {
+						Son.joueSonArriere();
+					} catch (InvalidMidiDataException | IOException | MidiUnavailableException e1) {
+						e1.printStackTrace();
+					}
+				}
+
 			}
 		});
 	   
