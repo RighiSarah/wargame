@@ -196,12 +196,22 @@ public abstract class Soldat extends Charset implements ISoldat
 				coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
 				if(vie > 0)
 					this.setVie(vie);
-				else
+				else {
+					if(soldat instanceof Heros)
+						Carte.nbHerosRestantDec();
+					else
+						Carte.nbMonstresRestantDec();
 					this.setMort();
+				}
 			}
 		}
-		else 
-			soldat.setMort();			
+		else {
+			if(soldat instanceof Heros)
+				Carte.nbHerosRestantDec();
+			else
+				Carte.nbMonstresRestantDec();
+			soldat.setMort();		
+		}
 	}
 
 	@Override

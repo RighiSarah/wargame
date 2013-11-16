@@ -32,7 +32,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	private static final double FPS = 60.0;
 
 	protected static int nbHerosRestant = IConfig.NB_HEROS;
-	protected int nbMonstresRestant = IConfig.NB_MONSTRES;
+	protected static int nbMonstresRestant = IConfig.NB_MONSTRES;
 	protected static int nbToPlay = nbHerosRestant - 1; 
 	protected int tour = 0;
 	
@@ -40,15 +40,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		return nbHerosRestant;
 	}
 	
-	public int getNbMonstresRestant() {
+	public static int getNbMonstresRestant() {
 		return nbMonstresRestant;
 	}
 	
-	public void nbMonstresRestantDec() {
-		this.nbMonstresRestant--;
+	public static void nbMonstresRestantDec() {
+		nbMonstresRestant--;
 	}
 	
-	public void nbHerosRestantDec() {
+	public static void nbHerosRestantDec() {
 		Carte.nbHerosRestant--;
 	}
 	
@@ -559,7 +559,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			Infobulle.dessiner(g, getCoordCase(caseactionnee).x + 1 , getCoordCase(caseactionnee).y, message, couleurMessage, null);
 		}
 	
-		FenetreJeu.gameHistory.setText(this.nbMonstresRestant+"Monstre restant - "+Carte.nbHerosRestant+"Heros restant");
+		FenetreJeu.gameHistory.setText(Carte.nbMonstresRestant+"Monstre restant - "+Carte.nbHerosRestant+"Heros restant");
 	}
     
 	public void actionPerformed(ActionEvent e) 
@@ -567,7 +567,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		if(generer)
 			if(Carte.nbToPlay == 0)
 				Carte.reinitAJoue();
-		
+
+
 		repaint();
 	}
 	
