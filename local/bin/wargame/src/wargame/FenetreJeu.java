@@ -4,14 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,8 +22,6 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
-
-import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -78,6 +77,7 @@ public class FenetreJeu extends JFrame
 	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
 		FenetreJeu fenetre = new FenetreJeu();
+
 		fenetre.setVisible(true);
 	}
 
@@ -261,14 +261,25 @@ public class FenetreJeu extends JFrame
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte);
 
-		JSeparator x = new JSeparator(SwingConstants.HORIZONTAL);  
-		x.setPreferredSize(new Dimension(this.getWidth(),30));  
-		
-        this.add(x,BorderLayout.SOUTH);
-        b1.setSize(2000, 100);
-
+        /* ICI C'EST LE BORDEL PAS TOUCHER MERCI [ nico ] */
+        JSeparator sep = new JSeparator(SwingConstants.HORIZONTAL);
+        sep.setBackground(Color.green);
+        sep.setSize(new Dimension(this.getWidth(), 16));
+        
+        this.add(sep,BorderLayout.SOUTH);
+        
+        
         b1.setPreferredSize(new Dimension(this.getWidth(), 16));
+        JLabel jlabel = new JLabel("This is a label");
+        jlabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        b1.add(jlabel);
+        
+        JLabel jlabel2 = new JLabel("This is a label2");
+        jlabel2.setAlignmentX(JLabel.LEFT_ALIGNMENT);
+        b1.add(jlabel2);
+        
         this.add(b1,BorderLayout.SOUTH);
+        /* FIN DE MON BORDEL */
         
         /* On joue le son d'arrière plan */
 		Son.joueSonArriere();
