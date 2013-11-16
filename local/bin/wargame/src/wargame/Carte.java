@@ -30,6 +30,31 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/** Nombre de FPS pour la carte. */
 	private static final double FPS = 60.0;
+
+	protected int nbHerosRestant = IConfig.NB_HEROS;
+	protected int nbMonstresRestant = IConfig.NB_MONSTRES;
+	protected int nbToPlay = nbHerosRestant - 1; 
+	protected int tour = 0;
+	
+	public int getNbHerosRestant() {
+		return nbHerosRestant;
+	}
+	
+	public int getNbMonstresRestant() {
+		return nbMonstresRestant;
+	}
+	
+	public void nbMonstresRestantDec() {
+		this.nbMonstresRestant--;
+	}
+	
+	public void nbHerosRestantDec() {
+		this.nbHerosRestant--;
+	}
+	
+	public void nbToPlayDef() {
+		this.nbToPlay--;
+	}
 	
 	/** Tileset de la carte. */
 	private Tileset tileset;
@@ -110,6 +135,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* On met a jour sa vie et on indique qu'il a joué */
 				soldat[caseclick].setVie(vie + regen);
 				soldat[caseclick].setAJoue(true);
+				nbToPlayDef();
 			}
 	
 				/** On change de héros si la case n'est pas vide et qu'il s'agit bien d'un soldat et que le soldat est affiché.
@@ -128,6 +154,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee() && !soldat[caseactionnee].getAJoue()) {
 								soldat[caseactionnee].combat(soldat[caseclick],distance);
 								soldat[caseactionnee].setAJoue(true);
+								nbToPlayDef();
 								return;
 						}
 
@@ -137,6 +164,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && soldat[caseclick] == null && !soldat[caseactionnee].getAJoue() ) {
 							
 							soldat[caseactionnee].setAJoue(true);
+							nbToPlayDef();
 							soldat[caseclick] = soldat[caseactionnee];
 							soldat[caseactionnee] = null;
 								
@@ -196,6 +224,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		});
 	}
 	
+	/* Méthode pour reinitialiser le tour de tout les soldats */
+	public void reinitAJoue() {
+		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE;i++)
+			if(soldat[i] != null)
+				soldat[i].setAJoue(false);	
+		this.nbToPlay = this.nbHerosRestant;
+	}
 	
 	/* Méthode récupérant la distance (en terme de nombre de cases) entre case1 et case2 */
 	private int getDistance(int case1, int case2)
@@ -382,7 +417,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			
 			num_tile = carte[getNumCase(point.x, point.y)];
 			tile = tileset.getTile(num_tile);
-		} while(soldat[num_tile] != null || !tile.estPraticable());
+		} while(soldat[num_tile] != null || !tile.estPraticable() || !existe(point.x,point.y) );
 
 		return point;
 	}
@@ -521,6 +556,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
     
 	public void actionPerformed(ActionEvent e) 
 	{	
+		if(generer)
+			if(this.nbToPlay == 0)
+				this.reinitAJoue();
+		
 		repaint();
 	}
 	
