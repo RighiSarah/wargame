@@ -104,8 +104,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	}
 	
 	/** Mettre le statut du personnage à mort. */
-	public void setMort()
-	{
+	public void setMort() {
 		this.estMort = true;
 		this.direction = HAUT;
 		this.animation = 0;
@@ -115,8 +114,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	/** Teste si le personnage est mort. 
 	 * @return true si mort, false sinon.
 	 */
-	public boolean estMort()
-	{
+	public boolean estMort() {
 		return estMort;
 	}
 
@@ -180,7 +178,6 @@ public abstract class Soldat extends Charset implements ISoldat
 		int numCase = soldat.getNumCase();
 		message = "-"+degat+"PV";
 		coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
-
 		
 		int vie = soldat.getVie() - degat;
 		soldat.setVie(vie);
@@ -188,8 +185,9 @@ public abstract class Soldat extends Charset implements ISoldat
 		if(vie > 0) {
 			soldat.setVie(vie);
 			if( soldat.getPortee() >= distance ) {
-				
+
 				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
+				FenetreJeu.gameInfo.setText("Tu t'es pris une putain de patate ( -"+degat+")");
 				vie = this.getVie() - degat;
 				numCase = this.getNumCase();
 				message = "-"+degat+"PV";
@@ -197,19 +195,16 @@ public abstract class Soldat extends Charset implements ISoldat
 				if(vie > 0)
 					this.setVie(vie);
 				else {
-					if(soldat instanceof Heros)
-						Carte.nbHerosRestantDec();
-					else
-						Carte.nbMonstresRestantDec();
+					if(soldat instanceof Heros)	Carte.nbHerosRestantDec();
+					else Carte.nbMonstresRestantDec();
 					this.setMort();
 				}
 			}
 		}
 		else {
-			if(soldat instanceof Heros)
-				Carte.nbHerosRestantDec();
-			else
-				Carte.nbMonstresRestantDec();
+			if(soldat instanceof Heros)	Carte.nbHerosRestantDec();
+			else Carte.nbMonstresRestantDec();
+			Carte.setSoldat(numCase, null);
 			soldat.setMort();		
 		}
 	}

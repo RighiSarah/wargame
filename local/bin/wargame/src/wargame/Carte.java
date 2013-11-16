@@ -123,6 +123,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				
 				/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message*/
 				if(vie == soldat[caseclick].getVieMax()) {
+					FenetreJeu.gameInfo.setText("Se connard ("+caseclick+") a sa vie au max ");
 					message = "Repos Impossible\nVie max atteinte";
 					couleurMessage = IConfig.MESSAGE_NEUTRE;
 					return;
@@ -131,7 +132,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* Définition du message et de la couleur dans laquel l'écrire */
 				message = "+"+regen+"PV";
 				couleurMessage = IConfig.MESSAGE_POSITIF;
-				
+				FenetreJeu.gameInfo.setText("Se connard de"+caseclick+"se heal ( +"+regen+" )");
 				/* On met a jour sa vie et on indique qu'il a joué */
 				soldat[caseclick].setVie(vie + regen);
 				soldat[caseclick].setAJoue(true);
@@ -151,18 +152,20 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						/** On a un soldat selectionné et on clique sûr un monste.
 						 * I.e : Combat 
 						 */
-						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee() && !soldat[caseactionnee].getAJoue()) {
-								soldat[caseactionnee].combat(soldat[caseclick],distance);
-								soldat[caseactionnee].setAJoue(true);
-								nbToPlayDef();
-								return;
+						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee() && !soldat[caseactionnee].getAJoue() && soldat[caseclick].estVisible() ) {
+							FenetreJeu.gameInfo.setText("Combat epic opposant "+caseactionnee+" a "+caseclick);	
+							soldat[caseactionnee].combat(soldat[caseclick],distance);
+							soldat[caseactionnee].setAJoue(true);
+							nbToPlayDef();
+							return;
 						}
 
 						/** On a un soldat selectionné et on click sur une case autour [ a une distance de 1 autour du soldat ].
 						 * I.e : On veut se déplacer sur la nouvelle case.
 						 */
-						if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && soldat[caseclick] == null && !soldat[caseactionnee].getAJoue() ) {
-							
+						if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && soldat[caseclick] == null && !soldat[caseactionnee].getAJoue()) {
+							FenetreJeu.gameInfo.setText("Mouvement de soldat : "+caseactionnee);
+
 							soldat[caseactionnee].setAJoue(true);
 							nbToPlayDef();
 							soldat[caseclick] = soldat[caseactionnee];
@@ -559,7 +562,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			Infobulle.dessiner(g, getCoordCase(caseactionnee).x + 1 , getCoordCase(caseactionnee).y, message, couleurMessage, null);
 		}
 	
-		FenetreJeu.gameHistory.setText(Carte.nbMonstresRestant+"Monstre restant - "+Carte.nbHerosRestant+"Heros restant");
+		FenetreJeu.gameHistory.setText(Carte.nbMonstresRestant+"Monstres restant - "+Carte.nbHerosRestant+"Heros restant");
 	}
     
 	public void actionPerformed(ActionEvent e) 
@@ -579,4 +582,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	
+	public static void setSoldat(int i, Soldat s) {
+		soldat[i] = s;
+	}
 }
+
