@@ -58,14 +58,15 @@ final class Infobulle extends Rectangle
 			start_x = pixel_largeur_carte - largeur_rectangle;
 		}
 		
-		/* On spécifie la couleur d'arrière plan et on trace notre rectangle */
-		g.setColor(background_color);
-		g.fillRect(start_x - IConfig.MARGE_INFOBULLE, start_y, largeur_rectangle, hauteur_rectangle); 
-		
-		/* Bordure du rectangle */
-		g.setColor(Color.DARK_GRAY);
-		g.drawRect(start_x - IConfig.MARGE_INFOBULLE, start_y, largeur_rectangle, hauteur_rectangle);
-		
+		if(background_color != null) {
+			/* On spécifie la couleur d'arrière plan et on trace notre rectangle */
+			g.setColor(background_color);
+			g.fillRect(start_x - IConfig.MARGE_INFOBULLE, start_y, largeur_rectangle, hauteur_rectangle); 
+			
+			/* Bordure du rectangle */
+			g.setColor(Color.DARK_GRAY);
+			g.drawRect(start_x - IConfig.MARGE_INFOBULLE, start_y, largeur_rectangle, hauteur_rectangle);
+		}
 		
 		/* Pour chaque ligne, on l'écrit dans la couleur spécifiée */
 		g.setColor(string_color);
