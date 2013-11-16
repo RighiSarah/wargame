@@ -123,7 +123,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				
 				/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message*/
 				if(vie == soldat[caseclick].getVieMax()) {
-					FenetreJeu.gameInfo.setText("Se connard ("+caseclick+") a sa vie au max ");
+					FenetreJeu.gameInfo.setText("Ce connard ("+caseclick+") a sa vie au max ");
 					message = "Repos Impossible\nVie max atteinte";
 					couleurMessage = IConfig.MESSAGE_NEUTRE;
 					return;
@@ -132,7 +132,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* Définition du message et de la couleur dans laquel l'écrire */
 				message = "+"+regen+"PV";
 				couleurMessage = IConfig.MESSAGE_POSITIF;
-				FenetreJeu.gameInfo.setText("Se connard de"+caseclick+"se heal ( +"+regen+" )");
+				FenetreJeu.gameInfo.setText("Ce connard de"+caseclick+"se heal ( +"+regen+" )");
 				/* On met a jour sa vie et on indique qu'il a joué */
 				soldat[caseclick].setVie(vie + regen);
 				soldat[caseclick].setAJoue(true);
