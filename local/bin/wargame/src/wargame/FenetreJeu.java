@@ -70,6 +70,9 @@ public class FenetreJeu extends JFrame
 
     /* Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
+	
+	/* Objet Son servant à gérer le son d'arrière plan */
+	private Son sonArriere;
 
     private String getDate(File f)
     {
@@ -186,21 +189,18 @@ public class FenetreJeu extends JFrame
 	    son.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(Son.getSon()) {
-					Son.setEnableSon(false);
-					son.setText("Activer son");
-
+				if(sonArriere.getSonArriereActive()){
+					sonArriere.stopSonArriere();
+					son.setText("Activer le son");
 				}
-				else {
-					son.setText("Désactiver son");
-					Son.setEnableSon(true);
+				else{
 					try {
-						Son.joueSonArriere();
-					} catch (InvalidMidiDataException | IOException | MidiUnavailableException e1) {
+						sonArriere.joueSonArriere();
+					} catch (MidiUnavailableException e1) {
 						e1.printStackTrace();
 					}
+					son.setText("Désactiver le son");
 				}
-
 			}
 		});
 	   
@@ -286,7 +286,8 @@ public class FenetreJeu extends JFrame
 	    
         
         /* On joue le son d'arrière plan */
-		Son.joueSonArriere();
+		sonArriere = new Son();
+		sonArriere.joueSonArriere();
 
         this.setTitle("Wargame");
         this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());

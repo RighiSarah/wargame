@@ -20,67 +20,91 @@ import javax.sound.midi.Sequencer;
  * Classe permettant de jouer des sons simples correspondant à différentes actions
  */
 public final class Son {
+	/* Pour charger un fichier midi */
+	private Sequence sequence;
+	/* Pour charger un lecteur */
+	private Sequencer sequencer; 
+	/* Pour savoir si le son en arrière est stoppé ou non */
+	private boolean sonArriereActive = false;
 
-	private static boolean sonEnable = true;
-	/* Constructeur privé, on ne veut pas qu'on instancie la classe */
-	private Son() {}
-	
 	/**
-	 * Méthode statique permettant de jouer en boucle et aléatoirement les musiques d'arrière plan
+	 * Constructeur permettant d'instancier l'objet qui manipulera le son d'arrière plan
 	 * @throws InvalidMidiDataException Si problème avec le fichier midi
 	 * @throws IOException Erreur d'entrée pour le fichier midi
 	 * @throws MidiUnavailableException Si le fichier midi est indisponible
 	*/
-	public static void joueSonArriere() throws InvalidMidiDataException, IOException, MidiUnavailableException {
-		int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
-		Sequence sequence = MidiSystem.getSequence(new File(IConfig.CHEMIN_MUSIQUE + "arriere_plan" + num + ".mid"));
-				
-		/* Final pour pouvoir accéder au sequencer dans la méthode meta de la sous classe MetaEventListener */
-		final Sequencer sequencer = MidiSystem.getSequencer();
-
-	    sequencer.open();
-		if(getSon() == false) {
-			
-			return;
-		}
-	    sequencer.setSequence(sequence);
-
-	    sequencer.start();
+	public Son() throws MidiUnavailableException, InvalidMidiDataException, IOException {
+		sequencer = MidiSystem.getSequencer();
+		sequencer.open();
+		
+	    chargeSonArriere();
 	    
 	    /* Ajout d'un évènement pour être prévenu lorsque la musique est terminée */
 	    sequencer.addMetaEventListener(new MetaEventListener() {
 			public void meta(MetaMessage message) {
-				if(!getSon()) {
-					if(sequencer.isRunning()) {
-						sequencer.stop();
-						sequencer.close();
-					}
-				}
 				/* Si la musique est terminée */
 				if(message.getType() == 47){
-					int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
+					/* On stoppe le sequencer puis on le ferme, et on charge puis joue une autre musique */
+					stopSonArriere();
+					
+					chargeSonArriere();
+					
 					try {
-						/* On charge une autre séquence */
-						Sequence sequence;
-						sequence = MidiSystem.getSequence(new File(IConfig.CHEMIN_MUSIQUE + "arriere_plan" + num + ".mid"));
-						
-						/* On stoppe le sequencer puis on le ferme, et on charge puis joue une autre musique */
-						sequencer.stop();
-						
-						try {
-							sequencer.setSequence(sequence);
-						} catch (InvalidMidiDataException e) {
-							e.printStackTrace();
-						}
-						
-						sequencer.start();
-					} catch (InvalidMidiDataException | IOException e) {
+						joueSonArriere();
+					} catch (MidiUnavailableException e) {
 						e.printStackTrace();
-					}	
+					}
 				}
 			}
 		});
+		
 	}
+	
+	/**
+	 * Méthode permettant de jouer le son en arrière plan
+	 * @throws MidiUnavailableException
+	 */
+	public void joueSonArriere() throws MidiUnavailableException{   
+	    sequencer.start();
+	    sonArriereActive = true;
+	}
+	
+	/** 
+	 * Méthode permettant de stopper le son d'arrière plan
+	 */
+	public void stopSonArriere(){
+		sequencer.stop();
+		sonArriereActive = false;
+	}
+	
+	
+	/**
+	 * Méthode permettant de savoir si le son est actuellement joué ou non
+	 * @return booléen a vrai si le son est effectivement en train d'être joué, false sinon
+	 */
+	public boolean getSonArriereActive(){
+		return sonArriereActive;
+	}
+	
+	/**
+	 * Méthode permettant de charger un son arrière aléatoire parmi les musiques du dossier
+	 */
+	public void chargeSonArriere(){
+		int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
+		try {
+			/* On charge une autre séquence */
+			sequence = MidiSystem.getSequence(new File(IConfig.CHEMIN_MUSIQUE + "arriere_plan" + num + ".mid"));
+	
+			try {
+				sequencer.setSequence(sequence);
+			} catch (InvalidMidiDataException e) {
+				e.printStackTrace();
+			}
+		} catch (InvalidMidiDataException | IOException e) {
+			e.printStackTrace();
+		}	
+	}
+	
 	
 	/* Méthode statique privée permettant de jouer un son wav */
 	private static void joueWav(String son){
@@ -122,11 +146,5 @@ public final class Son {
 		joueWav("marcher.wav");
 	}
 	
-	public static boolean getSon() {
-		return sonEnable;
-	}
 	
-	public static void setEnableSon(boolean set) {
-		sonEnable = set;
-	}
 }
