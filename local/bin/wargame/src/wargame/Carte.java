@@ -121,21 +121,21 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 				/** On vient de cliquer sur la même case. I.e : On veut se reposer */
 				if(caseclick == caseactionnee && !soldat[caseclick].getAJoue()) {
-					int regen = Aleatoire.nombreAleatoire(0,IConfig.REGEN_MAX);
+					int regen = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
 					int vie = soldat[caseclick].getVie();
 
-					/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message*/
+					/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message */
 					if(vie == soldat[caseclick].getVieMax()) {
-						FenetreJeu.gameInfo.setText("Ce connard ("+caseclick+") a sa vie au max ");
+						FenetreJeu.gameInfo.setText("Ce connard (" + caseclick + ") a sa vie au max ");
 						message = "Repos Impossible\nVie max atteinte";
 						couleurMessage = IConfig.MESSAGE_NEUTRE;
 						return;
 					}
 
 					/* Définition du message et de la couleur dans laquel l'écrire */
-					message = "+"+regen+"PV";
+					message = "+" + regen + "PV";
 					couleurMessage = IConfig.MESSAGE_POSITIF;
-					FenetreJeu.gameInfo.setText("Ce connard de"+caseclick+"se heal ( +"+regen+" )");
+					FenetreJeu.gameInfo.setText("Ce connard de" + caseclick + "se heal ( +"+regen+" )");
 					/* On met a jour sa vie et on indique qu'il a joué */
 					soldat[caseclick].setVie(vie + regen);
 					soldat[caseclick].setAJoue(true);
@@ -148,7 +148,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					caseactionnee = caseclick;
 				}
 				else {
-
 					if(caseactionnee != -1) {
 						
 						int distance = new Position(caseactionnee).distance(new Position(caseclick));
@@ -302,7 +301,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 			soldat[pos.getNumCase()] = heros[i];
 			soldat[pos.getNumCase()].setPosition(pos);
-//			System.out.println(pos.toString());
 		}
 
 		for(int i = 0; i < IConfig.NB_MONSTRES; i++) {
@@ -358,7 +356,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 
 	/* Retourne la position du premier héros trouvé aux alentour de p. Null si il n'y en as pas */
-	private Position herosAlentour(Point p){
+	private Position herosAlentour(Position p){
 		for(int x = p.x - 1; x <= p.x + 1; x++){
 			for(int y = p.y - 1; y <= p.y; y++){
 				Position pos = new Position(x, y);
@@ -375,21 +373,24 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		return null;
 	}
 
-
+	/* Déplace tous les monstres */
 	private void deplaceMonstres(){
 		for(int i=0; i<monstre.length; i++){
 			Monstre m = monstre[i];
 			if(m != null){
-				Point p;
-
+				Position p;
+				
 				if(m.getPourcentageVie() < 10){
 					// repos
 				}
-//				else if(p = herosAlentour(m.getPosition().getNumCase())){
-////					deplaceSoldat(m, direction, x, y);
-//				}
+				else if((p = herosAlentour(m.getPosition())) != null){
+					// attaque du soldat
+				}
 				else{
-					// se deplacer aleatoirement
+					Position nouvelle_position = new Position();
+					nouvelle_position.x = m.getPosition().x + Aleatoire.nombreAleatoire(-1, 1);
+					nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
+					deplaceSoldat(m, nouvelle_position);
 				}
 			}
 		}

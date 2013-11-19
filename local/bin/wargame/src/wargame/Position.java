@@ -2,8 +2,6 @@ package wargame;
 
 import java.awt.Point;
 
-import wargame.Charset.Direction;
-
 /**
  * Classe permettant de gérer les positions sur la carte
  */
