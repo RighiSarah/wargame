@@ -119,7 +119,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 				/** On vient de cliquer sur la même case. I.e : On veut se reposer */
 				if(caseclick == caseactionnee && !soldat[caseclick].getAJoue()) {
-					int regen = alea(0,IConfig.REGEN_MAX);
+					int regen = Aleatoire.nombreAleatoire(0,IConfig.REGEN_MAX);
 					int vie = soldat[caseclick].getVie();
 
 					/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message*/
@@ -610,10 +610,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 
 		repaint();
-	}
-
-	public int alea (int min , int max) {
-		return min + (int)(Math.random() * (max - min + 1));
 	}
 
 	public void setMessage(String message) {

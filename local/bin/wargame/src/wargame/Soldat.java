@@ -173,7 +173,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	public void combat(Soldat soldat,int distance)
 	{	
 		System.out.println(distance);
-		int degat = (distance == 1) ? alea(1,this.getPuissance()) : this.getTir();
+		int degat = (distance == 1) ? Aleatoire.nombreAleatoire(1, this.getPuissance()) : this.getTir();
 		int numCase = soldat.position.getNumCase();
 		message = "-"+degat+"PV";
 		coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
@@ -290,9 +290,5 @@ public abstract class Soldat extends Charset implements ISoldat
 		chaine += "\nPortee: " + this.portee;
 		
 		return chaine;
-	}
-	
-	public int alea (int min , int max) {
-		return min + (int)(Math.random() * (max - min + 1));
 	}
 }
