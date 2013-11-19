@@ -21,6 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import wargame.Charset.Direction;
+
 /** Classe de la Carte du jeu.
  *	@author ABHAMON Ronan 
  */
@@ -172,37 +174,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							nbToPlayDef();
 							soldat[caseclick] = soldat[caseactionnee];
 							soldat[caseactionnee] = null;
-							
-							Position pos_caseactionnee = new Position(caseactionnee);
-							Position pos_caseclick = new Position(caseclick);
 
-							int sx = pos_caseactionnee.x;
-							int sy = pos_caseactionnee.y;
-							int dx = pos_caseclick.x;
-							int dy = pos_caseclick.y;
-							int x = 0;
-							int y = 0;
-
-							char direction = Charset.HAUT;
-
-							if(dx > sx) {
-								x = 2; 
-								direction = Charset.DROITE;
-							}
-							else if(dx < sx) {
-								x = -2;
-								direction = Charset.GAUCHE;
-							}
-							if(dy > sy) {
-								y = 2; 
-								direction = Charset.BAS;
-							}
-							else if(dy < sy) {
-								y = -2;
-								direction = Charset.HAUT;
-							}
-
-							deplaceSoldat(soldat[caseclick], direction, x, y);
+							deplaceSoldat(soldat[caseclick], new Position(caseclick));
 						}
 					}
 					/* Fin deplacement on re-initialise la case */
@@ -310,12 +283,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
 			{
 				heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea());
-				heros[i].setDirection(Charset.GAUCHE);
+				heros[i].setDirection(Direction.GAUCHE);
 			}
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
 			{
 				monstre[i] = new Monstre(ISoldat.TypesM.getTypeMAlea());
-				monstre[i].setDirection(Charset.DROITE);
+				monstre[i].setDirection(Direction.DROITE);
 			}
 		} 
 		catch(IOException e) {
@@ -325,7 +298,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 		/* Positionnement des soldats. */
 		for(int i = 0; i < IConfig.NB_HEROS; i++) {
-			Position pos = new Position(this.trouvePositionVide(Soldat.HUMAIN));
+			Position pos = new Position(this.trouvePositionVide(Soldat.HEROS));
 
 			soldat[pos.getNumCase()] = heros[i];
 			soldat[pos.getNumCase()].setPosition(pos);
@@ -346,9 +319,36 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @param x         Offset X d'origine.
 	 * @param y         Offset Y d'origine.
 	 */
-	private void deplaceSoldat(Soldat soldat, char direction, int x, int y)
+	private void deplaceSoldat(Soldat soldat, Position nouvelle_position)
 	{
 		Son.joueCourir();
+        
+		int sx = soldat.getPosition().x;
+        int sy = soldat.getPosition().y;
+        int dx = nouvelle_position.x;
+        int dy = nouvelle_position.y;
+        int x = 0;
+        int y = 0;
+
+        Direction direction = Direction.HAUT;
+
+        if(dx > sx) {
+                x = 2;
+                direction = Direction.DROITE;
+        }
+        else if(dx < sx) {
+                x = -2;
+                direction = Direction.GAUCHE;
+        }
+        if(dy > sy) {
+                y = 2;
+                direction = Direction.BAS;
+        }
+        else if(dy < sy) {
+                y = -2;
+                direction = Direction.HAUT;
+        }
+		
 		soldat.setSeDeplace(true);
 		soldat.setDirection(direction);
 
@@ -364,6 +364,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				Position pos = new Position(x, y);
 
 				if(pos.estValide()){
+					/* Si il y a un héros à la case indiquée */
 					if(soldat[pos.getNumCase()] != null && soldat[pos.getNumCase()] instanceof Heros){
 						return pos;
 					}
@@ -384,9 +385,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				if(m.getPourcentageVie() < 10){
 					// repos
 				}
-				//				else if(p = herosAlentour(m.getNumCase())){
-				//					deplaceSoldat(m, direction, x, y);
-				//				}
+//				else if(p = herosAlentour(m.getPosition().getNumCase())){
+////					deplaceSoldat(m, direction, x, y);
+//				}
 				else{
 					// se deplacer aleatoirement
 				}
@@ -425,7 +426,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * */
 	public Position trouvePositionVide(char type)
 	{	
-		int dec = type == Soldat.HUMAIN ? 1 : 0;
+		int dec = type == Soldat.HEROS ? 1 : 0;
 		int num_tile;
 		Tile tile;
 		Position pos = new Position();
@@ -488,13 +489,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
 			{
 				heros[i].setImage();
-				heros[i].setDirection(Charset.GAUCHE);
+				heros[i].setDirection(Direction.GAUCHE);
 			}
 
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
 			{
 				monstre[i].setImage();
-				monstre[i].setDirection(Charset.DROITE);
+				monstre[i].setDirection(Direction.DROITE);
 			}
 
 			chargerTileset(); // Charge uniquement si tileset null.

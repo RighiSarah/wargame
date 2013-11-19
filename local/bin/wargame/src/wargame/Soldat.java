@@ -100,7 +100,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	/** Mettre le statut du personnage à mort. */
 	public void setMort() {
 		this.estMort = true;
-		this.direction = HAUT;
+		this.direction = Direction.HAUT;
 		this.animation = 0;
 	    this.timer.setDelay(350);
 	}
@@ -161,12 +161,14 @@ public abstract class Soldat extends Charset implements ISoldat
     	
     	/* Mise à jour de l'animation. */
         if(estVisible) {
-    		if(estMort)
-    			if(++direction >= N_DIRECTIONS)
+    		if(estMort){
+//    			if(++direction >= N_DIRECTIONS)
     				estVisible = false;
-    		if(seDeplace)
+    		}
+    		if(seDeplace){
     			if(++animation >= N_ANIMATIONS)
     				animation = 0;
+    		}
         }
 	}
 	

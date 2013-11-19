@@ -9,7 +9,7 @@ import java.io.Serializable;
 public interface ISoldat extends Serializable
 {
 	public static final char MONSTRE = 1;
-	public static final char HUMAIN = 2;
+	public static final char HEROS = 2;
 
 	/**
 	 * Énumération permettant d'avoir les caractéristiques des différents héros

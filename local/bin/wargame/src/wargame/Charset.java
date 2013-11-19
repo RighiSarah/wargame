@@ -20,16 +20,32 @@ public class Charset implements ActionListener
 	public final static char N_DIRECTIONS = 4;
 	
 	/** Directions possibles. */
-	public final static char HAUT    = 0;
-	public final static char DROITE  = 1;
-	public final static char BAS     = 2;
-	public final static char GAUCHE  = 3;
+	public enum Direction { 
+		HAUT(0),
+		DROITE(1),
+		BAS(2),
+		GAUCHE(3); 
+		
+		private int value;
+	 
+		private Direction(int value) {
+			this.value = value;
+		}
+	 
+		public int getValue() {
+			return this.value;
+		}
+		
+		public void setValue(int value){
+			this.value = value;
+		}
+	};
 
 	/** Offset sur l'axe Y. */
 	private int offset = 0;
 	
 	/** Direction actuelle. */
-	protected char direction = BAS;
+	protected Direction direction = Direction.BAS;
 			
 	/** Frame d'animation courante. */
 	protected char animation = 0;
@@ -84,7 +100,7 @@ public class Charset implements ActionListener
 		int height = image.getHeight() / N_DIRECTIONS;
 		
 		int sx = animation * width;
-		int sy = direction * height;
+		int sy = direction.getValue() * height;
 		int dx = x * IConfig.NB_PIX_CASE;
 		int dy = y * IConfig.NB_PIX_CASE;
 		
@@ -113,9 +129,9 @@ public class Charset implements ActionListener
 	/** Définir la direction du charset. 
 	 * @param direction Direction.
 	 */
-	public void setDirection(char direction)
+	public void setDirection(Direction direction)
 	{
-		if(direction < 0 || direction >= 4)
+		if(direction.getValue() < 0 || direction.getValue() >= N_DIRECTIONS)
 			return;
 		
 		this.direction = direction;

@@ -2,6 +2,8 @@ package wargame;
 
 import java.awt.Point;
 
+import wargame.Charset.Direction;
+
 /**
  * Classe permettant de gérer les positions sur la carte
  */
@@ -104,6 +106,7 @@ public class Position extends Point implements IConfig{
 		return dx + dy;
 	}
 	
+
 	/**
 	 * Méthode toString affichant les coordonnées de la position
 	 */
