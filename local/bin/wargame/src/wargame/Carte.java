@@ -148,7 +148,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				else {
 
 					if(caseactionnee != -1) {
-						int distance = getDistance(caseactionnee,caseclick);
+						
+						int distance = new Position(caseactionnee).distance(new Position(caseclick));
 
 						/** On a un soldat selectionné et on clique sûr un monste.
 						 * I.e : Combat 
@@ -237,22 +238,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			if(soldat[i] != null)
 				soldat[i].setAJoue(false);	
 		nbToPlay = nbHerosRestant;
-	}
-
-	/* Méthode récupérant la distance (en terme de nombre de cases) entre case1 et case2 */
-	private int getDistance(int case1, int case2)
-	{
-		if (case1 == -1) return 0;
-		Position coordCase1 = new Position(case1);	
-		Position coordCase2 = new Position(case2);
-
-		int dx = Math.abs(coordCase1.x - coordCase2.x);
-		int dy = Math.abs(coordCase1.y - coordCase2.y);
-
-		if(dx == 1 && dy == 1)
-			return 1;
-
-		return dx + dy;
 	}
 
 	/* Méthode chargeant un nouveau Tileset */

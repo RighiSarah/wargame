@@ -46,7 +46,21 @@ public class Position extends Point implements IConfig{
 		return ((Math.abs(x-pos.x) <= 1) && (Math.abs(y-pos.y) <= 1));
 	}
 	
+	public int distance(Position pos){
+		if (this.getNumCase() == -1 || pos.getNumCase() == -1) return 0;
+		
+		int dx = Math.abs(this.x - pos.x);
+		int dy = Math.abs(this.y - pos.y);
+
+		if(dx == 1 && dy == 1)
+			return 1;
+
+		return dx + dy;
+	}
+	
 	public String toString() { 
 		return "(" + x + "," + y +")"; 
 	}
+	
+	
 }
