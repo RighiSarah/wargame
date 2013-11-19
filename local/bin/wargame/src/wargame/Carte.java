@@ -356,9 +356,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		soldat.offsetY = y;
 	}
 
-	private boolean positionDansCarte(Position p){
-		return (p.x >= 0 && p.y >= 0 && p.x < IConfig.LARGEUR_CARTE && p.y < IConfig.HAUTEUR_CARTE);
-	}
 
 	/* Retourne la position du premier héros trouvé aux alentour de p. Null si il n'y en as pas */
 	private Position herosAlentour(Point p){
@@ -366,7 +363,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			for(int y = p.y - 1; y <= p.y; y++){
 				Position pos = new Position(x, y);
 
-				if(positionDansCarte(pos)){
+				if(pos.estValide()){
 					if(soldat[pos.getNumCase()] != null && soldat[pos.getNumCase()] instanceof Heros){
 						return pos;
 					}
