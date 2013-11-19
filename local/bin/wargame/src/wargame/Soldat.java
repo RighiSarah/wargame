@@ -26,7 +26,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	protected String nom;
 	
 	/** Numéro de la case où se situe le soldat. */
-	private int numCase;
+	private Position position;
 
 	/** Est mort ? */
 	private boolean estMort = false;
@@ -46,6 +46,10 @@ public abstract class Soldat extends Charset implements ISoldat
 	public int getVie() 
 	{
 		return vie;
+	}
+	
+	public int getPourcentageVie(){
+		return (vieMax/vie);
 	}
 	
 	public int getVieMax() 
@@ -86,16 +90,6 @@ public abstract class Soldat extends Charset implements ISoldat
 	public void setTir(int tir) 
 	{
 		this.tir = tir;
-	}
-	
-	public int getNumCase() 
-	{
-		return numCase;
-	}
-
-	public void setNumCase(int num_case) 
-	{
-		this.numCase = num_case;
 	}
 		
 	public void setSeDeplace(boolean value)
@@ -142,16 +136,21 @@ public abstract class Soldat extends Charset implements ISoldat
     		if(Math.abs((int)offsetX) >= IConfig.NB_PIX_CASE || Math.abs((int)offsetY) >= IConfig.NB_PIX_CASE)
     		{
     			/* Mise à jour de la nouvelle position. */
-    			int x = numCase % IConfig.LARGEUR_CARTE;
-    			int y = numCase / IConfig.LARGEUR_CARTE;
+    			int x = position.getNumCase() % IConfig.LARGEUR_CARTE;
+    			int y = position.getNumCase() / IConfig.LARGEUR_CARTE;
 
-    			if(offsetX > 0) x++;
-    			else if(offsetX < 0) x--;
+    			if(offsetX > 0)
+    				x++;
+    			else if(offsetX < 0)
+    				x--;
 
-    			if(offsetY > 0) y++;
-    			else if(offsetY < 0) y--;
+    			if(offsetY > 0)
+    				y++;
+    			else if(offsetY < 0)
+    				y--;
     			
-    			numCase = x + IConfig.LARGEUR_CARTE * y;
+    			position.x = x;
+    			position.y = y;
     			
     			/* Remise à zéro du déplacement. */
     			offsetX = offsetY = 0;
@@ -175,7 +174,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	{	
 		System.out.println(distance);
 		int degat = (distance == 1) ? alea(1,this.getPuissance()) : this.getTir();
-		int numCase = soldat.getNumCase();
+		int numCase = soldat.position.getNumCase();
 		message = "-"+degat+"PV";
 		coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
 		
@@ -189,7 +188,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
 				FenetreJeu.gameInfo.setText("Tu t'es pris une putain de patate ( -"+degat+")");
 				vie = this.getVie() - degat;
-				numCase = this.getNumCase();
+				numCase = this.position.getNumCase();
 				message = "-"+degat+"PV";
 				coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
 				if(vie > 0)
@@ -207,6 +206,14 @@ public abstract class Soldat extends Charset implements ISoldat
 			Carte.setSoldat(numCase, null);
 			soldat.setMort();		
 		}
+	}
+
+	public Position getPosition() {
+		return position;
+	}
+
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 
 	@Override
