@@ -169,7 +169,12 @@ public abstract class Soldat extends Charset implements ISoldat
     		}
         }
 	}
-	
+    
+	/**
+	 * Fonction permettant de crée un combat entre 2 soldats
+	 * @param soldat instance du soldat a attaquer
+	 * @param distance distance séparant soldat1 de soldat 2
+	 */
 	public void combat(Soldat soldat,int distance)
 	{	
 		System.out.println(distance);
@@ -207,6 +212,10 @@ public abstract class Soldat extends Charset implements ISoldat
 		}
 	}
 	
+	/**
+	 * Fonction statique permettant de dessiner une infobulle sur la carte
+	 * @param soldat instance du soldat a soignier
+	 */
 	public void heal(Soldat soldat) {
 
 		int regen = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);

@@ -23,7 +23,7 @@ final class Infobulle extends Rectangle
 	 */
 	private Infobulle(){}
 	
-	
+	/* Classe message qui instancie les messages */
 	static class Message{
 		
 		private Point coord;
@@ -33,6 +33,21 @@ final class Infobulle extends Rectangle
 		private int timer;
 		private int promptNext;
 				
+		
+		/**
+		 * Constructeur d'un message
+		 * @param loc Numero de la case sur laquel le message doit être dessiné
+		 * @param mes Message à écrire 
+		 * @param direction au choix entre :
+		 * 			- IConfig.HAUT : les messages monterons et seront animés
+		 * 			- IConfig.BAS : les messages descendrons et seront animés
+		 * 			- IConfig.NO_MOVE : les messages ne bouge pas ils reste soit au dessus soit en dessous du perso
+		 * @param t ici, il s'agit du temps en seconde * le nombre de FPS 
+		 * @param pN La variable la plus importante , elle determine si plusieurs messages peuvent s'afficher en même temps
+		 * 				- Si pN = -1 , un seul message a la fois
+		 * 				- Si pN = 0 , Les messages s'afficherons tous en meme temps
+		 * 				- Si pN > 0 , les messages auront un décalage de n seconde [ n étant letemps mis ]
+		 */
 		Message(int loc, String mes, Color color, char direction, int t,  int pN) {
 
 			Point coord = new Point(loc % IConfig.LARGEUR_CARTE , (int) loc / IConfig.LARGEUR_CARTE );
@@ -48,16 +63,19 @@ final class Infobulle extends Rectangle
 
 		}	
 		
+		/* Mes automatiquement tout les temps du message a jours  [ pN et t ] */
 		public void setTime() {
 			if(this.promptNext != -1 && this.promptNext != 0)
 				this.promptNext--;
 			this.timer--;
 		}
 		
+		/* Retourne les coordonnées de la position du message */
 		public Point getPoint() {
 			return this.coord;
 		}
 		
+		/* Deplace le message en changeant également la ccouche alpha du message */
 		public void setDeplacement() {
 			int x = (int) (60.0 / IConfig.FPS); // Max de 60 FPS ; pour passer a plus de FPs il faudrait tout transformer en float
 			int alpha =  color.getAlpha() - ( 2 * x ) ;
@@ -67,44 +85,65 @@ final class Infobulle extends Rectangle
 		}
 	}
 	
-	
+	/**
+	 * Fonction statique permettant rajouter un message a la file de message 
+	 * @param loc Numero de la case sur laquel le message doit être dessiné
+	 * @param s Message a afficher
+	 * @param color Couleur du message
+	 * @param direction au choix entre :
+	 * 			- IConfig.HAUT : les messages monterons et seront animés
+	 * 			- IConfig.BAS : les messages descendrons et seront animés
+	 * 			- IConfig.NO_MOVE : les messages ne bouge pas ils reste soit au dessus soit en dessous du perso
+	 * @param t ici, il s'agit du temps en seconde d'affichage du message
+	 * @param promptNext La variable la plus importante , elle determine si plusieurs messages peuvent s'afficher en même temps
+	 * 				- Si promptNext = -1 , un seul message a la fois
+	 * 				- Si promptNext = 0 , Les messages s'afficherons tous en meme temps
+	 * 				- Si promptNext > 0 , les messages auront un décalage de n seconde [ n étant letemps mis ]
+	 */
 	public static void generalQueue(int loc, String s, Color color, char direction, int t, int promptNext) {
 		File.add(new Message(loc, s, color, direction, (int) (t * IConfig.FPS), promptNext));
-		System.out.println("ADD"+s);
 	}
 	
+	/** Surchage de la generalQueue */
+	/* Si new message ne comporte que ses parametres la alors ,
+	 * il s'agit d'un message ou seul la direction est donnée I.e : Le message bougera obligatoirement en utilisant 
+	 * cette fonction
+	 */
 	public static void newMessage(int loc, String s, Color color, char direction, int promptNext) {
 		generalQueue(loc, s, color, direction, 1, promptNext);
 	}
 	
+	/** Surchage de la generalQueue */
+	/* Si new message ne comporte que ses parametres la alors ,
+	 * il s'agit d'un message statique ou le temps est donné,il correspond au temps d'affichage du message
+	 */
 	public static void newMessage(int loc, String s, Color color, int t, int promptNext) {
-		generalQueue(loc, s, color, IConfig.NO_MOVE, 1, promptNext);
+		generalQueue(loc, s, color, IConfig.NO_MOVE, t, promptNext);
 	}
 	
-	public static void dessiner(Graphics g, String message, int x, int y) {
+	/** Fonction d'auto gestion de la file de message 
+	 * @param g Graphics dans lequel on va dessiner le message
+	 */
+	public static void dessiner(Graphics g) {
 
 		int size = File.size();
 
-		if(size == 0) {
-			if(message == "")
-				return;
-			dessinerText(g, x, y, message, IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
+		if(size == 0)
 			return;
-		}
-		
+
 		int i = 0;
 		while(size != 0 && i < size ) {
 
 			Message m = File.get(i);
 			
-			if(m.timer == 0) {
+			if(m.timer == 0) { // si le temps d'affichage est a 0 ont retire le message de la file
 				File.poll();
 				size--;
 				i--;
 			}
 			else {
 				if(m.direction != IConfig.NO_MOVE)
-					m.setDeplacement();
+					m.setDeplacement(); // ont fait le deplacement que si la  direction est donnée [ Haut ou Bas ]
 				m.setTime();
 			}
 			
@@ -116,6 +155,14 @@ final class Infobulle extends Rectangle
 		}	
 	}
 	
+	/**
+	 * Fonction statique permettant de dessiner un message sur la carte
+	 * @param g Graphics dans lequel on va dessiner l'infobulle
+	 * @param x coordonnée x de la case de la carte
+	 * @param y coordonnée y de la case de la carte
+	 * @param message message à écrire dans l'infobulle 
+	 * @param string_color couleur du texte
+	 */
 	public static void dessinerText(Graphics g, int x, int y, String message, Color string_color)
 	{
 		Color ancienne_couleur = g.getColor();

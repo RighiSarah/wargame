@@ -550,7 +550,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			if(soldat[i] != null && !soldat[i].estMort())
 			{
 				Position pos = soldat[i].getPosition();
-
 				soldat[i].dessineVie(g, pos.x, pos.y);
 			}
 
@@ -559,7 +558,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			Position pos = soldatPointe.getPosition();
 			Infobulle.dessinerText(g, pos.x, pos.y, soldatPointe.toString(), IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
 		}
-		Infobulle.dessiner(g, "", 0, 0);
+		
+		/* Auto gestion de l'affichage de la file de message */
+		Infobulle.dessiner(g);
 
 		FenetreJeu.gameHistory.setText(Carte.nbMonstresRestant+"Monstres restant - "+Carte.nbHerosRestant+"Heros restant");
 	}
@@ -569,7 +570,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		if(generer)
 			if(Carte.nbToPlay == 0)
 				Carte.reinitAJoue();
-
 
 		repaint();
 	}
