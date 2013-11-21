@@ -237,9 +237,9 @@ public abstract class Soldat extends Charset implements ISoldat
 			if(!afficherMessage)
 				return;
 			
-			FenetreJeu.information.setText("La vie de " + this.nom + 
+			FenetreJeu.information.setText( this.nom + 
 										   "(" + this.position.x + "," + this.position.y + ")" + 
-										   " est au maximum"
+										   " a sa vie au maximum"
 										   );
 			
 			Infobulle.newMessage(case_courante, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
