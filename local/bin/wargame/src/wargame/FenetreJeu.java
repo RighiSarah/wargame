@@ -66,7 +66,7 @@ public class FenetreJeu extends JFrame
 	private JMenuItem son;
 	
 	/** Carte du jeu. */
-    JPanel carte;
+    Carte carte;
 
     /* Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
@@ -132,7 +132,7 @@ public class FenetreJeu extends JFrame
 	    		private final int NUM = k;
 		    	public void actionPerformed(ActionEvent arg0) 
 		    	{
-					((Carte)carte).sauvegarde(NUM);
+					carte.sauvegarde(NUM);
 		    	}       
 		    });
 	    	
@@ -140,7 +140,7 @@ public class FenetreJeu extends JFrame
 	    		private final int NUM = k;
 		    	public void actionPerformed(ActionEvent arg0) 
 		    	{
-					((Carte)carte).charge(NUM);
+					carte.charge(NUM);
 				    menu.add(Box.createHorizontalGlue()); 
 				    menu.add(finTour);
 				    setJMenuBar(menu);
@@ -176,7 +176,7 @@ public class FenetreJeu extends JFrame
 	    nouveau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				((Carte)carte).generer();							
+				carte.generer();							
 				sauvegarder.setEnabled(true);
 				
 				System.out.println(finTour.getSize());
@@ -258,9 +258,10 @@ public class FenetreJeu extends JFrame
 	    finTour.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				System.out.println("YEAHH");
-				if(Carte.generer)
-					Carte.reinitAJoue();
+				if(carte.isGeneree()){
+					carte.joueMonstres();
+					carte.reinitAJoue();
+				}
 			}
 		});
 	    

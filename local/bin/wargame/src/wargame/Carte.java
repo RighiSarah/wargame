@@ -70,7 +70,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	private static Soldat []soldat;
 
 	/** La carte est-elle générée ? */
-	static boolean generer = false;
+	private boolean generee = false;
 
 	/** Indique la case courante sélectionnée.
 	 * Correspond également au soldat selectionné dans le combat.
@@ -104,12 +104,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 		/* Capture de la souris. */
 		addMouseListener(new MouseAdapter() {
-			/* Au clique */
+			/* Au clic */
 			public void mouseClicked(MouseEvent e) { 
-				if(!generer)
+				if(!generee)
 					return;
 
-				/* On crée une position aux coordonnées du clique de la souris pour connaitre la coordonnée de la case (et non pas du pixel) */
+				/* On crée une position aux coordonnées du clic de la souris pour connaitre la coordonnée de la case (et non pas du pixel) */
 				Position pos = new Position(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
 				int case_cliquee = pos.getNumCase();
 
@@ -171,7 +171,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		addMouseMotionListener(new MouseAdapter() {
 			public void mouseMoved(MouseEvent e) {
 				/* On vérifie que la carte a bien été générée */
-				if(generer){
+				if(generee){
 					/* Récupération de la case de la carte correspondant aux coordonnées du curseur */
 					int num_case_curseur = new Position((e.getX() / IConfig.NB_PIX_CASE), (e.getY() / IConfig.NB_PIX_CASE)).getNumCase();
 
@@ -186,9 +186,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 
 	/** 
-	 * Méthode statique permettant de reinitialiser le tour de tous les soldats
+	 * Méthode permettant de reinitialiser le tour de tous les soldats
 	 */
-	public static void reinitAJoue() {
+	public void reinitAJoue() {
 		tour++;
 
 		FenetreJeu.gameInfo.setText("Début du tour " + tour);
@@ -356,6 +356,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/**
 	 *  Retourne la position du premier héros trouvé aux alentours de p. Null si il n'y en as pas 
+	 *  @param p Position du soldat où chercher aux alentours
 	 */
 	private Position herosAlentour(Position p){
 		for(int x = p.x - 1; x <= p.x + 1; x++){
@@ -377,19 +378,22 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/**
 	 *  Déplace tous les monstres 
 	 */
-	private void deplaceMonstres(){
+	public void joueMonstres(){
 		for(int i=0; i<monstre.length; i++){
 			Monstre m = monstre[i];
 			if(m != null){
 				Position p;
 
 				if(m.getPourcentageVie() < 10){
-					// repos
+					System.out.println("Repos pour moi car :" + m.getPourcentageVie());
+					m.repos();
 				}
 				else if((p = herosAlentour(m.getPosition())) != null){
-					// attaque du soldat
+					System.out.println("Je combats");
+					m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
 				}
 				else{
+					System.out.println("Je me déplace");
 					Position nouvelle_position = new Position();
 					nouvelle_position.x = m.getPosition().x + Aleatoire.nombreAleatoire(-1, 1);
 					nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
@@ -402,7 +406,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Genere aléatoirement une carte. */
 	public void generer()
 	{
-		generer = true;
+		generee = true;
 		genererCarte();
 		genererSoldats();
 		caseActionnee = -1;	
@@ -503,7 +507,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 
 			chargerTileset(); // Charge uniquement si tileset null.
-			generer = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
+			generee = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
 
 			ois.close();
 		}
@@ -520,7 +524,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		Point dest = new Point();
 		Point src;
 
-		if(!generer)
+		if(!generee)
 			return;
 
 		/* Affichage de la carte. */
@@ -589,15 +593,18 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		if(generer)
-			if(Carte.nbToPlay == 0)
-				Carte.reinitAJoue();
+		if(generee && nbToPlay == 0)
+			reinitAJoue();
 
 		repaint();
 	}
 
 	public static void setSoldat(int i, Soldat s) {
 		soldat[i] = s;
+	}
+	
+	public boolean isGeneree(){
+		return this.generee;
 	}
 }
 
