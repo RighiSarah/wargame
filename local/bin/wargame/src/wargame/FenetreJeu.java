@@ -276,8 +276,8 @@ public class FenetreJeu extends JFrame
         this.add(separator,BorderLayout.CENTER);
 
         barreEtat = new JPanel();
-        historique = new JLabel("Away gars crée une partie pour avoir des infos", JLabel.RIGHT);
-        information = new JLabel("Vas bouger la souris", JLabel.LEFT);
+        historique = new JLabel("Pour commencer, crée une nouvelle partie ou charger en une", JLabel.RIGHT);
+        information = new JLabel("Ici s'affichera l'historique des actions", JLabel.LEFT);
         barreEtat.setSize(new Dimension(carte.getWidth(), 16));
         barreEtat.setLayout(new BoxLayout(barreEtat, BoxLayout.X_AXIS));
         
