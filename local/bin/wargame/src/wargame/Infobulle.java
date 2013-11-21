@@ -166,14 +166,14 @@ final class Infobulle extends Rectangle
 
 			Message m = File.get(i);
 			
-			if(m.timer == 0) { // si le temps d'affichage est a 0 ont retire le message de la file
+			if(m.timer == 0) { // si le temps d'affichage est a 0 on retire le message de la file
 				File.poll();
 				size--;
 				i--;
 			}
 			else {
 				if(m.direction != IConfig.NO_MOVE)
-					m.setDeplacement(); // ont fait le deplacement que si la  direction est donnée [ Haut ou Bas ]
+					m.setDeplacement(); // on fait le deplacement que si la  direction est donnée [ Haut ou Bas ]
 				m.setTime();
 			}
 			

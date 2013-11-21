@@ -192,7 +192,7 @@ public abstract class Soldat extends Charset implements ISoldat
 			if(soldat.getPortee() >= distance) {
 
 				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
-				FenetreJeu.information.setText("Tu t'es pris une putain de patate ( -" + degat + ")");
+				FenetreJeu.information.setText("Un " + soldat.nom + " vous frappe, vous perdez " + degat + " points de vie");
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
 				
@@ -232,7 +232,11 @@ public abstract class Soldat extends Charset implements ISoldat
 		
 		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué. Cependant on lui met un message */
 		if(vie == this.getVieMax()) {
-			FenetreJeu.information.setText("Ce connard (" + case_courante + ") a sa vie au max ");
+			FenetreJeu.information.setText("La vie de " + this.nom + 
+										   "(" + this.position.x + "," + this.position.y + ")" + 
+										   " est au maximum"
+										   );
+			
 			Infobulle.newMessage(case_courante, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
 			return;
 		}
@@ -240,7 +244,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		/* Définition du message et de sa couleur */
 		Infobulle.newMessage(case_courante, "+" + regain, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
 		
-		FenetreJeu.information.setText("Ce connard de" + case_courante + "se régénère ( +" + regain + " )");
+		FenetreJeu.information.setText(this.nom + "se repose et regagne " + regain + " point de vie");
 		
 		/* On met a jour sa vie et on indique qu'il a joué */
 		this.setVie(vie + regain);
