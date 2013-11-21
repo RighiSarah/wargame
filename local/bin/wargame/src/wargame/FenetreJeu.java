@@ -267,8 +267,9 @@ public class FenetreJeu extends JFrame
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
         this.add(carte,BorderLayout.NORTH);
-
-        /* ICI C'EST LE BORDEL PAS TOUCHER MERCI [ nico ] */
+        
+        /* Do Not Touch plz */
+        
         separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBackground(Color.DARK_GRAY);
         separator.setSize(new Dimension(carte.getWidth(), 5));

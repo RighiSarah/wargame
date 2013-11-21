@@ -199,7 +199,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, -1);
 				this.setVie(vie);
 				
-				if(vie < 0) {
+				if(vie <= 0) {
 					this.setMort();
 					if(soldat instanceof Heros)	
 						Carte.nbHerosRestantDec();
