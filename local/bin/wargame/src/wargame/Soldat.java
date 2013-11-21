@@ -210,6 +210,7 @@ public abstract class Soldat extends Charset implements ISoldat
 			Carte.setSoldat(numCase, null);
 			soldat.setMort();		
 		}
+		this.setAJoue(true);
 	}
 	
 	/**

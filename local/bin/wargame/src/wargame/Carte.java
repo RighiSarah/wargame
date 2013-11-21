@@ -132,9 +132,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						 * I.e : Combat 
 						 */
 						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee() && !soldat[caseactionnee].getAJoue() && soldat[caseclick].estVisible() ) {
-							FenetreJeu.gameInfo.setText("Combat epic opposant "+caseactionnee+" a "+caseclick);	
 							soldat[caseactionnee].combat(soldat[caseclick],distance);
-							soldat[caseactionnee].setAJoue(true);
 							nbToPlayDef();
 							return;
 						}
@@ -145,7 +143,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && soldat[caseclick] == null && !soldat[caseactionnee].getAJoue()) {
 							FenetreJeu.gameInfo.setText("Mouvement de soldat : "+caseactionnee);
 
-							soldat[caseactionnee].setAJoue(true);
 							nbToPlayDef();
 							soldat[caseclick] = soldat[caseactionnee];
 							soldat[caseactionnee] = null;
@@ -301,7 +298,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	private void deplaceSoldat(Soldat soldat, Position nouvelle_position)
 	{
 		Son.joueCourir();
-        
+		soldat.setAJoue(true);
 		int sx = soldat.getPosition().x;
         int sy = soldat.getPosition().y;
         int dx = nouvelle_position.x;
