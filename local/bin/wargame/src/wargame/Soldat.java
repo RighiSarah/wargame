@@ -177,7 +177,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * @param soldat instance du soldat a attaquer
 	 * @param distance distance séparant soldat1 de soldat 2
 	 */
-	public void combat(Soldat soldat,int distance)
+	public void combat(Soldat soldat, int distance)
 	{	
 		System.out.println(distance);
 		int degat = (distance == 1) ? Aleatoire.nombreAleatoire(1, this.getPuissance()) : this.getTir();
@@ -189,29 +189,36 @@ public abstract class Soldat extends Charset implements ISoldat
 		soldat.setVie(vie);
 
 		if(vie > 0) {
-			if( soldat.getPortee() >= distance ) {
+			if(soldat.getPortee() >= distance) {
 
 				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
-				FenetreJeu.gameInfo.setText("Tu t'es pris une putain de patate ( -"+degat+")");
+				FenetreJeu.gameInfo.setText("Tu t'es pris une putain de patate ( -" + degat + ")");
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
 				
-				Infobulle.newMessage(numCase, "-"+degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, -1);
+				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, -1);
 				this.setVie(vie);
 				
 				if(vie < 0) {
 					this.setMort();
-					if(soldat instanceof Heros)	Carte.nbHerosRestantDec();
-					else Carte.nbMonstresRestantDec();
+					if(soldat instanceof Heros)	
+						Carte.nbHerosRestantDec();
+					else 
+						Carte.nbMonstresRestantDec();
 				}				
 			}
 		}
 		else {
-			if(soldat instanceof Heros)	Carte.nbHerosRestantDec();
-			else Carte.nbMonstresRestantDec();
-			Carte.setSoldat(numCase, null);
-			soldat.setMort();		
+			if(soldat instanceof Heros)	
+				Carte.nbHerosRestantDec();
+			else 
+				Carte.nbMonstresRestantDec();
+			soldat.setMort();	
+			
+			// Bug si on laisse ça comme ça
+//			Carte.setSoldat(numCase, null);	
 		}
+		
 		this.setAJoue(true);
 	}
 	
