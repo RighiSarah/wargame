@@ -57,10 +57,9 @@ public class Charset implements ActionListener
 				
 			if(this.value >= N_DIRECTIONS){
 				this.value = 0;
-				System.out.println(this.toString());
 				return false;
 			}
-			System.out.println(this.toString());
+			
 			return true;
 		}
 		

@@ -183,7 +183,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		int degat = (distance == 1) ? Aleatoire.nombreAleatoire(1, this.getPuissance()) : this.getTir();
 		int numCase = soldat.position.getNumCase();
 		
-		Infobulle.newMessage(numCase, "-"+degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, 30);
+		Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, 30);
 				
 		int vie = soldat.getVie() - degat;
 		soldat.setVie(vie);
@@ -213,10 +213,8 @@ public abstract class Soldat extends Charset implements ISoldat
 				Carte.nbHerosRestantDec();
 			else 
 				Carte.nbMonstresRestantDec();
-			soldat.setMort();	
 			
-			// Bug si on laisse ça comme ça
-//			Carte.setSoldat(numCase, null);	
+			soldat.setMort();	
 		}
 		
 		this.setAJoue(true);
@@ -226,7 +224,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * Fonction statique permettant de dessiner une infobulle sur la carte
 	 * @param soldat instance du soldat a soignier
 	 */
-	public void heal(Soldat soldat) {
+	public void repos(Soldat soldat) {
 
 		int regen = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
 		int vie = soldat.getVie();

@@ -75,7 +75,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Indique la case courante sélectionnée.
 	 * Correspond également au soldat selectionné dans le combat.
 	 */
-	private int caseactionnee = -1;
+	private int caseActionnee = -1;
 
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
@@ -103,54 +103,66 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		this.add(image);
 
 		/* Capture de la souris. */
-		addMouseListener(new MouseAdapter() { 
+		addMouseListener(new MouseAdapter() {
+			/* Au clique */
 			public void mouseClicked(MouseEvent e) { 
 				if(!generer)
 					return;
 
+				/* On crée une position aux coordonnées du clique de la souris pour connaitre la coordonnée de la case (et non pas du pixel) */
 				Position pos = new Position(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
-				int caseclick = pos.getNumCase();
+				int case_cliquee = pos.getNumCase();
 
-				/** On vient de cliquer sur la même case. I.e : On veut se reposer */
-				if(caseclick == caseactionnee && !soldat[caseclick].getAJoue()) {
-					soldat[caseclick].heal(soldat[caseclick]);
+				/* On vient de cliquer sur la même case : on veut se reposer */
+				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
+					soldat[case_cliquee].repos(soldat[case_cliquee]);
 					nbToPlayDef();
 				}
 
-				/** On change de héros si la case n'est pas vide et qu'il s'agit bien d'un soldat et que le soldat est affiché.
-				 * Sinon On vas faire une action en rapport avec le soldat selectionné.*/
-				if(soldat[caseclick] != null && soldat[caseclick] instanceof Heros && soldat[caseclick].estVisible() ) {
-					caseactionnee = caseclick;
+				/* On change de héros si la case n'est pas vide, qu'il s'agit bien d'un soldat et que le soldat est affiché. */
+				if(soldat[case_cliquee] != null 
+					&& soldat[case_cliquee] instanceof Heros 
+					&& soldat[case_cliquee].estVisible() 
+				) {
+					caseActionnee = case_cliquee;
 				}
+				/* Sinon on va faire une action en rapport avec le soldat sélectionné. */
 				else {
-					if(caseactionnee != -1) {
-						
-						int distance = new Position(caseactionnee).distance(new Position(caseclick));
+					if(caseActionnee != -1) {
+						/* Distance entre la case cliquée et la case actionnée */
+						int distance = new Position(caseActionnee).distance(new Position(case_cliquee));
 
-						/** On a un soldat selectionné et on clique sûr un monste.
-						 * I.e : Combat 
-						 */
-						if(soldat[caseclick] instanceof Monstre && distance <= soldat[caseactionnee].getPortee() && !soldat[caseactionnee].getAJoue() && soldat[caseclick].estVisible() ) {
-							soldat[caseactionnee].combat(soldat[caseclick],distance);
+						/* Si on clique sur un monste alors combat */
+						if(soldat[case_cliquee] instanceof Monstre 
+							&& distance <= soldat[caseActionnee].getPortee() 
+							&& !soldat[caseActionnee].getAJoue() 
+							&& soldat[case_cliquee].estVisible() 
+						) {
+							soldat[caseActionnee].combat(soldat[case_cliquee], distance);
 							nbToPlayDef();
 							return;
 						}
 
-						/** On a un soldat selectionné et on click sur une case autour [ a une distance de 1 autour du soldat ].
-						 * I.e : On veut se déplacer sur la nouvelle case.
+
+						/* On a un soldat selectionné et on clique sur une case autour (à une distance de 1 autour du soldat)
+						 * -> On veut se déplacer sur la nouvelle case.
 						 */
-						if(distance == 1 && tileset.getTile(carte[caseclick]).estPraticable() && soldat[caseclick] == null && !soldat[caseactionnee].getAJoue()) {
-							FenetreJeu.gameInfo.setText("Mouvement de soldat : "+caseactionnee);
+						if(distance == 1 
+							&& tileset.getTile(carte[case_cliquee]).estPraticable() 
+							&& soldat[case_cliquee] == null && !soldat[caseActionnee].getAJoue()
+						) {
+							FenetreJeu.gameInfo.setText("Mouvement de soldat : " + caseActionnee);
 
 							nbToPlayDef();
-							soldat[caseclick] = soldat[caseactionnee];
-							soldat[caseactionnee] = null;
+							soldat[case_cliquee] = soldat[caseActionnee];
+							soldat[caseActionnee] = null;
 
-							deplaceSoldat(soldat[caseclick], new Position(caseclick));
+							/* On déplace le soldat à la nouvelle position */
+							deplaceSoldat(soldat[case_cliquee], new Position(case_cliquee));
 						}
 					}
 					/* Fin deplacement on re-initialise la case */
-					caseactionnee = -1;
+					caseActionnee = -1;
 				}
 			}
 		});
@@ -160,12 +172,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			public void mouseMoved(MouseEvent e) {
 				/* On vérifie que la carte a bien été générée */
 				if(generer){
-					/* récupération de la case de la carte correspondant aux coordonnées du curseur */
-					int coord_curseur = (e.getX() / IConfig.NB_PIX_CASE) + 
-							IConfig.LARGEUR_CARTE * (e.getY() / IConfig.NB_PIX_CASE);
+					/* Récupération de la case de la carte correspondant aux coordonnées du curseur */
+					int num_case_curseur = new Position((e.getX() / IConfig.NB_PIX_CASE), (e.getY() / IConfig.NB_PIX_CASE)).getNumCase();
 
-					if(soldat[coord_curseur] != null && soldat[coord_curseur].estVisible())
-						soldatPointe = soldat[coord_curseur];
+					/* Si il y a bien un soldat pointé, alors on met ce dernier dans l'objet soldatPointe, sinon on le met à null (pas de soldat pointé) */
+					if(soldat[num_case_curseur] != null && soldat[num_case_curseur].estVisible())
+						soldatPointe = soldat[num_case_curseur];
 					else
 						soldatPointe = null;
 				}
@@ -173,23 +185,29 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		});
 	}
 
-	/* Méthode pour reinitialiser le tour de tout les soldats */
+	/** 
+	 * Méthode statique permettant de reinitialiser le tour de tous les soldats
+	 */
 	public static void reinitAJoue() {
 		tour++;
-		
-		FenetreJeu.gameInfo.setText("Début du tour "+tour);
-		
-		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE;i++) 
+
+		FenetreJeu.gameInfo.setText("Début du tour " + tour);
+
+		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
 				if(soldat[i] instanceof Heros && !soldat[i].getAJoue() ) {
-					soldat[i].heal(soldat[i]);
+					soldat[i].repos(soldat[i]);
 				}
 				soldat[i].setAJoue(false);	
 			}
+		}
+		
 		nbToPlay = nbHerosRestant;
 	}
 
-	/* Méthode chargeant un nouveau Tileset */
+	/**
+	 *  Méthode chargeant un nouveau Tileset
+	 */
 	private void chargerTileset()
 	{
 		if(tileset == null)
@@ -202,7 +220,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}		
 	}
 
-	/* Méthode générant la carte */
+	/**
+	 *  Méthode générant la carte 
+	 */
 	private void genererCarte()
 	{
 		int x, y;
@@ -243,7 +263,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}
 	}
 
-	/* Méthode générant tous les soldats */
+	/**
+	 *  Méthode générant tous les soldats 
+	 */
 	private void genererSoldats()
 	{
 		/* Mise à 0 de la carte. */
@@ -299,31 +321,31 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		Son.joueCourir();
 		soldat.setAJoue(true);
 		int sx = soldat.getPosition().x;
-        int sy = soldat.getPosition().y;
-        int dx = nouvelle_position.x;
-        int dy = nouvelle_position.y;
-        int x = 0;
-        int y = 0;
+		int sy = soldat.getPosition().y;
+		int dx = nouvelle_position.x;
+		int dy = nouvelle_position.y;
+		int x = 0;
+		int y = 0;
 
-        Direction direction = Direction.HAUT;
+		Direction direction = Direction.HAUT;
 
-        if(dx > sx) {
-                x = 2;
-                direction = Direction.DROITE;
-        }
-        else if(dx < sx) {
-                x = -2;
-                direction = Direction.GAUCHE;
-        }
-        if(dy > sy) {
-                y = 2;
-                direction = Direction.BAS;
-        }
-        else if(dy < sy) {
-                y = -2;
-                direction = Direction.HAUT;
-        }
-		
+		if(dx > sx) {
+			x = 2;
+			direction = Direction.DROITE;
+		}
+		else if(dx < sx) {
+			x = -2;
+			direction = Direction.GAUCHE;
+		}
+		if(dy > sy) {
+			y = 2;
+			direction = Direction.BAS;
+		}
+		else if(dy < sy) {
+			y = -2;
+			direction = Direction.HAUT;
+		}
+
 		soldat.setSeDeplace(true);
 		soldat.setDirection(direction);
 
@@ -332,7 +354,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 
 
-	/* Retourne la position du premier héros trouvé aux alentour de p. Null si il n'y en as pas */
+	/**
+	 *  Retourne la position du premier héros trouvé aux alentours de p. Null si il n'y en as pas 
+	 */
 	private Position herosAlentour(Position p){
 		for(int x = p.x - 1; x <= p.x + 1; x++){
 			for(int y = p.y - 1; y <= p.y; y++){
@@ -350,13 +374,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		return null;
 	}
 
-	/* Déplace tous les monstres */
+	/**
+	 *  Déplace tous les monstres 
+	 */
 	private void deplaceMonstres(){
 		for(int i=0; i<monstre.length; i++){
 			Monstre m = monstre[i];
 			if(m != null){
 				Position p;
-				
+
 				if(m.getPourcentageVie() < 10){
 					// repos
 				}
@@ -379,7 +405,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		generer = true;
 		genererCarte();
 		genererSoldats();
-		caseactionnee = -1;	
+		caseActionnee = -1;	
 
 		if(image != null){
 			image.getParent().remove(image);
@@ -412,7 +438,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		do {
 			pos.x = dec * (IConfig.LARGEUR_CARTE / 2) + dec + (int)(Math.random() * (IConfig.LARGEUR_CARTE / 2));
 			pos.y = (int)(Math.random() * IConfig.HAUTEUR_CARTE);
-					
+
 
 			num_tile = carte[pos.getNumCase()];
 			tile = tileset.getTile(num_tile);
@@ -509,13 +535,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 
 		/* Case sélectionnée. */
-		if(caseactionnee != -1){
-			Position coord = new Position(caseactionnee);
+		if(caseActionnee != -1){
+			Position coord = new Position(caseActionnee);
 			int dx = coord.x;
 			int dy = coord.y;
 
-			if(soldat[caseactionnee].getAJoue())
-				soldat[caseactionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_UTILISE);
+			if(soldat[caseActionnee].getAJoue())
+				soldat[caseActionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_UTILISE);
 			else {
 				for(int i = -1; i <= 1; i++) {
 					for(int j = -1; j <= 1; j++) {
@@ -524,11 +550,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 
 						if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
-							soldat[caseactionnee].dessineDeplacement(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
+							soldat[caseActionnee].dessineDeplacement(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
 					}
 				}
 
-				soldat[caseactionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
+				soldat[caseActionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
 			}
 		}
 
@@ -554,7 +580,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			Position pos = soldatPointe.getPosition();
 			Infobulle.dessinerText(g, pos.x, pos.y, soldatPointe.toString(), IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
 		}
-		
+
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 
