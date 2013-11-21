@@ -356,11 +356,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/**
 	 *  Retourne la position du premier héros trouvé aux alentours de p. Null si il n'y en as pas 
-	 *  @param p Position du soldat où chercher aux alentours
+	 *  @param pos Position du soldat où chercher aux alentours
+	 *  @param portee Nombre de cases du rayon où on cherche
 	 */
-	private Position herosAlentour(Position p){
-		for(int x = p.x - 1; x <= p.x + 1; x++){
-			for(int y = p.y - 1; y <= p.y; y++){
+	private Position herosAlentour(Position p, int portee){
+		for(int x = p.x - portee; x <= p.x + portee; x++){
+			for(int y = p.y - portee; y <= p.y + portee; y++){
 				Position pos = new Position(x, y);
 
 				if(pos.estValide()){
@@ -379,28 +380,43 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 *  Déplace tous les monstres 
 	 */
 	public void joueMonstres(){
-		for(int i=0; i<monstre.length; i++){
-			Monstre m = monstre[i];
-			if(m != null){
-				Position p;
-
-				if(m.getPourcentageVie() < 10){
-					System.out.println("Repos pour moi car :" + m.getPourcentageVie());
-					m.repos(true);
-				}
-				else if((p = herosAlentour(m.getPosition())) != null){
-					System.out.println("Je combats");
-					m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
-				}
-				else{
-					System.out.println("Je me déplace");
-					Position nouvelle_position = new Position();
-					nouvelle_position.x = m.getPosition().x + Aleatoire.nombreAleatoire(-1, 1);
-					nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
-					deplaceSoldat(m, nouvelle_position);
+		Thread t = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				for(int i=0; i<monstre.length; i++){
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					Monstre m = monstre[i];
+					if(m != null){
+						Position p;
+		
+						if(m.getPourcentageVie() < 10){
+							System.out.println("Repos pour moi car :" + m.getPourcentageVie());
+							m.repos(true);
+						}
+						else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
+							System.out.println("Je combats");
+							m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
+						}
+						else{
+							System.out.println("Je me déplace");
+							Position nouvelle_position = new Position();
+							nouvelle_position.x = m.getPosition().x + Aleatoire.nombreAleatoire(-1, 1);
+							nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
+							deplaceSoldat(m, nouvelle_position);
+						}
+					}
 				}
 			}
-		}
+		});
+		
+		t.run();
 	}
 
 	/** Genere aléatoirement une carte. */
