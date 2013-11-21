@@ -16,14 +16,14 @@ final class Infobulle extends Rectangle
 	private static final long serialVersionUID = 3889208541227481368L;
 	private static LinkedList<Message> File = new LinkedList<Message>();
 	
-//	private static Timer timer;
-
-	/**draw
+	/**
 	 * Constructeur privé, ce n'est pas une classe faite pour être instanciée
 	 */
 	private Infobulle(){}
 	
-	/* Classe message qui instancie les messages */
+	/**
+	 *  Classe message qui instancie les messages 
+	 */
 	static class Message{
 		
 		private Point coord;
@@ -41,12 +41,12 @@ final class Infobulle extends Rectangle
 		 * @param direction au choix entre :
 		 * 			- IConfig.HAUT : les messages monterons et seront animés
 		 * 			- IConfig.BAS : les messages descendrons et seront animés
-		 * 			- IConfig.NO_MOVE : les messages ne bouge pas ils reste soit au dessus soit en dessous du perso
+		 * 			- IConfig.NO_MOVE : les messages ne bouge pas ils restent soit, au dessus soit en dessous du perso
 		 * @param t ici, il s'agit du temps en seconde * le nombre de FPS 
 		 * @param pN La variable la plus importante , elle determine si plusieurs messages peuvent s'afficher en même temps
-		 * 				- Si pN = -1 , un seul message a la fois
-		 * 				- Si pN = 0 , Les messages s'afficherons tous en meme temps
-		 * 				- Si pN > 0 , les messages auront un décalage de n seconde [ n étant letemps mis ]
+		 * 				- Si pN = -1 , un seul message à la fois
+		 * 				- Si pN = 0 , les messages s'afficherons tous en meme temps
+		 * 				- Si pN > 0 , les messages auront un décalage de n seconde(s)
 		 */
 		Message(int loc, String mes, Color color, char direction, int t,  int pN) {
 
@@ -62,20 +62,27 @@ final class Infobulle extends Rectangle
 			this.promptNext = pN;
 
 		}	
-		
-		/* Mes automatiquement tout les temps du message a jours  [ pN et t ] */
+		/** 
+		 * Met automatiquement tout les temps du message a jours  [ pN et t ] 
+		 */
 		public void setTime() {
 			if(this.promptNext != -1 && this.promptNext != 0)
 				this.promptNext--;
 			this.timer--;
 		}
 		
-		/* Retourne les coordonnées de la position du message */
+		/** 
+		 * Retourne les coordonnées de la position du message
+		 *  
+		 * @return Point Coordonnée du point coord
+		 */
 		public Point getPoint() {
 			return this.coord;
 		}
 		
-		/* Deplace le message en changeant également la ccouche alpha du message */
+		/** 
+		 * Deplace le message en changeant également la couche alpha de la couleur du message 
+		 */
 		public void setDeplacement() {
 			int x = (int) (60.0 / IConfig.FPS); // Max de 60 FPS ; pour passer a plus de FPs il faudrait tout transformer en float
 			int alpha =  color.getAlpha() - ( 2 * x ) ;
@@ -86,6 +93,25 @@ final class Infobulle extends Rectangle
 	}
 	
 	/**
+	 * Fonction private permettant rajouter un message à la file de message 
+	 * @param loc Numero de la case sur laquel le message doit être dessiné
+	 * @param s Message à afficher
+	 * @param color Couleur du message
+	 * @param direction au choix entre :
+	 * 			- IConfig.HAUT : les messages monterons et seront animés
+	 * 			- IConfig.BAS : les messages descendrons et seront animés
+	 * 			- IConfig.NO_MOVE : les messages ne bouge pas ils restent soit au dessus, soit en dessous du perso
+	 * @param t ici, il s'agit du temps en seconde d'affichage du message
+	 * @param promptNext La variable la plus importante , elle determine si plusieurs messages peuvent s'afficher en même temps
+	 * 				- Si promptNext = -1 , un seul message a la fois
+	 * 				- Si promptNext = 0 , les messages s'afficherons tous en meme temps
+	 * 				- Si promptNext > 0 , les messages auront un décalage de n seconde(s)
+	 */
+	private static void generalQueue(int loc, String s, Color color, char direction, int t, int promptNext) {
+		File.add(new Message(loc, s, color, direction, (int) (t * IConfig.FPS), promptNext));
+	}
+	
+	/** Surchage de la generalQueue 
 	 * Fonction statique permettant rajouter un message a la file de message 
 	 * @param loc Numero de la case sur laquel le message doit être dessiné
 	 * @param s Message a afficher
@@ -93,19 +119,12 @@ final class Infobulle extends Rectangle
 	 * @param direction au choix entre :
 	 * 			- IConfig.HAUT : les messages monterons et seront animés
 	 * 			- IConfig.BAS : les messages descendrons et seront animés
-	 * 			- IConfig.NO_MOVE : les messages ne bouge pas ils reste soit au dessus soit en dessous du perso
-	 * @param t ici, il s'agit du temps en seconde d'affichage du message
 	 * @param promptNext La variable la plus importante , elle determine si plusieurs messages peuvent s'afficher en même temps
 	 * 				- Si promptNext = -1 , un seul message a la fois
 	 * 				- Si promptNext = 0 , Les messages s'afficherons tous en meme temps
 	 * 				- Si promptNext > 0 , les messages auront un décalage de n seconde [ n étant letemps mis ]
-	 */
-	public static void generalQueue(int loc, String s, Color color, char direction, int t, int promptNext) {
-		File.add(new Message(loc, s, color, direction, (int) (t * IConfig.FPS), promptNext));
-	}
-	
-	/** Surchage de la generalQueue */
-	/* Si new message ne comporte que ses parametres la alors ,
+	 * 
+	 * Si new message ne comporte que ses parametres la alors ,
 	 * il s'agit d'un message ou seul la direction est donnée I.e : Le message bougera obligatoirement en utilisant 
 	 * cette fonction
 	 */
@@ -113,15 +132,26 @@ final class Infobulle extends Rectangle
 		generalQueue(loc, s, color, direction, 1, promptNext);
 	}
 	
-	/** Surchage de la generalQueue */
-	/* Si new message ne comporte que ses parametres la alors ,
-	 * il s'agit d'un message statique ou le temps est donné,il correspond au temps d'affichage du message
+	/** Surchage de la generalQueue 
+	 * Fonction statique permettant rajouter un message a la file de message 
+	 * @param loc Numero de la case sur laquel le message doit être dessiné
+	 * @param s Message a afficher
+	 * @param color Couleur du message
+	 * @param t ici, il s'agit du temps en seconde d'affichage du message
+	 * @param promptNext La variable la plus importante , elle determine si plusieurs messages peuvent s'afficher en même temps
+	 * 				- Si promptNext = -1 , un seul message à la fois
+	 * 				- Si promptNext = 0 , Les messages s'afficherons tous en meme temps
+	 * 				- Si promptNext > 0 , les messages auront un décalage de n seconde [ n étant letemps mis ]
+	 * 
+	 * Si new message ne comporte que ses parametres là alors ,
+	 * il s'agit d'un message statique où le temps donné correspond au temps d'affichage du message
 	 */
 	public static void newMessage(int loc, String s, Color color, int t, int promptNext) {
 		generalQueue(loc, s, color, IConfig.NO_MOVE, t, promptNext);
 	}
 	
-	/** Fonction d'auto gestion de la file de message 
+	/** 
+	 * Fonction d'auto gestion de la file de message 
 	 * @param g Graphics dans lequel on va dessiner le message
 	 */
 	public static void dessiner(Graphics g) {
@@ -179,7 +209,6 @@ final class Infobulle extends Rectangle
 		g.setFont(ancienne_font);
 		g.setColor(ancienne_couleur);  
 	}
-	
 	
 	/**
 	 * Fonction statique permettant de dessiner une infobulle sur la carte
@@ -239,7 +268,11 @@ final class Infobulle extends Rectangle
 		g.setColor(ancienne_couleur);  
 	}
 	
-	/* Méthode retournant la chaine de taille maximale parmi un tableau de chaines */
+	/** 
+	 * Fonction private permettant de trouver une chaine maximale dans un tableau
+	 * @param message Tableau de message 
+	 * @return String Taille de la chaine maximum
+	 */
 	private static String stringTailleMax(String[] message){
 		String string_max = message[0];
 		int length_max = string_max.length();
