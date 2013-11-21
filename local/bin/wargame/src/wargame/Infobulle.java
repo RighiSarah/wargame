@@ -18,7 +18,7 @@ final class Infobulle extends Rectangle
 	
 //	private static Timer timer;
 
-	/**draw
+	/**
 	 * Constructeur privé, ce n'est pas une classe faite pour être instanciée
 	 */
 	private Infobulle(){}
