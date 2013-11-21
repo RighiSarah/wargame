@@ -224,14 +224,14 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * Fonction statique permettant de dessiner une infobulle sur la carte
 	 * @param soldat instance du soldat a soignier
 	 */
-	public void repos() {
+	public void repos(boolean afficherMessage) {
 
 		int regain = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
 		int vie = this.getVie();
 		int case_courante = this.getPosition().getNumCase();
 		
 		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué. Cependant on lui met un message */
-		if(vie == this.getVieMax()) {
+		if(vie == this.getVieMax() && afficherMessage) {
 			FenetreJeu.information.setText("La vie de " + this.nom + 
 										   "(" + this.position.x + "," + this.position.y + ")" + 
 										   " est au maximum"
