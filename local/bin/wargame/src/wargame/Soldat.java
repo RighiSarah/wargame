@@ -222,15 +222,14 @@ public abstract class Soldat extends Charset implements ISoldat
 	
 	/**
 	 * Fonction statique permettant de dessiner une infobulle sur la carte
-	 * @param soldat instance du soldat a soignier
 	 */
-	public void repos(Soldat soldat) {
+	public void repos() {
 
 		int regen = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
-		int vie = soldat.getVie();
-		int currentCase = soldat.getPosition().getNumCase();
+		int vie = this.getVie();
+		int currentCase = this.getPosition().getNumCase();
 		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message */
-		if(vie == soldat.getVieMax()) {
+		if(vie == this.getVieMax()) {
 			FenetreJeu.gameInfo.setText("Ce connard (" + currentCase + ") a sa vie au max ");
 			Infobulle.newMessage(currentCase, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
 			return;
@@ -241,8 +240,8 @@ public abstract class Soldat extends Charset implements ISoldat
 		
 		FenetreJeu.gameInfo.setText("Ce connard de" + currentCase + "se heal ( +"+regen+" )");
 		/* On met a jour sa vie et on indique qu'il a joué */
-		soldat.setVie(vie + regen);
-		soldat.setAJoue(true);
+		this.setVie(vie + regen);
+		this.setAJoue(true);
 
 	}
 
