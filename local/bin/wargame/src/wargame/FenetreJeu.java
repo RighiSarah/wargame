@@ -36,10 +36,10 @@ import java.util.Date;
 public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 7794325642011100784L;
-    JPanel b1;
+    JPanel barreEtat;
     JSeparator separator;
-    static JLabel gameHistory;
-    static JLabel gameInfo;
+    static JLabel historique;
+    static JLabel information;
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;
@@ -275,17 +275,17 @@ public class FenetreJeu extends JFrame
         
         this.add(separator,BorderLayout.CENTER);
 
-        b1 = new JPanel();
-        gameHistory = new JLabel("Away gars crée une partie pour avoir des infos", JLabel.RIGHT);
-        gameInfo = new JLabel("Vas bouger la souris", JLabel.LEFT);
-        b1.setSize(new Dimension(carte.getWidth(), 16));
-        b1.setLayout(new BoxLayout(b1, BoxLayout.X_AXIS));
+        barreEtat = new JPanel();
+        historique = new JLabel("Away gars crée une partie pour avoir des infos", JLabel.RIGHT);
+        information = new JLabel("Vas bouger la souris", JLabel.LEFT);
+        barreEtat.setSize(new Dimension(carte.getWidth(), 16));
+        barreEtat.setLayout(new BoxLayout(barreEtat, BoxLayout.X_AXIS));
         
-        b1.add(gameHistory);
-        b1.add(Box.createHorizontalGlue());
-        b1.add(gameInfo);
+        barreEtat.add(historique);
+        barreEtat.add(Box.createHorizontalGlue());
+        barreEtat.add(information);
 
-        this.add(b1,BorderLayout.SOUTH);
+        this.add(barreEtat,BorderLayout.SOUTH);
 	    
         
         /* On joue le son d'arrière plan */
