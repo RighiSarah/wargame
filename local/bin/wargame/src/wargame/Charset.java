@@ -32,12 +32,46 @@ public class Charset implements ActionListener
 			this.value = value;
 		}
 	 
+		/** 
+		 * Permet de récupérer la valeur numérique de la direction
+		 * @return La valeur numérique de la direction
+		 */
 		public int getValue() {
 			return this.value;
 		}
 		
+		/**
+		 * Permet de fixer une autre valeur de direction
+		 * @param value La nouvelle valeur à assigner
+		 */
 		public void setValue(int value){
 			this.value = value;
+		}
+		
+		/**
+		 * Permet d'augmenter la direction de 1
+		 * @return Vrai si on a atteint la direction maximale, faux sinon
+		 */
+		public boolean augmenteDirection(){
+			this.value++;
+				
+			if(this.value >= N_DIRECTIONS){
+				this.value = 0;
+				System.out.println(this.toString());
+				return false;
+			}
+			System.out.println(this.toString());
+			return true;
+		}
+		
+		public String toString(){
+			String[] t = new String[N_DIRECTIONS];
+			t[0] = "HAUT";
+			t[1] = "DROITE";
+			t[2] = "BAS";
+			t[3] = "GAUCHE";
+			
+			return t[this.value];
 		}
 	};
 

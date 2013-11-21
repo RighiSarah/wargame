@@ -160,8 +160,10 @@ public abstract class Soldat extends Charset implements ISoldat
     	/* Mise à jour de l'animation. */
         if(estVisible) {
     		if(estMort){
-//    			if(++direction >= N_DIRECTIONS)
+    			if(direction.augmenteDirection() == false){ // Si on a atteint la direction maximale
+    				System.out.println("coucou");
     				estVisible = false;
+    			}
     		}
     		if(seDeplace){
     			if(++animation >= N_ANIMATIONS)
@@ -197,7 +199,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				Infobulle.newMessage(numCase, "-"+degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, -1);
 				this.setVie(vie);
 				
-				if(vie == 0) {
+				if(vie < 0) {
 					this.setMort();
 					if(soldat instanceof Heros)	Carte.nbHerosRestantDec();
 					else Carte.nbMonstresRestantDec();
