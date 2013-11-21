@@ -15,9 +15,7 @@ import java.awt.event.ActionEvent;
 public abstract class Soldat extends Charset implements ISoldat
 {
 	private static final long serialVersionUID = 1L;
-	
-	protected String message = "";
-	protected Color couleurMessage = IConfig.MESSAGE_NEGATIF;
+
 	protected Point coord = null;
 	
 	/** Informations de base d'un soldat. */
@@ -177,29 +175,28 @@ public abstract class Soldat extends Charset implements ISoldat
 		System.out.println(distance);
 		int degat = (distance == 1) ? Aleatoire.nombreAleatoire(1, this.getPuissance()) : this.getTir();
 		int numCase = soldat.position.getNumCase();
-		message = "-"+degat+"PV";
-		coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
 		
+		Infobulle.newMessage(numCase, "-"+degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, 30);
+				
 		int vie = soldat.getVie() - degat;
 		soldat.setVie(vie);
-		System.out.println("VIE"+soldat.getVie());
+
 		if(vie > 0) {
-			soldat.setVie(vie);
 			if( soldat.getPortee() >= distance ) {
 
 				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
 				FenetreJeu.gameInfo.setText("Tu t'es pris une putain de patate ( -"+degat+")");
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
-				message = "-"+degat+"PV";
-				coord = new Point(numCase % IConfig.LARGEUR_CARTE, numCase / IConfig.LARGEUR_CARTE);
-				if(vie > 0)
-					this.setVie(vie);
-				else {
+				
+				Infobulle.newMessage(numCase, "-"+degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, -1);
+				this.setVie(vie);
+				
+				if(vie == 0) {
+					this.setMort();
 					if(soldat instanceof Heros)	Carte.nbHerosRestantDec();
 					else Carte.nbMonstresRestantDec();
-					this.setMort();
-				}
+				}				
 			}
 		}
 		else {
@@ -208,6 +205,28 @@ public abstract class Soldat extends Charset implements ISoldat
 			Carte.setSoldat(numCase, null);
 			soldat.setMort();		
 		}
+	}
+	
+	public void heal(Soldat soldat) {
+
+		int regen = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
+		int vie = soldat.getVie();
+		int currentCase = soldat.getPosition().getNumCase();
+		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message */
+		if(vie == soldat.getVieMax()) {
+			FenetreJeu.gameInfo.setText("Ce connard (" + currentCase + ") a sa vie au max ");
+			Infobulle.newMessage(currentCase, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
+			return;
+		}
+
+		/* Définition du message et de la couleur dans laquel l'écrire */
+		Infobulle.newMessage(currentCase, "+"+regen, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
+		
+		FenetreJeu.gameInfo.setText("Ce connard de" + currentCase + "se heal ( +"+regen+" )");
+		/* On met a jour sa vie et on indique qu'il a joué */
+		soldat.setVie(vie + regen);
+		soldat.setAJoue(true);
+
 	}
 
 	public Position getPosition() {
@@ -276,8 +295,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)vieMax);
 		g.setColor(color);
 		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
-		if(message != null && coord != null)
-			Infobulle.dessiner(g, coord.x, coord.y, message, couleurMessage, IConfig.ARRIERE_PLAN);
+
 	}
 	
 	/**

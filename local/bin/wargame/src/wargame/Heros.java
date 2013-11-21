@@ -45,6 +45,7 @@ public class Heros extends Soldat
 		super();
 		
 		vieMax = vie = type_heros.getPoints();
+		vie--;
 		portee = type_heros.getPortee();
 		puissance = type_heros.getPuissance();
 		tir = type_heros.getTir();

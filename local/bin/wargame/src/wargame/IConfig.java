@@ -7,6 +7,11 @@ import java.awt.Color;
  */
 public interface IConfig 
 {
+	
+	/** Nombre de FPS pour la carte. */
+	double FPS = 60.0;
+	
+	
 	/* Chemins : attention de bien préciser le / de fin */
 	/** Chemin du dossier des musiques */
 	String CHEMIN_MUSIQUE = "musique/"; 
@@ -76,9 +81,8 @@ public interface IConfig
     /** Couleur des cases de déplacement possiblebackground_color */
     Color SOLDAT_DEPLACEMENT_POSSIBLE = new Color(255, 0, 0, DEFAULT_ALPHA);
     
-	
 	/** Couleurs du message de l'infobulle */
-	Color MESSAGE_POSITIF = Color.GREEN;
+	Color MESSAGE_POSITIF = new Color(60, 150, 10, 255);
 	Color MESSAGE_NEGATIF = Color.RED;
 	Color MESSAGE_NEUTRE = Color.BLACK;
 	
@@ -90,6 +94,10 @@ public interface IConfig
     
     /** Nombre de musiques d'arrière plan */
     int NOMBRE_MUSIQUE_ARRIERE_PLAN = 3;
+      
+	char HAUT    = 0;
+	char BAS     = 1;
+	char NO_MOVE = 2;
  
     
 }

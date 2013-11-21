@@ -30,13 +30,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
 
-	/** Nombre de FPS pour la carte. */
-	private static final double FPS = 60.0;
-
 	protected static int nbHerosRestant = IConfig.NB_HEROS;
 	protected static int nbMonstresRestant = IConfig.NB_MONSTRES;
 	protected static int nbToPlay = nbHerosRestant - 1; 
-	protected int tour = 0;
+	protected static int tour = 0;
 
 	public int getNbHerosRestant() {
 		return nbHerosRestant;
@@ -81,10 +78,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	private int caseactionnee = -1;
 
-	/** Message a afficher */
-	private String message = "";
-	private Color couleurMessage = Color.BLACK;
-
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
 
@@ -100,7 +93,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	Carte() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{		
 		/* Initialisation taux de rafraichissement. */
-		timer = new Timer((int)(1000.0 * 1.0 / FPS), this);
+		timer = new Timer((int)(1000.0 * 1.0 / IConfig.FPS), this);
 		timer.setInitialDelay(0);
 		timer.start();
 
@@ -121,24 +114,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 				/** On vient de cliquer sur la même case. I.e : On veut se reposer */
 				if(caseclick == caseactionnee && !soldat[caseclick].getAJoue()) {
-					int regen = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
-					int vie = soldat[caseclick].getVie();
-
-					/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message */
-					if(vie == soldat[caseclick].getVieMax()) {
-						FenetreJeu.gameInfo.setText("Ce connard (" + caseclick + ") a sa vie au max ");
-						message = "Repos Impossible\nVie max atteinte";
-						couleurMessage = IConfig.MESSAGE_NEUTRE;
-						return;
-					}
-
-					/* Définition du message et de la couleur dans laquel l'écrire */
-					message = "+" + regen + "PV";
-					couleurMessage = IConfig.MESSAGE_POSITIF;
-					FenetreJeu.gameInfo.setText("Ce connard de" + caseclick + "se heal ( +"+regen+" )");
-					/* On met a jour sa vie et on indique qu'il a joué */
-					soldat[caseclick].setVie(vie + regen);
-					soldat[caseclick].setAJoue(true);
+					soldat[caseclick].heal(soldat[caseclick]);
 					nbToPlayDef();
 				}
 
@@ -179,7 +155,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					}
 					/* Fin deplacement on re-initialise la case */
 					caseactionnee = -1;
-					couleurMessage = IConfig.MESSAGE_NEUTRE;
 				}
 			}
 		});
@@ -195,10 +170,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 					if(soldat[coord_curseur] != null && soldat[coord_curseur].estVisible())
 						soldatPointe = soldat[coord_curseur];
-					else {
+					else
 						soldatPointe = null;
-						message = "";
-					}
 				}
 			}
 		});
@@ -206,9 +179,17 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/* Méthode pour reinitialiser le tour de tout les soldats */
 	public static void reinitAJoue() {
-		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE;i++)
-			if(soldat[i] != null)
+		tour++;
+		
+		FenetreJeu.gameInfo.setText("Début du tour "+tour);
+		
+		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE;i++) 
+			if(soldat[i] != null) {
+				if(soldat[i] instanceof Heros && !soldat[i].getAJoue() ) {
+					soldat[i].heal(soldat[i]);
+				}
 				soldat[i].setAJoue(false);	
+			}
 		nbToPlay = nbHerosRestant;
 	}
 
@@ -532,7 +513,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 
 		/* Case sélectionnée. */
-		if(caseactionnee != -1 && message == ""){
+		if(caseactionnee != -1){
 			Position coord = new Position(caseactionnee);
 			int dx = coord.x;
 			int dy = coord.y;
@@ -574,14 +555,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 
 		/* Affichage de l'infobulle si un soldat est pointé */
-		if(soldatPointe != null && message == ""){ 
+		if(soldatPointe != null ){ 
 			Position pos = soldatPointe.getPosition();
-			Infobulle.dessiner(g, pos.x, pos.y, soldatPointe.toString(), IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
+			Infobulle.dessinerText(g, pos.x, pos.y, soldatPointe.toString(), IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
 		}
-		if (message != "" && caseactionnee != -1) {
-			Position pos = new Position(caseactionnee);
-			Infobulle.dessiner(g, pos.x + 1 , pos.y, message, couleurMessage, null);
-		}
+		Infobulle.dessiner(g, "", 0, 0);
 
 		FenetreJeu.gameHistory.setText(Carte.nbMonstresRestant+"Monstres restant - "+Carte.nbHerosRestant+"Heros restant");
 	}
@@ -594,10 +572,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 
 		repaint();
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public static void setSoldat(int i, Soldat s) {
