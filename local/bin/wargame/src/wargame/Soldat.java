@@ -224,26 +224,27 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * Fonction statique permettant de dessiner une infobulle sur la carte
 	 * @param soldat instance du soldat a soignier
 	 */
-	public void repos(Soldat soldat) {
+	public void repos() {
 
-		int regen = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
-		int vie = soldat.getVie();
-		int currentCase = soldat.getPosition().getNumCase();
-		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué cependant ont lui met un message */
-		if(vie == soldat.getVieMax()) {
-			FenetreJeu.gameInfo.setText("Ce connard (" + currentCase + ") a sa vie au max ");
-			Infobulle.newMessage(currentCase, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
+		int regain = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
+		int vie = this.getVie();
+		int case_courante = this.getPosition().getNumCase();
+		
+		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué. Cependant on lui met un message */
+		if(vie == this.getVieMax()) {
+			FenetreJeu.gameInfo.setText("Ce connard (" + case_courante + ") a sa vie au max ");
+			Infobulle.newMessage(case_courante, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
 			return;
 		}
 
-		/* Définition du message et de la couleur dans laquel l'écrire */
-		Infobulle.newMessage(currentCase, "+"+regen, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
+		/* Définition du message et de sa couleur */
+		Infobulle.newMessage(case_courante, "+" + regain, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
 		
-		FenetreJeu.gameInfo.setText("Ce connard de" + currentCase + "se heal ( +"+regen+" )");
+		FenetreJeu.gameInfo.setText("Ce connard de" + case_courante + "se régénère ( +" + regain + " )");
+		
 		/* On met a jour sa vie et on indique qu'il a joué */
-		soldat.setVie(vie + regen);
-		soldat.setAJoue(true);
-
+		this.setVie(vie + regain);
+		this.setAJoue(true);
 	}
 
 	public Position getPosition() {
