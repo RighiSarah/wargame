@@ -88,6 +88,9 @@ public class FenetreJeu extends JFrame
 
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
+		this.setTitle("Wargame");
+        this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
+        
 		/* Création d'une carte vide. */
 		carte = new Carte();
 		
@@ -289,9 +292,7 @@ public class FenetreJeu extends JFrame
 		sonArriere = new Son();
 		sonArriere.joueSonArriere();
 
-        this.setTitle("Wargame");
-        this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
-	    
+        
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setResizable(false);
 	    this.pack();
