@@ -222,7 +222,8 @@ public abstract class Soldat extends Charset implements ISoldat
 	
 	/**
 	 * Fonction statique permettant de dessiner une infobulle sur la carte
-	 * @param soldat instance du soldat a soignier
+	 * @param afficherMessage si afficher message vaut true, le message vie au max s'affichera 
+	 * 						  sinon , seul les +X s'afficherons
 	 */
 	public void repos(boolean afficherMessage) {
 
@@ -231,7 +232,11 @@ public abstract class Soldat extends Charset implements ISoldat
 		int case_courante = this.getPosition().getNumCase();
 		
 		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué. Cependant on lui met un message */
-		if(vie == this.getVieMax() && afficherMessage) {
+		if(vie == this.getVieMax()) {
+			
+			if(!afficherMessage)
+				return;
+			
 			FenetreJeu.information.setText("La vie de " + this.nom + 
 										   "(" + this.position.x + "," + this.position.y + ")" + 
 										   " est au maximum"
@@ -242,7 +247,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		}
 
 		/* Définition du message et de sa couleur */
-		Infobulle.newMessage(case_courante, "+" + regain, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
+		Infobulle.newMessage(case_courante, "+ " + regain, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
 		
 		FenetreJeu.information.setText(this.nom + " se repose et regagne " + regain + " point de vie");
 		
