@@ -47,7 +47,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	}
 	
 	public int getPourcentageVie(){
-		return (int) (((double)vie/(double)vieMax) * 100.);
+		return ((vie/vieMax) * 100);
 	}
 	
 	public int getVieMax() 
