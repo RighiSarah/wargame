@@ -50,12 +50,14 @@ final class Infobulle extends Rectangle
 		 */
 		Message(int loc, String mes, Color color, char direction, int t,  int pN) {
 
-			Point coord = new Point(loc % IConfig.LARGEUR_CARTE , (int) loc / IConfig.LARGEUR_CARTE );
+			Point coord = new Point(loc % IConfig.LARGEUR_CARTE, (int) loc / IConfig.LARGEUR_CARTE );
 			this.message = mes;
 			this.color = color;
 			this.timer = t;
 			this.direction = direction;
-
+			
+			if(this.direction == IConfig.NO_MOVE)	coord.x--;
+			
 			this.coord = ( coord.y == 0 || direction == IConfig.HAUT)
 								? new Point( coord.x * IConfig.NB_PIX_CASE, (coord.y + 1 ) * IConfig.NB_PIX_CASE ) 
 								: new Point( coord.x * IConfig.NB_PIX_CASE, (coord.y - 1) * IConfig.NB_PIX_CASE);					

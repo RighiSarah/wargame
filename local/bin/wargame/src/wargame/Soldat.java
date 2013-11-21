@@ -244,7 +244,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		/* Définition du message et de sa couleur */
 		Infobulle.newMessage(case_courante, "+" + regain, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
 		
-		FenetreJeu.information.setText(this.nom + "se repose et regagne " + regain + " point de vie");
+		FenetreJeu.information.setText(this.nom + " se repose et regagne " + regain + " point de vie");
 		
 		/* On met a jour sa vie et on indique qu'il a joué */
 		this.setVie(vie + regain);

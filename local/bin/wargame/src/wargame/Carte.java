@@ -151,7 +151,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& tileset.getTile(carte[case_cliquee]).estPraticable() 
 							&& soldat[case_cliquee] == null && !soldat[caseActionnee].getAJoue()
 						) {
-							FenetreJeu.information.setText("Mouvement de soldat : " + caseActionnee);
+							FenetreJeu.information.setText(soldat[caseActionnee].nom + " se deplace en " + caseActionnee );
 
 							nbToPlayDef();
 							soldat[case_cliquee] = soldat[caseActionnee];
@@ -584,7 +584,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 
-		FenetreJeu.historique.setText(Carte.nbMonstresRestant+"Monstres restant - "+Carte.nbHerosRestant+"Heros restant");
+		FenetreJeu.historique.setText(Carte.nbMonstresRestant+" Monstres restant - "+Carte.nbHerosRestant+" Heros restant");
 	}
 
 	public void actionPerformed(ActionEvent e) 
