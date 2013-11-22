@@ -36,8 +36,8 @@ import java.util.Date;
 public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 7794325642011100784L;
-    JPanel barreEtat;
-    JSeparator separator;
+    private JPanel barreEtat;
+    private JSeparator separator;
     static JLabel historique;
     static JLabel information;
 	/** Menus. */
@@ -68,10 +68,10 @@ public class FenetreJeu extends JFrame
 	/** Carte du jeu. */
     Carte carte;
 
-    /* Compteur servant à l'initialisation des évènements de sauvegardes. */
+    /** Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
 	
-	/* Objet Son servant à gérer le son d'arrière plan */
+	/** Objet Son servant à gérer le son d'arrière plan */
 	private Son sonArriere;
 
     private String getDate(File f)

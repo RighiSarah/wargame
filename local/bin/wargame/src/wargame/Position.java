@@ -12,9 +12,7 @@ public class Position extends Point implements IConfig{
 	 * Constructeur de base, initialise une position aléatoire comprise dans la carte
 	 */
 	Position(){
-		super();
-		x = (int)(Math.random() * IConfig.LARGEUR_CARTE);
-		y = (int)(Math.random() * IConfig.HAUTEUR_CARTE);
+		super((int)(Math.random() * IConfig.LARGEUR_CARTE), (int)(Math.random() * IConfig.HAUTEUR_CARTE));
 	}
 
 	/**

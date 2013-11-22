@@ -107,10 +107,18 @@ public abstract class Soldat extends Charset implements ISoldat
 		return estMort;
 	}
 
+	/**
+	 * Teste si le soldat a déjà joué
+	 * @return Vrai si il a déjà joué, faux sinon
+	 */
 	public boolean getAJoue() {
 		return tourEffectue;
 	}
 	
+	/**
+	 * Permet de dire si le soldat a joué ou non
+	 * @param value Vrai si le soldat a déjà joué, faux sinon
+	 */
 	public void setAJoue(boolean value) {
 		tourEffectue = value;
 	}
@@ -218,14 +226,12 @@ public abstract class Soldat extends Charset implements ISoldat
 	}
 	
 	/**
-	 * Fonction statique permettant de dessiner une infobulle sur la carte
-	 * @param afficherMessage si afficher message vaut true, le message vie au max s'affichera 
-	 * 						  sinon , seul les +X s'afficherons
+	 * Méthode permettant de mettre en repos le soldat
+	 * @param afficherMessage Si vrai, un message sera affiché
 	 */
 	public void repos(boolean afficherMessage) {
 
 		int regain = Aleatoire.nombreAleatoire(0, IConfig.REPOS_MAX);
-		int vie = this.getVie();
 		int case_courante = this.getPosition().getNumCase();
 		
 		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué. Cependant on lui met un message */
@@ -234,10 +240,7 @@ public abstract class Soldat extends Charset implements ISoldat
 			if(!afficherMessage)
 				return;
 			
-			FenetreJeu.information.setText( this.nom + 
-										   "(" + this.position.x + "," + this.position.y + ")" + 
-										   " a sa vie au maximum"
-										   );
+			FenetreJeu.information.setText(this.nom + " " + position.toString() + " a sa vie au maximum");
 			
 			Infobulle.newMessage(case_courante, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
 			return;
@@ -246,7 +249,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		/* Définition du message et de sa couleur */
 		Infobulle.newMessage(case_courante, "+ " + regain, IConfig.MESSAGE_POSITIF, IConfig.MOUV_INFOBULLE_HAUT, 0);
 		
-		FenetreJeu.information.setText(this.nom + " se repose et regagne " + regain + " point de vie");
+		FenetreJeu.information.setText(this.nom + " se repose et regagne " + regain + " points de vie");
 		
 		/* On met a jour sa vie et on indique qu'il a joué */
 		this.setVie(vie + regain);
