@@ -1,11 +1,8 @@
 package wargame;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Stroke;
 import java.awt.event.ActionEvent;
 
 
@@ -282,14 +279,18 @@ public abstract class Soldat extends Charset implements ISoldat
 		
 	}
 
-	protected void dessineDeplacement(Graphics g, int x, int y, Color c) 
+	/** 
+	 * Dessine un rectangle de hauteur IConfig.NB_PIX_CASE de la couleur c indiquée
+	 * @param g Graphics dans lequel on va dessiner le rectangle
+	 * @param x Point de départ x du rectangle
+	 * @param y Point de départ y du rectangle
+	 * @param c Couleur du rectangle a dessiner
+	 */
+	
+	protected void dessineRectangle(Graphics g, int x, int y, Color c) 
 	{
-		Stroke s = ((Graphics2D) g).getStroke();        // Sauvegarde du trait courant.
-		((Graphics2D) g).setStroke(new BasicStroke(3)); // Changement du trait.
 		g.setColor(c);
 		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
-		
-		((Graphics2D) g).setStroke(s); // Restauration du trait.
 	}
 	
 	/** Dessine la barre de vie du Héros.

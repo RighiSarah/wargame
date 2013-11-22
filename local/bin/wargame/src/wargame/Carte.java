@@ -580,7 +580,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			int dy = coord.y;
 
 			if(soldat[caseActionnee].getAJoue())
-				soldat[caseActionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_UTILISE);
+				soldat[caseActionnee].dessineRectangle(g, dx, dy, IConfig.SOLDAT_UTILISE);
 			else {
 				for(int i = -1; i <= 1; i++) {
 					for(int j = -1; j <= 1; j++) {
@@ -589,11 +589,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 
 						if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
-							soldat[caseActionnee].dessineDeplacement(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
+							soldat[caseActionnee].dessineRectangle(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
 					}
 				}
 
-				soldat[caseActionnee].dessineDeplacement(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
+				soldat[caseActionnee].dessineRectangle(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
 			}
 		}
 
