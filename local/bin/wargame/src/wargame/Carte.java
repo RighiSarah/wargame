@@ -81,10 +81,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
 
-	private JLabel image;
+	/** Image de présentation, quand on a pas encore généré la carte */
+	private JLabel imagePresentation;
 
 	/** Timer. */
-	Timer timer;
+	private Timer timer;
+	
+	/** Est-ce au tour de joueur ? */
+	private boolean tourJoueur;
 
 	/** Constructeur par défaut. 
 	 * @throws MidiUnavailableException 
@@ -100,14 +104,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
 
-		image = new JLabel( new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
-		this.add(image);
+		imagePresentation = new JLabel( new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
+		this.add(imagePresentation);
 
 		/* Capture de la souris. */
 		addMouseListener(new MouseAdapter() {
 			/* Au clic */
 			public void mouseClicked(MouseEvent e) { 
-				if(!generee)
+				if(!generee || tourJoueur == false)
 					return;
 
 				/* On crée une position aux coordonnées du clic de la souris pour connaitre la coordonnée de la case (et non pas du pixel) */
@@ -381,9 +385,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 *  Déplace tous les monstres 
 	 */
 	public void joueMonstres(){
+		tourJoueur = false;
+		
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				tourJoueur = false;
 				for(int i=0; i<monstre.length; i++){
 					try {
 						Thread.sleep(1000/60);
@@ -425,23 +432,27 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						}
 					}
 				}
+				tourJoueur = true;
 			}
 		});
 		
 		t.start();
+		
+		
 	}
 
 	/** Genere aléatoirement une carte. */
 	public void generer()
 	{
 		generee = true;
+		tourJoueur = true;
 		genererCarte();
 		genererSoldats();
 		caseActionnee = -1;	
 
-		if(image != null){
-			image.getParent().remove(image);
-			image = null;
+		if(imagePresentation != null){
+			imagePresentation.getParent().remove(imagePresentation);
+			imagePresentation = null;
 		}
 	}
 
@@ -507,9 +518,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	void charge(int num)
 	{
 
-		if(image != null){
-			image.getParent().remove(image);
-			image = null;
+		if(imagePresentation != null){
+			imagePresentation.getParent().remove(imagePresentation);
+			imagePresentation = null;
 		}
 
 		try {
