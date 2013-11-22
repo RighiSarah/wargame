@@ -23,11 +23,15 @@ public class Heros extends Soldat
 		switch(nom)
 		{
 			case "archer":				
-				if(archer == null) archer = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ARCHER));
+				if(archer == null) 
+					archer = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ARCHER));
+				
 				image = archer;
 				break;
 			case "elfe":				
-				if(elfe == null) elfe = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ELFE));
+				if(elfe == null) 
+					elfe = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ELFE));
+				
 				image = elfe;
 				break;
 				

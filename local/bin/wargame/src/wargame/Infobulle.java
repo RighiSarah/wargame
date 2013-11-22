@@ -36,14 +36,14 @@ final class Infobulle extends Rectangle
 		
 		/**
 		 * Constructeur d'un message
-		 * @param loc Numero de la case sur laquel le message doit être dessiné
+		 * @param loc Numero de la case sur laquelle le message doit être dessiné
 		 * @param mes Message à écrire 
 		 * @param direction au choix entre :
-		 * 			- IConfig.HAUT : les messages monterons et seront animés
-		 * 			- IConfig.BAS : les messages descendrons et seront animés
-		 * 			- IConfig.NO_MOVE : les messages ne bouge pas ils restent soit, au dessus soit en dessous du perso
-		 * @param t ici, il s'agit du temps en seconde * le nombre de FPS 
-		 * @param pN La variable la plus importante , elle determine si plusieurs messages peuvent s'afficher en même temps
+		 * 			- IConfig.HAUT : les messages monteront et seront animés
+		 * 			- IConfig.BAS : les messages descendront et seront animés
+		 * 			- IConfig.NO_MOVE : les messages ne bougent pas ils restent soit au dessus, soit en dessous du perso
+		 * @param t Temps en seconde * le nombre de FPS 
+		 * @param pN Determine si plusieurs messages peuvent s'afficher en même temps
 		 * 				- Si pN = -1 , un seul message à la fois
 		 * 				- Si pN = 0 , les messages s'afficherons tous en meme temps
 		 * 				- Si pN > 0 , les messages auront un décalage de n seconde(s)
@@ -56,16 +56,16 @@ final class Infobulle extends Rectangle
 			this.timer = t;
 			this.direction = direction;
 			
-			if(this.direction == IConfig.STATIQUE)	coord.x--;
+			if(this.direction == IConfig.MOUV_INFOBULLE_AUCUN)	coord.x--;
 			
-			this.coord = ( coord.y == 0 || direction == IConfig.HAUT)
+			this.coord = ( coord.y == 0 || direction == IConfig.MOUV_INFOBULLE_HAUT)
 								? new Point( coord.x * IConfig.NB_PIX_CASE, (coord.y + 1 ) * IConfig.NB_PIX_CASE ) 
 								: new Point( coord.x * IConfig.NB_PIX_CASE, (coord.y - 1) * IConfig.NB_PIX_CASE);					
 			this.promptNext = pN;
 
 		}	
 		/** 
-		 * Met automatiquement tout les temps du message a jours  [ pN et t ] 
+		 * Met automatiquement tous les temps du message à jour [ pN et t ] 
 		 */
 		public void setTime() {
 			if(this.promptNext != -1 && this.promptNext != 0)
@@ -88,7 +88,7 @@ final class Infobulle extends Rectangle
 		public void setDeplacement() {
 			int x = (int) (60.0 / IConfig.FPS); // Max de 60 FPS ; pour passer a plus de FPs il faudrait tout transformer en float
 			int alpha =  color.getAlpha() - ( 2 * x ) ;
-			this.coord.y = (this.direction == IConfig.HAUT) ? getPoint().y - x : getPoint().y + x;
+			this.coord.y = (this.direction == IConfig.MOUV_INFOBULLE_HAUT) ? getPoint().y - x : getPoint().y + x;
 
 			this.color = new Color(color.getRed(),color.getGreen(), color.getBlue(), alpha );
 		}
@@ -149,7 +149,7 @@ final class Infobulle extends Rectangle
 	 * il s'agit d'un message statique où le temps donné correspond au temps d'affichage du message
 	 */
 	public static void newMessage(int loc, String s, Color color, int t, int promptNext) {
-		generalQueue(loc, s, color, IConfig.STATIQUE, t, promptNext);
+		generalQueue(loc, s, color, IConfig.MOUV_INFOBULLE_AUCUN, t, promptNext);
 	}
 	
 	/** 
@@ -174,7 +174,7 @@ final class Infobulle extends Rectangle
 				i--;
 			}
 			else {
-				if(m.direction != IConfig.STATIQUE)
+				if(m.direction != IConfig.MOUV_INFOBULLE_AUCUN)
 					m.setDeplacement(); // on fait le deplacement que si la  direction est donnée [ Haut ou Bas ]
 				m.setTime();
 			}

@@ -6,16 +6,7 @@ import java.awt.Point;
  * Interface comprenant les méthodes et attributs d'une classe carte
  */
 public interface ICarte {
- //	Element getElement(Position pos);
-/*
-	Heros trouveHeros(); // Trouve aléatoirement un héros sur la carte
-	Heros trouveHeros(Position pos); // Trouve un héros choisi aléatoirement parmi les 8 positions adjacentes de pos
 
-	void mort(Soldat perso);
-	boolean actionHeros(Position pos, Position pos2);
-//	void jouerSoldats(PanneauJeu pj);	
-	*/
-	
 	/** Déplace un soldat sur la carte.
 	 * @param soldat    Soldat à deplacer.
 	 * @param direction Direction du soldat.
@@ -37,7 +28,7 @@ public interface ICarte {
 	
 	/** Trouve une position vide aléatoirement sur la carte. 
 	 * Utilisable pour placer des Soldats.
-	 * @param type Type de Soldat (Soldat.HOMME ou Soldat.MONSTRE)
+	 * @param type Type de Soldat (Soldat.HEROS ou Soldat.MONSTRE)
 	 * @return     La position vide.
 	 * */
 	Point trouvePositionVide(char type);

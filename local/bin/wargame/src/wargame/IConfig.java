@@ -11,7 +11,6 @@ public interface IConfig
 	/** Nombre de FPS pour la carte. */
 	double FPS = 60.0;
 	
-	
 	/* Chemins : attention de bien préciser le / de fin */
 	/** Chemin du dossier des musiques */
 	String CHEMIN_MUSIQUE = "musique/"; 
@@ -63,8 +62,8 @@ public interface IConfig
 	int NB_ARBRES = 3;	
 	int NB_PAILLES = 4;
 	
-	/** Regen max d'un pégus */
-	int REGEN_MAX = 10;
+	/** Repos maximum dont peut bénéficier un soldat */
+	int REPOS_MAX = 10;
 	
 	/** Couleur du texte. */
     Color COULEUR_TEXTE = Color.black;
@@ -75,10 +74,10 @@ public interface IConfig
     /** Couleur d'une case d'un soldat utilisé */
     Color SOLDAT_UTILISE = new Color(128, 128, 128, DEFAULT_ALPHA);
     
-    /** Couleur de la case du soldat [ Heros ]  séléctionné */
+    /** Couleur de la case du soldat sélectionné */
     Color SOLDAT_SELECTIONNEE = new Color(0, 0, 255, DEFAULT_ALPHA);
     
-    /** Couleur des cases de déplacement possiblebackground_color */
+    /** Couleur des cases de déplacement possible */
     Color SOLDAT_DEPLACEMENT_POSSIBLE = new Color(255, 0, 0, DEFAULT_ALPHA);
     
 	/** Couleurs du message de l'infobulle */
@@ -95,21 +94,15 @@ public interface IConfig
     /** Nombre de musiques d'arrière plan */
     int NOMBRE_MUSIQUE_ARRIERE_PLAN = 3;
       
-    /** 
-     * Mouvement possible du texte pour l'info bulle 
-     * 	Haut : Le texte ira vers le haut
-     * 	Bas : Le texte ira vers le bas
-     *  Statique : 
-     * */
-    
-	char HAUT    = 0;
-	char BAS     = 1;
-	char STATIQUE = 2;
+    /** Mouvement de l'infobulle (vers le haut, vers le bas ou aucun mouvement...) */
+	char MOUV_INFOBULLE_HAUT    = 0;
+	char MOUV_INFOBULLE_BAS     = 1;
+	char MOUV_INFOBULLE_AUCUN = 2;
 	
-	/** Nombre de millisecondes à attendre après qu'un monstre ai fait une action */
-	int ATTENDRE_MONSTRE_DEPLACEMENT = 1500;
-	int ATTENDRE_MONSTRE_REPOS = 1500;
-	int ATTENDRE_MONSTRE_COMBAT = 1500;
+	/** Nombre de millisecondes à attendre après qu'un monstre ait fait une action */
+	int ATTENDRE_MONSTRE_DEPLACEMENT = 100;
+	int ATTENDRE_MONSTRE_REPOS = 1000;
+	int ATTENDRE_MONSTRE_COMBAT = 1000;
 	
 	
  
