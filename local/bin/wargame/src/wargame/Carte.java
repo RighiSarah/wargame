@@ -388,9 +388,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		tourJoueur = false;
 		
 		Thread t = new Thread(new Runnable() {
-			@Override
 			public void run() {
 				tourJoueur = false;
+				
 				for(int i=0; i<monstre.length; i++){
 					try {
 						Thread.sleep(1000/60);
@@ -399,11 +399,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					}
 					
 					Monstre m = monstre[i];
-					if(m != null){
+					if(m != null && m.estVisible()){
 						Position p;
 		
 						if(m.getPourcentageVie() < 10){
-//							System.out.println("Repos pour moi car :" + m.getPourcentageVie());
+//							System.out.println("Repos pour moi car :" + m.getPourcentageVie() + " vie : " + m.getVie() + " pour viemax : " + m.getVieMax());
 							m.repos(true);
 						}
 						else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
@@ -432,6 +432,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						}
 					}
 				}
+				
 				tourJoueur = true;
 			}
 		});
