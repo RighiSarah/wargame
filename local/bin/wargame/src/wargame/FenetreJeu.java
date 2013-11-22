@@ -46,7 +46,7 @@ public class FenetreJeu extends JFrame
 	private JMenu sauvegarder;
 	private JMenu charger;
 	private JMenu config;
-	private JButton finTour;
+	private static JButton finTour;
 
 	/* Options des menus. */
 	
@@ -302,7 +302,9 @@ public class FenetreJeu extends JFrame
 	    this.setVisible(true);
 	    
 	    
-	  }
-   
 	}
+	public static void activableFinTour(boolean b) {
+	   finTour.setEnabled(b);
+	}
+}
 

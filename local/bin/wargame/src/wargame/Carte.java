@@ -382,7 +382,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public void joueMonstres(){
 		tourJoueur = false;
-		
+		FenetreJeu.activableFinTour(false);
 		/* On crée un thread pour que quand on mette en pause, juste cette boucle soit mise en pause (et non pas tout le programme) */
 		Thread t = new Thread(new Runnable() {
 			public void run() {
@@ -439,6 +439,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				}
 				
 				tourJoueur = true;
+				FenetreJeu.activableFinTour(true);
 			}
 		});
 		
