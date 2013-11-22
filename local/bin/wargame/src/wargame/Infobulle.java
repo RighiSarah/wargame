@@ -56,7 +56,7 @@ final class Infobulle extends Rectangle
 			this.timer = t;
 			this.direction = direction;
 			
-			if(this.direction == IConfig.NO_MOVE)	coord.x--;
+			if(this.direction == IConfig.STATIQUE)	coord.x--;
 			
 			this.coord = ( coord.y == 0 || direction == IConfig.HAUT)
 								? new Point( coord.x * IConfig.NB_PIX_CASE, (coord.y + 1 ) * IConfig.NB_PIX_CASE ) 
@@ -149,7 +149,7 @@ final class Infobulle extends Rectangle
 	 * il s'agit d'un message statique où le temps donné correspond au temps d'affichage du message
 	 */
 	public static void newMessage(int loc, String s, Color color, int t, int promptNext) {
-		generalQueue(loc, s, color, IConfig.NO_MOVE, t, promptNext);
+		generalQueue(loc, s, color, IConfig.STATIQUE, t, promptNext);
 	}
 	
 	/** 
@@ -174,7 +174,7 @@ final class Infobulle extends Rectangle
 				i--;
 			}
 			else {
-				if(m.direction != IConfig.NO_MOVE)
+				if(m.direction != IConfig.STATIQUE)
 					m.setDeplacement(); // on fait le deplacement que si la  direction est donnée [ Haut ou Bas ]
 				m.setTime();
 			}

@@ -95,9 +95,16 @@ public interface IConfig
     /** Nombre de musiques d'arrière plan */
     int NOMBRE_MUSIQUE_ARRIERE_PLAN = 3;
       
+    /** 
+     * Mouvement possible du texte pour l'info bulle 
+     * 	Haut : Le texte ira vers le haut
+     * 	Bas : Le texte ira vers le bas
+     *  Statique : 
+     * */
+    
 	char HAUT    = 0;
 	char BAS     = 1;
-	char NO_MOVE = 2;
+	char STATIQUE = 2;
 	
 	/** Nombre de millisecondes à attendre après qu'un monstre ai fait une action */
 	int ATTENDRE_MONSTRE_DEPLACEMENT = 1500;
