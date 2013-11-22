@@ -98,7 +98,6 @@ public abstract class Soldat extends Charset implements ISoldat
 		this.direction = Direction.HAUT;
 		this.animation = 0;
 	    this.timer.setDelay(350);
-	    
 	}
 	
 	/** Teste si le personnage est mort. 
