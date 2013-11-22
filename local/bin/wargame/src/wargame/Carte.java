@@ -20,7 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-
 import wargame.Charset.Direction;
 
 /** Classe de la Carte du jeu.
@@ -447,6 +446,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		});
 		
 		t.start();
+	
 	}
 
 	/** Genere aléatoirement une carte. */
@@ -462,16 +462,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			imagePresentation.getParent().remove(imagePresentation);
 			imagePresentation = null;
 		}
-	}
-
-	/** Teste si une case existe sur la Carte.
-	 * @param x Coordonnée x.
-	 * @param y Coordonnée y.
-	 * @return  true si existe, false sinon.
-	 */
-	public boolean existe(int x, int y)
-	{
-		return (x >= 0 && y >= 0 && x < IConfig.LARGEUR_CARTE && y < IConfig.HAUTEUR_CARTE);
 	}
 
 	/** Trouve une position vide aléatoirement sur la carte. 
@@ -493,7 +483,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 			num_tile = carte[pos.getNumCase()];
 			tile = tileset.getTile(num_tile);
-		} while(soldat[pos.getNumCase()] != null || !tile.estPraticable() || !existe(pos.x, pos.y) );
+		} while(soldat[pos.getNumCase()] != null || !tile.estPraticable() || !pos.estValide() );
 
 		return pos;
 	}
@@ -600,7 +590,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						int dyc = dy + j;
 						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 
-						if(existe(dxc, dyc) && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
+						if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
 							soldat[caseActionnee].dessineDeplacement(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
 					}
 				}

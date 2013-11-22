@@ -72,10 +72,7 @@ public class Position extends Point implements IConfig{
 	 * @return Vrai si la position est dans la carte, faux sinon
 	 */
 	public boolean estValide() {
-		if (x < 0 || x >= IConfig.LARGEUR_CARTE || y < 0 || y >= IConfig.HAUTEUR_CARTE) 
-			return false; 
-		
-		return true;
+		return (x >= 0 && y >= 0 && x < IConfig.LARGEUR_CARTE && y < IConfig.HAUTEUR_CARTE);
 	}
 	
 	/**

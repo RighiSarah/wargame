@@ -66,7 +66,7 @@ public class Tileset
 		int res = (int)(Math.random() * 100);
 		int tile = x + IConfig.LARGEUR_CARTE * y;
 		
-		if(!carte.existe(x, y))
+		if(!(new Position(x, y).estValide()))
 			return false;
 		
 		if(res > 60)
@@ -92,7 +92,7 @@ public class Tileset
 		int res = (int)(Math.random() * 4);
 		int tile = x + IConfig.LARGEUR_CARTE * y;
 		
-		if(!carte.existe(x, y))
+		if(!(new Position(x, y).estValide()))
 			return false;
 		
 		carte.carte[tile] = (char)(16 + res);
@@ -143,7 +143,7 @@ public class Tileset
 	 */
 	protected boolean setPaille(Carte carte, int x, int y)
 	{
-		if(!carte.existe(x, y))
+		if(!(new Position(x, y).estValide()))
 			return false;
 		return dessinerPartie(carte, new Point(2, 0), new Point(3, 1), new Point(x, y));
 	}
@@ -156,7 +156,7 @@ public class Tileset
 	 */
 	protected boolean setArbre(Carte carte, int x, int y)
 	{
-		if(!carte.existe(x, y))
+		if(!(new Position(x, y).estValide()))
 			return false;
 		return dessinerPartie(carte, new Point(4, 0), new Point(7, 3), new Point(x, y));
 	}
