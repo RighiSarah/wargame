@@ -100,9 +100,9 @@ public interface IConfig
 	char NO_MOVE = 2;
 	
 	/** Nombre de millisecondes à attendre après qu'un monstre ai fait une action */
-	int ATTENDRE_MONSTRE_DEPLACEMENT = 100;
-	int ATTENDRE_MONSTRE_REPOS = 1000;
-	int ATTENDRE_MONSTRE_COMBAT = 1000;
+	int ATTENDRE_MONSTRE_DEPLACEMENT = 1500;
+	int ATTENDRE_MONSTRE_REPOS = 1500;
+	int ATTENDRE_MONSTRE_COMBAT = 1500;
 	
 	
  
