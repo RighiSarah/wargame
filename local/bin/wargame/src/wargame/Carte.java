@@ -22,9 +22,7 @@ import javax.swing.Timer;
 
 import wargame.Charset.Direction;
 
-/** Classe de la Carte du jeu.
- *	@author ABHAMON Ronan 
- */
+/** Classe de la Carte du jeu. */
 public class Carte extends JPanel implements ActionListener, Serializable
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
@@ -92,7 +90,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Constructeur par défaut. 
 	 * @throws MidiUnavailableException 
 	 * @throws IOException 
-	 * @throws InvalidMidiDataException */
+	 * @throws InvalidMidiDataException 
+	 */
 	Carte() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{		
 		/* Initialisation taux de rafraichissement. */
@@ -103,6 +102,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
 
+		/* Image de présentation, avant donc que la carte ne soit générée */
 		imagePresentation = new JLabel( new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
 		this.add(imagePresentation);
 

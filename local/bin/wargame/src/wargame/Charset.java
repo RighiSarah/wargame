@@ -28,6 +28,10 @@ public class Charset implements ActionListener
 		
 		private int value;
 	 
+		/**
+		 * Constructeur privé permettant de construire une direction avec sa valeur assignée
+		 * @param value Valeur de la direction
+		 */
 		private Direction(int value) {
 			this.value = value;
 		}
@@ -63,6 +67,9 @@ public class Charset implements ActionListener
 			return true;
 		}
 		
+		/**
+		 * Redéfinition de méthode permettant d'afficher la direction en toutes lettres
+		 */
 		public String toString(){
 			String[] t = new String[N_DIRECTIONS];
 			t[0] = "HAUT";

@@ -183,7 +183,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		int degat = (distance == 1) ? Aleatoire.nombreAleatoire(1, this.getPuissance()) : this.getTir();
 		int numCase = soldat.position.getNumCase();
 		
-		Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, 30);
+		Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, 30);
 				
 		int vie = soldat.getVie() - degat;
 		soldat.setVie(vie);
@@ -196,7 +196,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
 				
-				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.BAS, -1);
+				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, -1);
 				this.setVie(vie);
 				
 				if(vie <= 0) {
@@ -227,7 +227,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	 */
 	public void repos(boolean afficherMessage) {
 
-		int regain = Aleatoire.nombreAleatoire(0, IConfig.REGEN_MAX);
+		int regain = Aleatoire.nombreAleatoire(0, IConfig.REPOS_MAX);
 		int vie = this.getVie();
 		int case_courante = this.getPosition().getNumCase();
 		
@@ -247,7 +247,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		}
 
 		/* Définition du message et de sa couleur */
-		Infobulle.newMessage(case_courante, "+ " + regain, IConfig.MESSAGE_POSITIF, IConfig.HAUT, 0);
+		Infobulle.newMessage(case_courante, "+ " + regain, IConfig.MESSAGE_POSITIF, IConfig.MOUV_INFOBULLE_HAUT, 0);
 		
 		FenetreJeu.information.setText(this.nom + " se repose et regagne " + regain + " point de vie");
 		
