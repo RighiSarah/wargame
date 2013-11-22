@@ -153,7 +153,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						 */
 						if(distance == 1 
 							&& tileset.getTile(carte[case_cliquee]).estPraticable() 
-							&& soldat[case_cliquee] == null && !soldat[caseActionnee].getAJoue()
+							&& ( soldat[case_cliquee] == null || soldat[case_cliquee].estMort() ) && !soldat[caseActionnee].getAJoue()
 						) {
 							FenetreJeu.information.setText(soldat[caseActionnee].nom + " se deplace en " + caseActionnee );
 
