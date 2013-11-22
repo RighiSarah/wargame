@@ -28,8 +28,10 @@ public final class Son {
 	private boolean sonArriereActive = false;
 
 	/* Son du bruitage de pas. */
-	private static AudioClip bruitPas = null;
-
+	private static AudioClip bruitCourir = null;
+	private static AudioClip bruitArc = null;
+	private static AudioClip bruitEpee = null;
+	private static AudioClip bruitMarcher = null;
 
 	/**
 	 * Constructeur permettant d'instancier l'objet qui manipulera le son d'arrière plan
@@ -109,45 +111,62 @@ public final class Son {
 		}	
 	}
 	
-	
-	/* Méthode statique privée permettant de jouer un son wav */
-	private static void joueWav(String son){
-		if(bruitPas == null)
-		try {
-			bruitPas = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + son));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
 
-		bruitPas.play();
-	}
-	
 	/**
 	 * Méthode statique permettant de jouer le son d'un arc
 	 */
 	public static void joueArc(){
-		joueWav("arc.wav");
+		/* Si le bruit n'a pas été déjà chargé, alors on le charge */
+		if(bruitArc == null)
+			try {
+				bruitArc = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "arc.wav"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		bruitArc.play();
 	}
 	
 	/** 
 	 * Méthode statique permettant de jouer le son d'une épée
 	 */
 	public static void joueEpee(){
-		joueWav("epee.wav");
+		if(bruitEpee == null)
+			try {
+				bruitEpee = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "epee.wav"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		bruitEpee.play();
 	}	
 	
 	/**
 	 * Méthode statique permettant de jouer le son d'un personnage courant sur l'herbe
 	 */
 	public static void joueCourir(){
-		joueWav("courir.wav");
+		if(bruitCourir == null)
+			try {
+				bruitCourir = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "courir.wav"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		bruitCourir.play();
 	}
 	
 	/**
 	 * Méthode statique permettant de jouer le son d'un personnage marchant sur l'herbe
 	 */
 	public static void joueMarcher(){
-		joueWav("marcher.wav");
+		if(bruitMarcher == null)
+			try {
+				bruitMarcher = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "marcher.wav"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		bruitMarcher.play();
 	}
 	
 	
