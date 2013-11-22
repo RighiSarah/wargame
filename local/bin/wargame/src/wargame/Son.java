@@ -27,6 +27,10 @@ public final class Son {
 	/* Pour savoir si le son en arrière est stoppé ou non */
 	private boolean sonArriereActive = false;
 
+	/* Son du bruitage de pas. */
+	private static AudioClip bruitPas = null;
+
+
 	/**
 	 * Constructeur permettant d'instancier l'objet qui manipulera le son d'arrière plan
 	 * @throws InvalidMidiDataException Si problème avec le fichier midi
@@ -108,14 +112,14 @@ public final class Son {
 	
 	/* Méthode statique privée permettant de jouer un son wav */
 	private static void joueWav(String son){
-		AudioClip ac = null;
+		if(bruitPas == null)
 		try {
-			ac = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + son));
+			bruitPas = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + son));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 
-		ac.play();
+		bruitPas.play();
 	}
 	
 	/**

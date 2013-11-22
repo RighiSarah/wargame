@@ -92,6 +92,11 @@ public abstract class Soldat extends Charset implements ISoldat
 		this.seDeplace = value;
 	}
 	
+	public boolean getSeDeplace()
+	{
+		return this.seDeplace;
+	}
+	
 	/** Mettre le statut du personnage à mort. */
 	public void setMort() {
 		this.estMort = true;

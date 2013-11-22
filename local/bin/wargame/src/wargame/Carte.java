@@ -380,72 +380,73 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/**
 	 *  Déplace tous les monstres 
 	 */
-	public void joueMonstres(){
-		tourJoueur = false;
+	public void joueMonstres()
+	{
 		FenetreJeu.activableFinTour(false);
-		/* On crée un thread pour que quand on mette en pause, juste cette boucle soit mise en pause (et non pas tout le programme) */
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				tourJoueur = false;
-				
-				for(int i=0; i<monstre.length; i++){
-					Monstre m = monstre[i];
+		tourJoueur = false;
 					
-					if(m != null && m.estVisible()){
-						Position p;
-		
-						if(m.getPourcentageVie() < 10){
-//							System.out.println("Repos pour moi car :" + m.getPourcentageVie() + " vie : " + m.getVie() + " pour viemax : " + m.getVieMax());
-							m.repos(true);
+		for(int i=0; i < monstre.length; i++) 
+		{
+			Monstre m = monstre[i];
+					
+			if(m != null && m.estVisible())
+			{					
+				Position p;
+				
+				if(m.getPourcentageVie() < 10)
+					m.repos(true);
+				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null)
+					m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
+				else {							
+					Position positions[] = new Position[9];
+					Position temp = new Position();
+					
+					int l = 0;
+					
+					for(int j = -1; j <= 1; j++)
+						for(int k = -1; k <= 1; k++)							
+						{
+							if(k != 0 || j != 0)
+							{							
+								temp.setNumCase(m.getPosition().getNumCase() + k + IConfig.LARGEUR_CARTE * j);
 							
-							try {
-								Thread.sleep(IConfig.ATTENDRE_MONSTRE_REPOS);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
+								if (temp.estValide() && soldat[temp.getNumCase()] == null && 
+										tileset.getTile(carte[temp.getNumCase()]).estPraticable())
+								{
+									positions[l] = new Position(temp.getNumCase());
+									l++;
+								}
 							}
 						}
-						else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
-//							System.out.println("Je combats");
-							m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
-							
-							try {
-								Thread.sleep(IConfig.ATTENDRE_MONSTRE_COMBAT);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
-						else{
-//							System.out.println("Je me déplace");
-							Position nouvelle_position = new Position();
-							
-							do{
-								nouvelle_position.x = m.getPosition().x + Aleatoire.nombreAleatoire(-1, 1);
-								nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
-								
-							}while(!nouvelle_position.estValide() || soldat[nouvelle_position.getNumCase()] != null || !(tileset.getTile(carte[nouvelle_position.getNumCase()]).estPraticable()));
-							
-							soldat[m.getPosition().getNumCase()] = null;
-							soldat[nouvelle_position.getNumCase()] = m;
-
-							deplaceSoldat(m, nouvelle_position);
-							
-							try {
-								Thread.sleep(IConfig.ATTENDRE_MONSTRE_DEPLACEMENT);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
+					
+					if(l > 0)
+					{
+						temp = positions[Aleatoire.nombreAleatoire(0, l - 1)];
+						soldat[m.getPosition().getNumCase()] = null;
+						soldat[temp.getNumCase()] = m;
+						deplaceSoldat(m, temp);
 					}
 				}
-				
-				tourJoueur = true;
-				FenetreJeu.activableFinTour(true);
-			}
-		});
 		
-		t.start();
-	
+			}
+		}
+		
+	   Thread t = new Thread() {
+	          public void run() {
+	      		for(int i = 0; i < monstre.length; i++)
+	    			while(monstre[i].getSeDeplace())
+	    			{
+	    				System.out.println(i);
+	    			}
+	    		
+	    		tourJoueur = true;
+	    		FenetreJeu.activableFinTour(true);
+	          }
+	        };
+	        t.start();
+
 	}
+
 
 	/** Genere aléatoirement une carte. */
 	public void generer()
