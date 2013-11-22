@@ -387,28 +387,36 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void joueMonstres(){
 		tourJoueur = false;
 		
+		/* On crée un thread pour que quand on mette en pause, juste cette boucle soit mise en pause (et non pas tout le programme) */
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				tourJoueur = false;
 				
 				for(int i=0; i<monstre.length; i++){
-					try {
-						Thread.sleep(1000/60);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					
 					Monstre m = monstre[i];
+					
 					if(m != null && m.estVisible()){
 						Position p;
 		
 						if(m.getPourcentageVie() < 10){
 //							System.out.println("Repos pour moi car :" + m.getPourcentageVie() + " vie : " + m.getVie() + " pour viemax : " + m.getVieMax());
 							m.repos(true);
+							
+							try {
+								Thread.sleep(IConfig.ATTENDRE_MONSTRE_REPOS);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
 						else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
 //							System.out.println("Je combats");
 							m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
+							
+							try {
+								Thread.sleep(IConfig.ATTENDRE_MONSTRE_COMBAT);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
 						else{
 //							System.out.println("Je me déplace");
@@ -419,13 +427,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 								nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
 								
 							}while(!nouvelle_position.estValide() || soldat[nouvelle_position.getNumCase()] != null || !(tileset.getTile(carte[nouvelle_position.getNumCase()]).estPraticable()));
+							
 							soldat[m.getPosition().getNumCase()] = null;
 							soldat[nouvelle_position.getNumCase()] = m;
 
 							deplaceSoldat(m, nouvelle_position);
 							
 							try {
-								Thread.sleep(100);
+								Thread.sleep(IConfig.ATTENDRE_MONSTRE_DEPLACEMENT);
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
@@ -438,8 +447,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		});
 		
 		t.start();
-		
-		
 	}
 
 	/** Genere aléatoirement une carte. */

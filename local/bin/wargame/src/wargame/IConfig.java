@@ -86,7 +86,7 @@ public interface IConfig
 	Color MESSAGE_NEGATIF = Color.RED;
 	Color MESSAGE_NEUTRE = Color.BLACK;
 	
-	/* Couleur de l'arrière plan de l'infobulle */
+	/** Couleur de l'arrière plan de l'infobulle */
 	Color ARRIERE_PLAN = new Color(240, 240, 0, 220);
     
     /** Marge interne de l'infobulle */
@@ -98,6 +98,13 @@ public interface IConfig
 	char HAUT    = 0;
 	char BAS     = 1;
 	char NO_MOVE = 2;
+	
+	/** Nombre de millisecondes à attendre après qu'un monstre ai fait une action */
+	int ATTENDRE_MONSTRE_DEPLACEMENT = 100;
+	int ATTENDRE_MONSTRE_REPOS = 1000;
+	int ATTENDRE_MONSTRE_COMBAT = 1000;
+	
+	
  
     
 }
