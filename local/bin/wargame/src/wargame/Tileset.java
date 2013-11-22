@@ -57,16 +57,15 @@ public class Tileset
 	
 	/** Ajoute une case d'herbe sur la carte.
 	 * @param carte Carte du jeu
-	 * @param x     Position X où ajouter l'herbe
-	 * @param y     Position Y où ajouter l'herbe
+	 * @param p     Position où ajouter l'herbe
 	 * @return      false si x, y ne font pas partis de la carte, true sinon.
 	 */
-	protected boolean setHerbe(Carte carte, int x, int y)
+	protected boolean setHerbe(Carte carte, Position p)
 	{
 		int res = (int)(Math.random() * 100);
-		int tile = x + IConfig.LARGEUR_CARTE * y;
+		int tile = p.getNumCase();
 		
-		if(!(new Position(x, y).estValide()))
+		if(!p.estValide())
 			return false;
 		
 		if(res > 60)
@@ -83,16 +82,15 @@ public class Tileset
 	
 	/** Ajoute une case de rochers sur la carte.
 	 * @param carte Carte du jeu
-	 * @param x     Position X où ajouter le rocher
-	 * @param y     Position Y où ajouter le rocher
+	 * @param x     Position où ajouter le rocher
 	 * @return      false si x, y ne font pas partis de la carte, true sinon.
 	 */
-	protected boolean setRocher(Carte carte, int x, int y)
+	protected boolean setRocher(Carte carte, Position p)
 	{
 		int res = (int)(Math.random() * 4);
-		int tile = x + IConfig.LARGEUR_CARTE * y;
+		int tile = p.getNumCase();
 		
-		if(!(new Position(x, y).estValide()))
+		if(!p.estValide())
 			return false;
 		
 		carte.carte[tile] = (char)(16 + res);
@@ -137,28 +135,28 @@ public class Tileset
 	
 	/** Dessine de la paille sur la carte.
 	 * @param carte Carte où dessiner.
-	 * @param x		Position en X où ajouter la paille.
-	 * @param y		Position en Y où ajouter la paille.
+	 * @param p		Position où ajouter la paille.
 	 * @return      false si x, y ne font pas partis de la carte, true sinon.
 	 */
-	protected boolean setPaille(Carte carte, int x, int y)
+	protected boolean setPaille(Carte carte, Position p)
 	{
-		if(!(new Position(x, y).estValide()))
+		if(!p.estValide())
 			return false;
-		return dessinerPartie(carte, new Point(2, 0), new Point(3, 1), new Point(x, y));
+		
+		return dessinerPartie(carte, new Point(2, 0), new Point(3, 1), p);
 	}
 	
 	/** Dessine un arbre sur la carte.
 	 * @param carte Carte où dessiner.
-	 * @param x		Position en X où ajouter l'arbre.
-	 * @param y		Position en Y où ajouter l'arbre.
+	 * @param p		Position où ajouter l'arbre.
 	 * @return      false si x, y ne font pas partis de la carte, true sinon.
 	 */
-	protected boolean setArbre(Carte carte, int x, int y)
+	protected boolean setArbre(Carte carte, Position p)
 	{
-		if(!(new Position(x, y).estValide()))
+		if(!p.estValide())
 			return false;
-		return dessinerPartie(carte, new Point(4, 0), new Point(7, 3), new Point(x, y));
+		
+		return dessinerPartie(carte, new Point(4, 0), new Point(7, 3), p);
 	}
 	
 	/** Dessine un tile du Tileset.
@@ -202,7 +200,7 @@ public class Tileset
 		return tile[num];	
 	}
 	
-	/* Teste si un Tile existe dans le tileset.
+	/** Teste si un Tile existe dans le tileset.
 	 * @param x Coordonnée x du Tile.
 	 * @param y Coordonnée y du Tile.
 	 * @return  true si existe, false sinon.

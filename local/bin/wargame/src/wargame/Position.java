@@ -9,10 +9,12 @@ public class Position extends Point implements IConfig{
 	private static final long serialVersionUID = 4537495200581219261L;
 
 	/**
-	 * Constructeur de base, initialise une position sans rien
+	 * Constructeur de base, initialise une position aléatoire comprise dans la carte
 	 */
 	Position(){
 		super();
+		x = (int)(Math.random() * IConfig.LARGEUR_CARTE);
+		y = (int)(Math.random() * IConfig.HAUTEUR_CARTE);
 	}
 
 	/**

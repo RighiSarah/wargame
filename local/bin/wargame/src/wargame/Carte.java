@@ -229,41 +229,38 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	private void genererCarte()
 	{
-		int x, y;
-
 		soldat = new Soldat[IConfig.LARGEUR_CARTE * IConfig.HAUTEUR_CARTE];
 		chargerTileset();
 
 		/* Couche d'herbe. */
 		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			Position p = new Position(i);
-			tileset.setHerbe(this, p.x, p.y);
+			tileset.setHerbe(this, p);
 		}
 
 		/* Rochers. */
 		for(int i = 0; i < IConfig.NB_ROCHERS; i++)
 		{
-			x = (int)(Math.random() * IConfig.LARGEUR_CARTE);
-			y = (int)(Math.random() * IConfig.HAUTEUR_CARTE);
-			tileset.setRocher(this, x, y);
+			/* Une position aléatoire est générée */
+			Position p = new Position();
+			
+			tileset.setRocher(this, p);
 		}
 
 		/* Arbres. */
 		for(int i = 0; i < IConfig.NB_ARBRES; i++)
 		{
-			x = (int)(Math.random() * IConfig.LARGEUR_CARTE);
-			y = (int)(Math.random() * IConfig.HAUTEUR_CARTE);
+			Position p = new Position();
 
-			if(!tileset.setArbre(this, x, y)) i--;
+			if(!tileset.setArbre(this, p)) i--;
 		}
 
 		/* Paille. */
 		for(int i = 0; i < IConfig.NB_PAILLES; i++)
 		{
-			x = (int)(Math.random() * IConfig.LARGEUR_CARTE);
-			y = (int)(Math.random() * IConfig.HAUTEUR_CARTE);
+			Position p = new Position();
 
-			if(!tileset.setPaille(this, x, y)) i--;
+			if(!tileset.setPaille(this, p)) i--;
 		}
 	}
 
