@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+
 import wargame.Charset.Direction;
 
 /** Classe de la Carte du jeu.
@@ -67,7 +68,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	private Heros []heros;
 
 	/** Table de jeu de la carte. */
-	private static Soldat []soldat;
+	private Soldat []soldat;
 
 	/** La carte est-elle générée ? */
 	private boolean generee = false;
@@ -381,14 +382,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public void joueMonstres(){
 		Thread t = new Thread(new Runnable() {
-			
 			@Override
 			public void run() {
 				for(int i=0; i<monstre.length; i++){
 					try {
-						Thread.sleep(100);
+						Thread.sleep(1000/60);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -397,26 +396,39 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						Position p;
 		
 						if(m.getPourcentageVie() < 10){
-							System.out.println("Repos pour moi car :" + m.getPourcentageVie());
+//							System.out.println("Repos pour moi car :" + m.getPourcentageVie());
 							m.repos(true);
 						}
 						else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
-							System.out.println("Je combats");
+//							System.out.println("Je combats");
 							m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
 						}
 						else{
-							System.out.println("Je me déplace");
+//							System.out.println("Je me déplace");
 							Position nouvelle_position = new Position();
-							nouvelle_position.x = m.getPosition().x + Aleatoire.nombreAleatoire(-1, 1);
-							nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
+							
+							do{
+								nouvelle_position.x = m.getPosition().x + Aleatoire.nombreAleatoire(-1, 1);
+								nouvelle_position.y = m.getPosition().y + Aleatoire.nombreAleatoire(-1, 1);
+								
+							}while(!nouvelle_position.estValide() || soldat[nouvelle_position.getNumCase()] != null || !(tileset.getTile(carte[nouvelle_position.getNumCase()]).estPraticable()));
+							soldat[m.getPosition().getNumCase()] = null;
+							soldat[nouvelle_position.getNumCase()] = m;
+
 							deplaceSoldat(m, nouvelle_position);
+							
+							try {
+								Thread.sleep(100);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
 					}
 				}
 			}
 		});
 		
-		t.run();
+		t.start();
 	}
 
 	/** Genere aléatoirement une carte. */
@@ -445,7 +457,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/** Trouve une position vide aléatoirement sur la carte. 
 	 * Utilisable pour placer des Soldats.
-	 * @param type Type de Soldat (Soldat.HOMME ou Soldat.MONSTRE)
+	 * @param type Type de Soldat (Soldat.HEROS ou Soldat.MONSTRE)
 	 * @return     La position vide.
 	 * */
 	public Position trouvePositionVide(char type)
@@ -462,7 +474,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 			num_tile = carte[pos.getNumCase()];
 			tile = tileset.getTile(num_tile);
-		} while(soldat[num_tile] != null || !tile.estPraticable() || !existe(pos.x, pos.y) );
+		} while(soldat[pos.getNumCase()] != null || !tile.estPraticable() || !existe(pos.x, pos.y) );
 
 		return pos;
 	}
@@ -615,7 +627,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		repaint();
 	}
 
-	public static void setSoldat(int i, Soldat s) {
+	public void setSoldat(int i, Soldat s) {
 		soldat[i] = s;
 	}
 	
