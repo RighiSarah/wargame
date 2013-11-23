@@ -331,13 +331,10 @@ public abstract class Soldat extends Charset implements ISoldat
 	protected void dessineVie(Graphics g, int x, int y)
 	{
 		Color color;
-
-		/* Couleur de la barre de vie. */
-		int res = ((int)(100.0 * vie / (double)vieMax));
-		
-		if(res >= 70)
+		int pourcentage_vie = (int) getPourcentageVie();
+		if(pourcentage_vie >= 70)
 			color = Color.green;
-		else if(res >= 40)
+		else if(pourcentage_vie >= 40)
 			color = Color.orange;
 		else
 			color = Color.red;

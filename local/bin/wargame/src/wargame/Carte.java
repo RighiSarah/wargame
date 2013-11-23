@@ -725,6 +725,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public boolean faisCombattre(Soldat attaquant, Soldat defenseur, int distance){
 		boolean retour = false;
 		
+		/* On commence à faire tourner l'attaquant dans la direction du defenseur */
+		attaquant.setDirection(attaquant.getPosition().direction(defenseur.getPosition()));
+		
 		int v = attaquant.combat(defenseur, distance);
 		
 		if(attaquant instanceof Monstre){

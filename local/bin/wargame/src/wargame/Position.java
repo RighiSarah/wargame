@@ -2,6 +2,8 @@ package wargame;
 
 import java.awt.Point;
 
+import wargame.Charset.Direction;
+
 /**
  * Classe permettant de gérer les positions sur la carte
  */
@@ -99,6 +101,37 @@ public class Position extends Point implements IConfig{
 			return 1;
 
 		return dx + dy;
+	}
+	
+	
+	/**
+	 * Méthode retournant la direction vers une autre position. Si c'est en diagonale, ce sera une des deux directions.
+	 * Ex : diagonale haut droite, la méthode retournera soit haut soit droite
+	 * @param pos La position dont on se demande la direction
+	 * @return Une direction 
+	 */
+	public Direction direction(Position pos){
+		int sx = x;
+		int sy = y;
+		int dx = pos.x;
+		int dy = pos.y;
+		
+		Direction direction = Direction.HAUT;
+
+		if(dx > sx) {
+			direction = Direction.DROITE;
+		}
+		else if(dx < sx) {
+			direction = Direction.GAUCHE;
+		}
+		if(dy > sy) {
+			direction = Direction.BAS;
+		}
+		else if(dy < sy) {
+			direction = Direction.HAUT;
+		}
+		
+		return direction;
 	}
 	
 
