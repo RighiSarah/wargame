@@ -305,13 +305,17 @@ public class FenetreJeu extends JFrame
 	    carte.onStateRealized(new CarteListener() {
 			
 			@Override
-			public void perd() {
+			public void joueurPerd() {
 				sonArriere.jouePerdu();
 			}
 			
 			@Override
-			public void gagne() {
+			public void joueurGagne() {
 				sonArriere.joueGagne();
+			}
+			
+			public void deplaceMonstre(){
+				finTour.setEnabled(!finTour.isEnabled());
 			}
 		});
 	    

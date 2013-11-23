@@ -370,9 +370,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public void joueMonstres()
 	{
-		FenetreJeu.activableFinTour(false);
+		carteListener.deplaceMonstre();
 		tourJoueur = false;
-					
+			
 		for(int i=0; i < monstre.length; i++) 
 		{
 			Monstre m = monstre[i];
@@ -443,11 +443,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	    			}
 	    		
 	    		tourJoueur = true;
-	    		FenetreJeu.activableFinTour(true);
 	    		
+	    		carteListener.deplaceMonstre();
 	          }
 	        };
-	        t.start();
+	       
+	   t.start();
 
 	}
 
@@ -651,7 +652,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	public void joueurGagne(){
 		timer.stop();
-		this.carteListener.gagne();
+		this.carteListener.joueurGagne();
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
@@ -679,7 +680,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	public void joueurPerd(){
 		timer.stop();
-		this.carteListener.perd();
+		this.carteListener.joueurPerd();
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
