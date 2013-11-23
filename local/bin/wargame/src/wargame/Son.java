@@ -235,7 +235,7 @@ public final class Son {
 	private static void joueMourirMonstre(){
 		if(bruitMortMonstre == null)
 			try {
-				bruitMortMonstre = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "bruitMortMonstre.wav"));
+				bruitMortMonstre = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort_monstre.wav"));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}

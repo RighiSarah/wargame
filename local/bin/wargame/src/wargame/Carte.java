@@ -33,25 +33,25 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	protected static int nbToPlay = nbHerosRestant - 1; 
 	protected static int tour = 0;
 
-	public int getNbHerosRestant() {
-		return nbHerosRestant;
-	}
-
-	public static int getNbMonstresRestant() {
-		return nbMonstresRestant;
-	}
-
-	public static void nbMonstresRestantDec() {
-		nbMonstresRestant--;
-	}
-
-	public static void nbHerosRestantDec() {
-		Carte.nbHerosRestant--;
-	}
-
-	public void nbToPlayDef() {
-		Carte.nbToPlay--;
-	}
+//	public int getNbHerosRestant() {
+//		return nbHerosRestant;
+//	}
+//
+//	public static int getNbMonstresRestant() {
+//		return nbMonstresRestant;
+//	}
+//
+//	public static void nbMonstresRestantDec() {
+//		nbMonstresRestant--;
+//	}
+//
+//	public static void nbHerosRestantDec() {
+//		Carte.nbHerosRestant--;
+//	}
+//
+//	public void nbToPlayDef() {
+//		Carte.nbToPlay--;
+//	}
 
 	/** Tileset de la carte. */
 	private Tileset tileset;
@@ -121,7 +121,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
 					soldat[case_cliquee].repos(true);
-					nbToPlayDef();
 				}
 
 				/* On change de héros si la case n'est pas vide, qu'il s'agit bien d'un soldat et que le soldat est affiché. */
@@ -158,7 +157,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						) {
 							FenetreJeu.information.setText(soldat[caseActionnee].nom + " se deplace en " + caseActionnee );
 
-							nbToPlayDef();
 							soldat[case_cliquee] = soldat[caseActionnee];
 							soldat[caseActionnee] = null;
 
@@ -195,7 +193,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public void reinitAJoue() {
 		tour++;
-
+		
 		FenetreJeu.information.setText("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
@@ -641,14 +639,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 
-		FenetreJeu.historique.setText(Carte.nbMonstresRestant+" Monstres restant - "+Carte.nbHerosRestant+" Heros restant");
+		FenetreJeu.historique.setText(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
 	}
 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		if(generee && nbToPlay == 0)
-			reinitAJoue();
-
 		repaint();
 	}
 
@@ -668,7 +663,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void joueurGagne(){
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
-		this.getGraphics().drawString("Vous avez perdu", IConfig.LARGEUR_CARTE / 2, IConfig.HAUTEUR_CARTE / 2);
+		
 	}
 	
 	public void joueurPerd(){
@@ -677,8 +672,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		Graphics g = this.getGraphics();
 		g.setColor(Color.BLACK);
 		
-		g.drawString("Vous avez gagné", IConfig.LARGEUR_CARTE / 2, IConfig.HAUTEUR_CARTE / 2);
-		repaint();
+		g.drawString("Vous avez perdu", 100, 100);
+//		repaint();
 		System.out.println("Vous avez perdu !");
 	}
 	
@@ -698,11 +693,18 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		int v = attaquant.combat(defenseur, distance);
 		
-		if(v == -1 || v == 2)
-			nbMonstresRestant--;
-		
-		if(v == 1 || v == 2)
-			nbHerosRestant--;
+		if(attaquant instanceof Monstre){
+			if(v == -1 || v == 2)
+				nbMonstresRestant--;	
+			if(v == 1 || v == 2)
+				nbHerosRestant--;
+		}
+		else{
+			if(v == -1 || v == 2)
+				nbHerosRestant--;
+			if(v == 1 || v == 2)
+				nbMonstresRestant--;
+		}
 		
 		if(nbMonstresRestant <= 0){
 			if(nbHerosRestant > 0)
