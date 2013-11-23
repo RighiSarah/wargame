@@ -403,7 +403,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					Position positions[] = new Position[9];
 					Position temp = new Position();
 					
-					int position_trouve = 0;
+					int nb_position_trouve = 0;
 					
 					/* On parcourt toutes les positions possibles autour du soldat */
 					for(int x = -1; x <= 1; x++)
@@ -419,15 +419,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							if (temp.estValide() && soldat[temp.getNumCase()] == null && 
 									tileset.getTile(carte[temp.getNumCase()]).estPraticable())
 							{
-								positions[position_trouve] = new Position(temp.getNumCase());
-								position_trouve++;
+								positions[nb_position_trouve] = new Position(temp.getNumCase());
+								nb_position_trouve++;
 							}
 						}
 					
 					/* Si on a trouvé des positions valides, on en choisit une au hasard */
-					if(position_trouve > 0)
+					if(nb_position_trouve > 0)
 					{
-						temp = positions[Aleatoire.nombreAleatoire(0, position_trouve - 1)];
+						temp = positions[Aleatoire.nombreAleatoire(0, nb_position_trouve - 1)];
 						soldat[m.getPosition().getNumCase()] = null;
 						soldat[temp.getNumCase()] = m;
 						deplaceSoldat(m, temp);
@@ -440,7 +440,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	   Thread t = new Thread() {
 	          public void run() {
 	      		for(int i = 0; i < monstre.length; i++)
-	    			while(monstre[i].getSeDeplace())
+	    			while(monstre[i].getSeDeplace() || Infobulle.aTermine() == false)
 	    			{
 	    				try {
 							Thread.currentThread();

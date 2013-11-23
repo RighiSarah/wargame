@@ -270,6 +270,25 @@ final class Infobulle extends Rectangle
 		g.setColor(ancienne_couleur);  
 	}
 	
+	
+	/**
+	 * Permet de savoir si on a finit d'afficher toute la file des messages
+	 * @return Vrai si la file est vide, faux sinon
+	 */
+	public static boolean aTermine(){
+		boolean fini = true;
+		
+		
+		
+		for(Message m : File){
+			if(m.timer != 0){
+				System.out.println("La valeur du timer : " + m.timer + " pour une file de " + File.size() + " éléments");
+				fini = false;
+			}
+		}
+		return fini;
+	}
+		
 	/** 
 	 * Fonction private permettant de trouver une chaine maximale dans un tableau
 	 * @param message Tableau de message 
