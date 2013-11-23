@@ -366,8 +366,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				Position pos = new Position(x, y);
 
 				if(pos.estValide()){
-					/* Si il y a un héros à la case indiquée */
-					if(soldat[pos.getNumCase()] != null && soldat[pos.getNumCase()] instanceof Heros){
+					/* Si il y a un héros à la case indiquée, qu'il est visible et pas mort */
+					if(soldat[pos.getNumCase()] != null && soldat[pos.getNumCase()] instanceof Heros 
+						&& soldat[pos.getNumCase()].estVisible() && soldat[pos.getNumCase()].estMort() == false){
 						return pos;
 					}
 				}

@@ -196,22 +196,27 @@ public abstract class Soldat extends Charset implements ISoldat
 	 */
 	public void combat(Soldat soldat, int distance)
 	{	
+		/* On joue le bruitage approprié */
 		if(distance > 1)
 			Son.joueArc();
 		else
 			Son.joueEpee();
 		
+		/* On calcule un dégat aléatoire, selon si on est côté à côté ou éloigné du soldat attaque */
 		int degat = (distance == 1) ? Aleatoire.nombreAleatoire(1, this.getPuissance()) : this.getTir();
 		int numCase = soldat.position.getNumCase();
 		
 		Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, 30);
 				
+		/* On met à jour la nouvelle vie du soldat attaqué */
 		int vie = soldat.getVie() - degat;
 		soldat.setVie(vie);
 
+		/* S'il lui reste encore de la vie */
 		if(vie > 0) {
+			/* Et si le soldat a une portée assez grande pour répliquer */
 			if(soldat.getPortee() >= distance) {
-
+				/* Alors une réplique est crée */
 				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
 				FenetreJeu.information.setText("Un " + soldat.nom + " vous frappe, vous perdez " + degat + " points de vie");
 				vie = this.getVie() - degat;
@@ -220,8 +225,11 @@ public abstract class Soldat extends Charset implements ISoldat
 				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, -1);
 				this.setVie(vie);
 				
+				/* Si la réplique est fatale, le soldat qui a attaqué meurt */
 				if(vie <= 0) {
+					Son.joueMourir();
 					this.setMort(true);
+					
 					if(soldat instanceof Heros)	
 						Carte.nbHerosRestantDec();
 					else 
