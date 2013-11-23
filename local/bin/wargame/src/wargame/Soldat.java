@@ -170,10 +170,10 @@ public abstract class Soldat extends Charset implements ISoldat
     	/* Mise à jour de l'animation. */
         if(estVisible) {
     		if(estMort){
-    			if(direction.augmenteDirection() == false){ // Si on a atteint la direction maximale
-    				System.out.println("coucou");
+    			System.out.println("J'augmente la direction de " + this.toString());
+    			/* Si on a atteint la direction maximale */
+    			if(direction.augmenteDirection() == false)
     				estVisible = false;
-    			}
     		}
     		if(seDeplace){
     			if(++animation >= N_ANIMATIONS)
@@ -339,7 +339,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * @return La chaine formatée comprenant les caractéristiques du soldat
 	 */
 	public String toString(){
-		String chaine = nom;
+		String chaine = nom + " " + getPosition().toString();
 		chaine += "\nVie: " + this.vie + " /" + this.vieMax;
 		chaine += "\nPuissance: " + this.puissance;
 		chaine += "\nTir: " + this.tir;

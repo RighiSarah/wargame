@@ -389,39 +389,45 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		{
 			Monstre m = monstre[i];
 					
-			if(m != null && m.estVisible())
+			if(m != null && !m.estMort() && m.estVisible())
 			{					
 				Position p;
-				
+				/* Repos */
 				if(m.getPourcentageVie() < 10)
 					m.repos(true);
+				/* Combat avec un héros aux alentours */
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null)
 					m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
+				/* Sinon déplacement */
 				else {							
 					Position positions[] = new Position[9];
 					Position temp = new Position();
 					
-					int l = 0;
+					int position_trouve = 0;
 					
-					for(int j = -1; j <= 1; j++)
-						for(int k = -1; k <= 1; k++)							
-						{
-							if(k != 0 || j != 0)
-							{							
-								temp.setNumCase(m.getPosition().getNumCase() + k + IConfig.LARGEUR_CARTE * j);
+					/* On parcourt toutes les positions possibles autour du soldat */
+					for(int x = -1; x <= 1; x++)
+						for(int y = -1; y <= 1; y++)							
+						{					
+							temp.x = m.getPosition().x + x;
+							temp.y = m.getPosition().y + y;
 							
-								if (temp.estValide() && soldat[temp.getNumCase()] == null && 
-										tileset.getTile(carte[temp.getNumCase()]).estPraticable())
-								{
-									positions[l] = new Position(temp.getNumCase());
-									l++;
-								}
+							/* Si la position est valide (dans la carte)
+							 * Et si il n'y a pas déjà de soldat sur cette position
+							 * Et si la case est praticable (pas d'arbre ou de rocher)
+							 * Le soldat ne pourra pas fais du surplace car soldat[temp.getNumCase()] ne renverra pas null */
+							if (temp.estValide() && soldat[temp.getNumCase()] == null && 
+									tileset.getTile(carte[temp.getNumCase()]).estPraticable())
+							{
+								positions[position_trouve] = new Position(temp.getNumCase());
+								position_trouve++;
 							}
 						}
 					
-					if(l > 0)
+					/* Si on a trouvé des positions valides, on en choisit une au hasard */
+					if(position_trouve > 0)
 					{
-						temp = positions[Aleatoire.nombreAleatoire(0, l - 1)];
+						temp = positions[Aleatoire.nombreAleatoire(0, position_trouve - 1)];
 						soldat[m.getPosition().getNumCase()] = null;
 						soldat[temp.getNumCase()] = m;
 						deplaceSoldat(m, temp);
@@ -436,7 +442,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	      		for(int i = 0; i < monstre.length; i++)
 	    			while(monstre[i].getSeDeplace())
 	    			{
-	    				System.out.println(i);
+	    				try {
+							Thread.currentThread();
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 	    			}
 	    		
 	    		tourJoueur = true;
