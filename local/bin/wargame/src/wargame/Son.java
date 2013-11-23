@@ -36,7 +36,8 @@ public final class Son {
 	private static AudioClip bruitArc = null;
 	private static AudioClip bruitEpee = null;
 	private static AudioClip bruitMarcher = null;
-	private static AudioClip bruitMort = null;
+	private static AudioClip bruitMortHeros = null;
+	private static AudioClip bruitMortMonstre = null;
 
 	/**
 	 * Constructeur permettant d'instancier l'objet qui manipulera le son d'arrière plan
@@ -215,18 +216,42 @@ public final class Son {
 	}
 	
 	/**
-	 * Méthode statique permettant de jouer le son d'un personnage qui meurt
+	 * Méthode statique permettant de jouer le son d'un héros qui meurt
 	 */
-	public static void joueMourir(){
-		if(bruitMort == null)
+	private static void joueMourirHeros(){
+		if(bruitMortHeros == null)
 			try {
-				bruitMort = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort.wav"));
+				bruitMortHeros = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort_heros.wav"));
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			}
 
-		bruitMort.play();
+		bruitMortHeros.play();
 	}
 	
+	/**
+	 * Méthode statique permettant de jouer le son d'un monstre qui meurt
+	 */
+	private static void joueMourirMonstre(){
+		if(bruitMortMonstre == null)
+			try {
+				bruitMortMonstre = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "bruitMortMonstre.wav"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		bruitMortMonstre.play();
+	}
+	
+	/**
+	 * Méthode permettant de jouer le son de la mort selon le soldat
+	 * @param s Soldat (monstre ou héros)
+	 */
+	public static void joueMourir(Soldat s){
+		if(s instanceof Heros)
+			Son.joueMourirHeros();
+		else
+			Son.joueMourirMonstre();
+	}
 	
 }

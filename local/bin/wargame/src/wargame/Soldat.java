@@ -230,24 +230,14 @@ public abstract class Soldat extends Charset implements ISoldat
 				
 				/* Si la réplique est fatale, le soldat qui a attaqué meurt */
 				if(vie <= 0) {
-					Son.joueMourir();
+					Son.joueMourir(this);
 					this.setMort(true);
 					valeur_retour = -1;
-					
-					if(soldat instanceof Heros)	
-						Carte.nbHerosRestantDec();
-					else 
-						Carte.nbMonstresRestantDec();
 				}				
 			}
 		}
 		else {
-			if(soldat instanceof Heros)	
-				Carte.nbHerosRestantDec();
-			else 
-				Carte.nbMonstresRestantDec();
-			
-			Son.joueMourir();
+			Son.joueMourir(soldat);
 			soldat.setMort(true);	
 			
 			if(valeur_retour == -1)

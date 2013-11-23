@@ -1,5 +1,6 @@
 package wargame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -143,7 +144,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& soldat[case_cliquee].estVisible() 
 						) {
 							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
-							nbToPlayDef();
+//							nbToPlayDef();
 							return;
 						}
 
@@ -398,7 +399,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					m.repos(true);
 				/* Combat avec un héros aux alentours */
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
-					faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition()));
+					/* Si faisCombattre retourne true, la partie est terminée donc on stoppe tout */
+					if(faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
+						return;
 				}
 				/* Sinon déplacement */
 				else {							
@@ -653,21 +656,46 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		soldat[i] = s;
 	}
 	
+	/**
+	 * Méthode permettant de savoir si la carte a été générée ou non
+	 * @return vrai si elle a été générée, faux sinon
+	 */
 	public boolean isGeneree(){
 		return this.generee;
 	}
 	
+	
 	public void joueurGagne(){
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
+		this.getGraphics().drawString("Vous avez perdu", IConfig.LARGEUR_CARTE / 2, IConfig.HAUTEUR_CARTE / 2);
 	}
 	
 	public void joueurPerd(){
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
+		Graphics g = this.getGraphics();
+		g.setColor(Color.BLACK);
+		
+		g.drawString("Vous avez gagné", IConfig.LARGEUR_CARTE / 2, IConfig.HAUTEUR_CARTE / 2);
+		repaint();
+		System.out.println("Vous avez perdu !");
 	}
 	
-	public void faisCombattre(Soldat attaquant, Soldat defenseur, int distance){
+	public void joueurEgalite(){
+		
+	}
+	
+	/**
+	 * Méthode permettant de faire combattre 2 soldats et vérifie ensuite si une armée a gagné
+	 * @param attaquant Le soldat qui attaque
+	 * @param defenseur Le soldat qui défend
+	 * @param distance La distance qui sépare les deux soldats
+	 * @return Vrai si une des deux armées a gagné, faux sinon
+	 */
+	public boolean faisCombattre(Soldat attaquant, Soldat defenseur, int distance){
+		boolean retour = false;
+		
 		int v = attaquant.combat(defenseur, distance);
 		
 		if(v == -1 || v == 2)
@@ -677,11 +705,19 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			nbHerosRestant--;
 		
 		if(nbMonstresRestant <= 0){
-			joueurGagne();
+			if(nbHerosRestant > 0)
+				joueurGagne();
+			else
+				joueurEgalite();
+			
+			retour = true;
 		}
 		else if(nbHerosRestant <= 0){
 			joueurPerd();
+			retour = true;
 		}
+		
+		return retour;
 	}
 }
 
