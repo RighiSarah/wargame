@@ -24,7 +24,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	private Position position;
 
 	/** Est mort ? */
-	private boolean estMort = false;
+	private boolean mort = false;
 	
 	/** En train de se deplacer. */
 	private boolean seDeplace = false;
@@ -97,19 +97,26 @@ public abstract class Soldat extends Charset implements ISoldat
 		return this.seDeplace;
 	}
 	
-	/** Mettre le statut du personnage à mort. */
-	public void setMort() {
-		this.estMort = true;
-		this.direction = Direction.HAUT;
-		this.animation = 0;
-	    this.timer.setDelay(350);
+	/** Mettre le statut du personnage à mort.
+	 * @param mort Vrai si le personnage est mort, faux sinon
+	 */
+	public void setMort(boolean mort) {
+		if(mort){
+			this.mort = true;
+			this.direction = Direction.HAUT;
+			this.animation = 0;
+		    this.timer.setDelay(350);
+		}
+		else{
+			this.mort = false;
+		}
 	}
 	
 	/** Teste si le personnage est mort. 
 	 * @return true si mort, false sinon.
 	 */
 	public boolean estMort() {
-		return estMort;
+		return mort;
 	}
 
 	/**
@@ -169,7 +176,7 @@ public abstract class Soldat extends Charset implements ISoldat
     	
     	/* Mise à jour de l'animation. */
         if(estVisible) {
-    		if(estMort){
+    		if(this.mort){
     			System.out.println("J'augmente la direction de " + this.toString());
     			/* Si on a atteint la direction maximale */
     			if(direction.augmenteDirection() == false)
@@ -214,7 +221,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				this.setVie(vie);
 				
 				if(vie <= 0) {
-					this.setMort();
+					this.setMort(true);
 					if(soldat instanceof Heros)	
 						Carte.nbHerosRestantDec();
 					else 
@@ -229,7 +236,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				Carte.nbMonstresRestantDec();
 			
 			Son.joueMourir();
-			soldat.setMort();	
+			soldat.setMort(true);	
 			
 		}
 		
