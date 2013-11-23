@@ -1,6 +1,7 @@
 package wargame;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -32,26 +33,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	protected static int nbMonstresRestant = IConfig.NB_MONSTRES;
 	protected static int nbToPlay = nbHerosRestant - 1; 
 	protected static int tour = 0;
-
-//	public int getNbHerosRestant() {
-//		return nbHerosRestant;
-//	}
-//
-//	public static int getNbMonstresRestant() {
-//		return nbMonstresRestant;
-//	}
-//
-//	public static void nbMonstresRestantDec() {
-//		nbMonstresRestant--;
-//	}
-//
-//	public static void nbHerosRestantDec() {
-//		Carte.nbHerosRestant--;
-//	}
-//
-//	public void nbToPlayDef() {
-//		Carte.nbToPlay--;
-//	}
+	
+	CarteListener carteListener;
+	
+	public void onStateRealized(CarteListener l)
+	{
+	 this.carteListener = l;
+	}
 
 	/** Tileset de la carte. */
 	private Tileset tileset;
@@ -456,6 +444,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	    		
 	    		tourJoueur = true;
 	    		FenetreJeu.activableFinTour(true);
+	    		
 	          }
 	        };
 	        t.start();
@@ -662,18 +651,36 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	public void joueurGagne(){
 		/* Le joueur ne peut plus jouer */
-		tourJoueur = false;
+		tourJoueur = false;	
 		
+		this.carteListener.gagne();
 	}
 	
 	public void joueurPerd(){
+		timer.stop();
+		this.carteListener.perd();
+		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		Graphics g = this.getGraphics();
-		g.setColor(Color.BLACK);
 		
-		g.drawString("Vous avez perdu", 100, 100);
-//		repaint();
+		g.setFont(new Font("calibri", Font.BOLD, 100));
+		
+		for(int i=0; i<256; i++){
+			Thread.currentThread();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			g.setColor(new Color(0, 0, 0, i));
+			g.drawString("Game Over", 100, 100);
+			repaint();
+		}
+			
+			
+		
 		System.out.println("Vous avez perdu !");
 	}
 	

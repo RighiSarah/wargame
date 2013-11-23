@@ -267,7 +267,7 @@ public class FenetreJeu extends JFrame
 	    
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
-        this.add(carte,BorderLayout.NORTH);
+        this.add(carte, BorderLayout.NORTH);
         
         /* Do Not Touch plz */
         
@@ -300,6 +300,20 @@ public class FenetreJeu extends JFrame
 	    this.pack();
 	    
 	    this.setVisible(true);
+	    
+	    /* Événements de carte */
+	    carte.onStateRealized(new CarteListener() {
+			
+			@Override
+			public void perd() {
+				sonArriere.jouePerdu();
+			}
+			
+			@Override
+			public void gagne() {
+				sonArriere.joueGagne();
+			}
+		});
 	    
 	    
 	}
