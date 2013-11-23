@@ -20,14 +20,18 @@ import javax.sound.midi.Sequencer;
  * Classe permettant de jouer des sons simples correspondant à différentes actions
  */
 public final class Son {
-	/* Pour charger un fichier midi */
+	/** Pour charger un fichier midi */
 	private Sequence sequence;
-	/* Pour charger un lecteur */
+	/** Pour charger un lecteur */
 	private Sequencer sequencer; 
-	/* Pour savoir si le son en arrière est stoppé ou non */
+	/** Pour savoir si le son en arrière est stoppé ou non */
 	private boolean sonArriereActive = false;
+	/** Pour jouer un wma quand il se passe un grand événement (partie perdue ou gagnée) */
+	private AudioClip musiqueEven = null;
+	
+	
 
-	/* Son du bruitage de pas. */
+	/* Différents sons de bruitage */
 	private static AudioClip bruitCourir = null;
 	private static AudioClip bruitArc = null;
 	private static AudioClip bruitEpee = null;
@@ -110,6 +114,19 @@ public final class Son {
 		} catch (InvalidMidiDataException | IOException e) {
 			e.printStackTrace();
 		}	
+	}
+	
+	
+	public void jouePerdu(){
+		/* Si la musique n'a pas été déjà chargé, alors on le charge */
+		if(musiqueEven == null)
+			try {
+				musiqueEven = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "perdre.wav"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		musiqueEven.play();
 	}
 	
 
