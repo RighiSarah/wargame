@@ -191,11 +191,14 @@ public abstract class Soldat extends Charset implements ISoldat
     
 	/**
 	 * Fonction permettant de crée un combat entre 2 soldats
-	 * @param soldat instance du soldat a attaquer
-	 * @param distance distance séparant soldat1 de soldat 2
+	 * @param soldat Instance du soldat à attaquer
+	 * @param distance Distance séparant soldat1 de soldat 2
+	 * @return -1 si le soldat qui attaque est mort, 1 si le soldat attaqué est mort, 2 si les deux soldats sont morts et 0 sinon
 	 */
-	public void combat(Soldat soldat, int distance)
+	public int combat(Soldat soldat, int distance)
 	{	
+		int valeur_retour = 0;
+		
 		/* On joue le bruitage approprié */
 		if(distance > 1)
 			Son.joueArc();
@@ -229,6 +232,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				if(vie <= 0) {
 					Son.joueMourir();
 					this.setMort(true);
+					valeur_retour = -1;
 					
 					if(soldat instanceof Heros)	
 						Carte.nbHerosRestantDec();
@@ -246,9 +250,16 @@ public abstract class Soldat extends Charset implements ISoldat
 			Son.joueMourir();
 			soldat.setMort(true);	
 			
+			if(valeur_retour == -1)
+				valeur_retour = 2;
+			else
+				valeur_retour = 1;
+			
 		}
 		
 		this.setAJoue(true);
+		
+		return(valeur_retour);
 	}
 	
 	/**

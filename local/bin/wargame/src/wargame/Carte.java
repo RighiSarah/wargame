@@ -142,7 +142,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& !soldat[caseActionnee].getAJoue() 
 							&& soldat[case_cliquee].estVisible() 
 						) {
-							soldat[caseActionnee].combat(soldat[case_cliquee], distance);
+							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
 							nbToPlayDef();
 							return;
 						}
@@ -397,8 +397,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				if(m.getPourcentageVie() < 10)
 					m.repos(true);
 				/* Combat avec un héros aux alentours */
-				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null)
-					m.combat(soldat[p.getNumCase()], p.distance(m.getPosition()));
+				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
+					faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition()));
+				}
 				/* Sinon déplacement */
 				else {							
 					Position positions[] = new Position[9];
@@ -654,6 +655,33 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	public boolean isGeneree(){
 		return this.generee;
+	}
+	
+	public void joueurGagne(){
+		/* Le joueur ne peut plus jouer */
+		tourJoueur = false;
+	}
+	
+	public void joueurPerd(){
+		/* Le joueur ne peut plus jouer */
+		tourJoueur = false;
+	}
+	
+	public void faisCombattre(Soldat attaquant, Soldat defenseur, int distance){
+		int v = attaquant.combat(defenseur, distance);
+		
+		if(v == -1 || v == 2)
+			nbMonstresRestant--;
+		
+		if(v == 1 || v == 2)
+			nbHerosRestant--;
+		
+		if(nbMonstresRestant <= 0){
+			joueurGagne();
+		}
+		else if(nbHerosRestant <= 0){
+			joueurPerd();
+		}
 	}
 }
 

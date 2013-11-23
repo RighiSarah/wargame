@@ -121,7 +121,7 @@ public interface ISoldat extends Serializable
 	int getPortee();
 	
 	void joueTour(int tour);
-	void combat(Soldat soldat,int distance);
+	int combat(Soldat soldat,int distance);
 	
 	public void setSeDeplace(boolean value);	
 }
