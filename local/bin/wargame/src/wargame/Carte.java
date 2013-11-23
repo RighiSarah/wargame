@@ -650,10 +650,31 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	
 	public void joueurGagne(){
-		/* Le joueur ne peut plus jouer */
-		tourJoueur = false;	
-		
+		timer.stop();
 		this.carteListener.gagne();
+		
+		/* Le joueur ne peut plus jouer */
+		tourJoueur = false;
+		Graphics g = this.getGraphics();
+		
+		g.setFont(new Font("calibri", Font.BOLD, 100));
+		
+		for(int i=0; i<256; i++){
+			Thread.currentThread();
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			g.setColor(new Color(0, 0, 0, i));
+			g.drawString("You win !", 100, 100);
+			repaint();
+		}
+			
+			
+		
+		System.out.println("Vous avez perdu !");
 	}
 	
 	public void joueurPerd(){

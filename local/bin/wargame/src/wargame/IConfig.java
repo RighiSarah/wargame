@@ -52,10 +52,10 @@ public interface IConfig
 	int POSITION_Y = 50;
 
 	/** Nombre de Héros. */
-	int NB_HEROS = 1; 
+	int NB_HEROS = 100; 
 	
 	/** Nombre de Monstres. */
-	int NB_MONSTRES = 60; 
+	int NB_MONSTRES = 1; 
 
 	/** Nombre d'obstacles. */
 	int NB_ROCHERS = 10;
