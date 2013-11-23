@@ -189,7 +189,11 @@ public abstract class Soldat extends Charset implements ISoldat
 	 */
 	public void combat(Soldat soldat, int distance)
 	{	
-		System.out.println(distance);
+		if(distance > 1)
+			Son.joueArc();
+		else
+			Son.joueEpee();
+		
 		int degat = (distance == 1) ? Aleatoire.nombreAleatoire(1, this.getPuissance()) : this.getTir();
 		int numCase = soldat.position.getNumCase();
 		
@@ -224,7 +228,9 @@ public abstract class Soldat extends Charset implements ISoldat
 			else 
 				Carte.nbMonstresRestantDec();
 			
+			Son.joueMourir();
 			soldat.setMort();	
+			
 		}
 		
 		this.setAJoue(true);

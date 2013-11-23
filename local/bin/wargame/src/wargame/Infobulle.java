@@ -277,12 +277,10 @@ final class Infobulle extends Rectangle
 	 */
 	public static boolean aTermine(){
 		boolean fini = true;
-		
-		
-		
+
 		for(Message m : File){
 			if(m.timer != 0){
-				System.out.println("La valeur du timer : " + m.timer + " pour une file de " + File.size() + " éléments");
+//				System.out.println("La valeur du timer : " + m.timer + " pour une file de " + File.size() + " éléments");
 				fini = false;
 			}
 		}

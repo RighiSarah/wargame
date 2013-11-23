@@ -32,6 +32,7 @@ public final class Son {
 	private static AudioClip bruitArc = null;
 	private static AudioClip bruitEpee = null;
 	private static AudioClip bruitMarcher = null;
+	private static AudioClip bruitMort = null;
 
 	/**
 	 * Constructeur permettant d'instancier l'objet qui manipulera le son d'arrière plan
@@ -167,6 +168,20 @@ public final class Son {
 			}
 
 		bruitMarcher.play();
+	}
+	
+	/**
+	 * Méthode statique permettant de jouer le son d'un personnage qui meurt
+	 */
+	public static void joueMourir(){
+		if(bruitMort == null)
+			try {
+				bruitMort = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort.wav"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+
+		bruitMort.play();
 	}
 	
 	
