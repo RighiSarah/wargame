@@ -101,6 +101,11 @@ public final class Son {
 	 * Méthode permettant de charger un son arrière aléatoire parmi les musiques du dossier
 	 */
 	public void chargeSonArriere(){
+		if(musiqueEven != null){
+			musiqueEven.stop();
+			musiqueEven = null;
+		}
+		
 		int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
 		try {
 			/* On charge une autre séquence */
@@ -116,18 +121,40 @@ public final class Son {
 		}	
 	}
 	
-	
+	/** Méthode permettant de jouer un son adapté lorsque le joueur perd le jeu */
 	public void jouePerdu(){
-		/* Si la musique n'a pas été déjà chargé, alors on le charge */
-		if(musiqueEven == null)
-			try {
-				musiqueEven = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "perdre.wav"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+		stopSonArriere();
+		if(musiqueEven != null)
+			musiqueEven.stop();
+		
+		try {
+			musiqueEven = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "perdre.wav"));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 
 		musiqueEven.play();
 	}
+	
+	/** Méthode permettant de jouer un son adapté lorsque le joueur gagne le jeu */
+	public void joueGagne(){
+		stopSonArriere();
+		if(musiqueEven != null)
+			musiqueEven.stop();
+		
+		try {
+			musiqueEven = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "gagner.wav"));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+		musiqueEven.play();
+	}
+	
+	
+	
+	
+	/* ############################# MÉTHODES STATIQUES ############################# */
 	
 
 	/**
