@@ -199,7 +199,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
-				if(soldat[i] instanceof Heros && !soldat[i].getAJoue() ) {
+				if(soldat[i] instanceof Heros && !soldat[i].getAJoue() && soldat[i].estVisible && soldat[i].estMort() == false ) {
 					soldat[i].repos(false);
 				}
 				soldat[i].setAJoue(false);	

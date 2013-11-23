@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+
 /**
  * Classe représenant un monstre
  */
@@ -13,23 +14,26 @@ public class Monstre extends Soldat
 {	
 	private static final long serialVersionUID = -2866246699288761404L;
 	
+	/** Permet de connaitre le type du héros */
+	private TypesM typeMonstre;
+	
 	/** Images des Monstres. */
-	static protected BufferedImage gobelin, orc;
+	static protected BufferedImage imageGobelin, imageOrc;
 
 	/** Change l'image du monstre selon son type */
 	protected void setImage() throws IOException
 	{
-		switch(nom)
+		switch(typeMonstre)
 		{
-			case "gobelin":				
-				if(gobelin == null) 
-					gobelin = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.GOBELIN));
-				image = gobelin;
+			case GOBELIN:				
+				if(imageGobelin == null) 
+					imageGobelin = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_GOBELIN));
+				image = imageGobelin;
 				break;
-			case "orc":				
-				if(orc == null) 
-					orc = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ORC));
-				image = orc;
+			case ORC:				
+				if(imageOrc == null) 
+					imageOrc = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_ORC));
+				image = imageOrc;
 				break;
 				
 			default: break;
@@ -50,6 +54,7 @@ public class Monstre extends Soldat
 		this.puissance = type_monstre.getPuissance();
 		this.tir = type_monstre.getTir();
 		this.nom = type_monstre.getNom();
+		this.typeMonstre = type_monstre;
 		
 		setImage();
 	}

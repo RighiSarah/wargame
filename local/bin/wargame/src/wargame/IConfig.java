@@ -32,10 +32,10 @@ public interface IConfig
 	String NOM_FENETRE = "The JAVA War";
 	
 	/** Liste des images des soldats. */
-	String ARCHER  = "archer.png";
-	String ELFE    = "elfe.png";
-	String GOBELIN = "gobelin.png";
-	String ORC     = "orc.png";
+	String IMAGE_HUMAIN  = "archer.png";
+	String IMAGE_ELFE    = "elfe.png";
+	String IMAGE_GOBELIN = "gobelin.png";
+	String IMAGE_ORC     = "orc.png";
 
 	/** Taille de la carte. */
 	int LARGEUR_CARTE = 25; 
@@ -52,10 +52,10 @@ public interface IConfig
 	int POSITION_Y = 50;
 
 	/** Nombre de Héros. */
-	int NB_HEROS = 20; 
+	int NB_HEROS = 10; 
 	
 	/** Nombre de Monstres. */
-	int NB_MONSTRES = 35; 
+	int NB_MONSTRES = 15; 
 
 	/** Nombre d'obstacles. */
 	int NB_ROCHERS = 10;

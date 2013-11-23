@@ -14,25 +14,28 @@ public class Heros extends Soldat
 {	
 	private static final long serialVersionUID = -3793338387029787601L;
 	
-	/* Images des Héros. */
-	static protected BufferedImage archer, elfe;
+	/** Permet de connaitre le type du héros */
+	private TypesH typeHeros;
+	
+	/** Images des Héros. */
+	static protected BufferedImage imageHumain, imageElfe;
 	
 	/** Change l'image du héros selon son type */
 	protected void setImage() throws IOException
 	{
-		switch(nom)
+		switch(typeHeros)
 		{
-			case "archer":				
-				if(archer == null) 
-					archer = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ARCHER));
+			case HUMAIN:				
+				if(imageHumain == null) 
+					imageHumain = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_HUMAIN));
 				
-				image = archer;
+				image = imageHumain;
 				break;
-			case "elfe":				
-				if(elfe == null) 
-					elfe = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.ELFE));
+			case ELFE:				
+				if(imageElfe == null) 
+					imageElfe = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_ELFE));
 				
-				image = elfe;
+				image = imageElfe;
 				break;
 				
 			default: break;
@@ -53,6 +56,7 @@ public class Heros extends Soldat
 		puissance = type_heros.getPuissance();
 		tir = type_heros.getTir();
 		nom = type_heros.getNom();
+		typeHeros = type_heros;
 		
 		setImage();
 	}
