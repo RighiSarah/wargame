@@ -34,12 +34,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	protected static int nbToPlay = nbHerosRestant - 1; 
 	protected static int tour = 0;
 	
-	CarteListener carteListener;
+	private CarteListener carteListener;
 	
-	public void onStateRealized(CarteListener l)
-	{
-	 this.carteListener = l;
-	}
+	
 
 	/** Tileset de la carte. */
 	private Tileset tileset;
@@ -131,7 +128,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& soldat[case_cliquee].estVisible() 
 						) {
 							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
-//							nbToPlayDef();
 							return;
 						}
 
@@ -174,6 +170,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Méthode permettant d'associer un listener
+	 * @param l Le listener
+	 */
+	public void onStateRealized(CarteListener l)
+	{
+	 this.carteListener = l;
 	}
 
 	/** 
