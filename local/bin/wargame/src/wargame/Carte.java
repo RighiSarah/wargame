@@ -3,14 +3,11 @@ package wargame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.font.TextLayout;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -785,8 +782,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		
-		String s = new String("Game Over");
-		
 		FenetreJeu.information.setText("Vous avez perdu ! ");
 		Graphics g = this.getGraphics();
 		
@@ -801,10 +796,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				e.printStackTrace();
 			}
 			g.setColor(new Color(0, 0, 0, i));
-			TextLayout textTl = new TextLayout(s, g.getFont(), ((Graphics2D) g).getFontRenderContext());
-			Shape outline = textTl.getOutline(null);
-			((Graphics2D) g).draw(outline);
-			//g.drawString(outline, 100, 100);
+
+			g.drawString("Game Over", 100, 100);
 
 			repaint();
 		}
@@ -832,29 +825,29 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		int v = attaquant.combat(defenseur, distance);
 		
 		if(attaquant instanceof Monstre){
-			if(v == -1 || v == 2)
+			if(v == -1 /* || v == 2 */)
 				nbMonstresRestant--;	
 
-			if(v == 1 || v == 2) {
+			if(v == 1  /* || v == 2 */) {
 				nbHerosRestant--;
 				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
 			}
 		}
 		else{
-			if(v == -1 || v == 2) {
+			if(v == -1  /* || v == 2 */) {
 				nbHerosRestant--;
 				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
 			}
 			
-			if(v == 1 || v == 2)
+			if(v == 1  /* || v == 2 */)
 				nbMonstresRestant--;
 		}
 		
 		if(nbMonstresRestant <= 0){
-			if(nbHerosRestant > 0)
-				joueurGagne();
-			else
-				joueurEgalite();
+			//if(nbHerosRestant > 0)
+				joueurGagne(); // La MORT DES 2 EN MEME TEMPS N'EST PAS POSSIBLE !
+			//else
+			//	joueurEgalite();
 			
 			retour = true;
 		}
