@@ -309,20 +309,6 @@ public abstract class Soldat extends Charset implements ISoldat
 		
 	}
 
-	/** 
-	 * Dessine un rectangle de hauteur IConfig.NB_PIX_CASE de la couleur c indiquée
-	 * @param g Graphics dans lequel on va dessiner le rectangle
-	 * @param x Point de départ x du rectangle
-	 * @param y Point de départ y du rectangle
-	 * @param c Couleur du rectangle a dessiner
-	 */
-	
-	protected void dessineRectangle(Graphics g, int x, int y, Color c) 
-	{
-		g.setColor(c);
-		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
-	}
-	
 	/** Dessine la barre de vie du Héros.
 	 * @param g : Zone de dessin. 
 	 * @param x : Coordonnée X du personnage.

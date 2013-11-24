@@ -591,7 +591,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			int dy = coord.y;
 
 			if(soldat[caseActionnee].getAJoue())
-				soldat[caseActionnee].dessineRectangle(g, dx, dy, IConfig.SOLDAT_UTILISE);
+				dessineRectangle(g, dx, dy, IConfig.SOLDAT_UTILISE);
 			else {
 				for(int i = -1; i <= 1; i++) {
 					for(int j = -1; j <= 1; j++) {
@@ -600,11 +600,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 
 						if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
-							soldat[caseActionnee].dessineRectangle(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
+							dessineRectangle(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
 					}
 				}
 
-				soldat[caseActionnee].dessineRectangle(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
+				dessineRectangle(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
 			}
 		}
 
@@ -641,6 +641,21 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	{	
 		repaint();
 	}
+
+	/** 
+	 * Dessine un rectangle de hauteur IConfig.NB_PIX_CASE de la couleur c indiquée
+	 * @param g Graphics dans lequel on va dessiner le rectangle
+	 * @param x Point de départ x du rectangle
+	 * @param y Point de départ y du rectangle
+	 * @param c Couleur du rectangle a dessiner
+	 */
+	
+	protected void dessineRectangle(Graphics g, int x, int y, Color c) 
+	{
+		g.setColor(c);
+		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
+	}
+	
 
 	public void setSoldat(int i, Soldat s) {
 		soldat[i] = s;
