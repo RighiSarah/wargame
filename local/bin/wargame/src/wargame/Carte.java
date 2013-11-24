@@ -571,6 +571,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			oos.writeObject(monstre);
 			oos.writeObject(heros);
 			oos.writeObject(soldat);
+			oos.writeObject(brouillard);
 
 			oos.flush();
 			oos.close();
@@ -599,6 +600,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			monstre = (Monstre[])ois.readObject();
 			heros   = (Heros[])ois.readObject();
 			soldat  = (Soldat[])ois.readObject();
+			brouillard = (char[])ois.readObject();
 
 			/* Les images ne sont pas sérializées... */
 			for(int i = 0; i < IConfig.NB_HEROS; i++)

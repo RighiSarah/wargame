@@ -277,7 +277,7 @@ final class Infobulle extends Rectangle
 	 */
 	public static boolean aTermine(){
 		boolean fini = true;
-		if(File.size() <= 0)
+		if(File.size() == 0)
 			return fini;
 		
 		for(Message m : File){
