@@ -218,7 +218,15 @@ public class FenetreJeu extends JFrame
 	    brouillard.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-					;
+					if(carte.getBrouillardActive()) {
+						carte.setBrouillardActive(false);
+						brouillard.setText("Activer le brouillard");
+					}
+					else {
+						carte.setBrouillardActive(true);
+						brouillard.setText("Désactiver le brouillard");
+					}
+						
 			}
 		});
 

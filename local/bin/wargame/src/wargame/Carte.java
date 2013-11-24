@@ -41,7 +41,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/** Brouillard. */
 	protected char []brouillard;
-	private boolean brouillardActive = false;
+	private boolean brouillardActive = true;
 	
 	/** Carte. */
 	protected char []carte;
@@ -730,7 +730,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	protected void dessinerBrouillard(Graphics g, char[] brouillard) {
 		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++) {
-			if(brouillard[i] == 0) {
+			if(brouillard[i] == 0 && brouillardActive) {
 				Position coord = new Position(i);
 				dessineRectangle(g, coord.x, coord.y, IConfig.COULEUR_BROUILLARD);
 			}
