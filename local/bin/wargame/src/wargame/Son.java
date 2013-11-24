@@ -74,7 +74,7 @@ public final class Son {
 	
 	/**
 	 * Méthode permettant de jouer le son en arrière plan
-	 * @throws MidiUnavailableException
+	 * @throws MidiUnavailableException Exception permettnat de vérifier qu'il n'y a pas d'erreur à la lecture du son midi
 	 */
 	public void joueSonArriere() throws MidiUnavailableException{   
 	    sequencer.start();
