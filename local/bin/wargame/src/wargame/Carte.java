@@ -41,6 +41,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Tileset de la carte. */
 	private Tileset tileset;
 
+	/** Brouillard. */
+	protected char []brouillard;
+	
 	/** Carte. */
 	protected char []carte;
 
@@ -88,6 +91,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
 
+		/* Création du brouillard */
+		brouillard = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];
+		
 		/* Image de présentation, avant donc que la carte ne soit générée */
 		imagePresentation = new JLabel( new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
 		this.add(imagePresentation);
@@ -128,6 +134,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& soldat[case_cliquee].estVisible() 
 						) {
 							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
+							
+							/* Si le héros meurt oau cours du combat on supprime le brouillard */
+							if(soldat[caseActionnee].estMort())
+								changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
+
 							return;
 						}
 
@@ -141,11 +152,23 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						) {
 							FenetreJeu.information.setText(soldat[caseActionnee].nom + " se deplace en " + caseActionnee );
 
+							/* On supprime le brouillard du perso */
+							changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
+
+							
 							soldat[case_cliquee] = soldat[caseActionnee];
 							soldat[caseActionnee] = null;
 
 							/* On déplace le soldat à la nouvelle position */
 							deplaceSoldat(soldat[case_cliquee], new Position(case_cliquee));
+							
+							/* on recré le brouillard associé au perso */
+							
+							/* Petit cheat sur new Position(case_cliquee) ;
+							 * étant donné que le mouvement n'est pas encore finis , 
+							 * la position n'est pas mis a jours, cependant ont sait qu'il sera a la position case_cliquee
+							 */
+							changeBrouillard(new Position(case_cliquee), soldat[case_cliquee].getPortee() , 1);
 						}
 					}
 					/* Fin deplacement on re-initialise la case */
@@ -303,6 +326,44 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}
 	}
 
+	/**
+	 *  Méthode générant et initialisant le brouillard 
+	 */
+	private void genererBrouillard() {
+
+		/*initialisation du brouillard [ toutes les cases sont a 0 */
+		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++)
+			brouillard[i] = 0;
+		
+		/* Ensuite pour chaque héros [ présent dans le tableau héros on crée le brouillard associé */
+		for(int i = 0; i < IConfig.NB_HEROS; i++) 
+			if(heros[i].estVisible()) /* seulement si il est visible */
+				changeBrouillard(heros[i].getPosition(), heros[i].getPortee(), 1);
+
+	}
+	
+	/** Méthode permetant de crée ( ou retirer ) le brouillard autour d'un soldat
+	 * 
+	 * @param numCase Position du soldat
+	 * @param distance Distance a laquel le soldat peut voir
+	 * @param inc Ici plusieurs cas :
+	 * 					- Si inc = 1, alors on crée du brouillard
+	 * 					- sinon si inc = -1, on retire du brouillard
+	 */
+	private void changeBrouillard(Position pos, int distance, int inc) {
+		int i = 0;
+		int j = 0;
+		
+		Position tmp = null;
+		brouillard[pos.getNumCase()] += inc;
+		for(j = distance; j >= - distance ; j--) 
+			for(i = distance ; i >= -distance ; i--) {
+				tmp = new Position(pos.x + i ,pos.y + j);
+				if(tmp.estValide())
+					brouillard[tmp.getNumCase()] += inc;
+			}
+		
+	}
 	/** Déplace un soldat sur la carte.
 	 * @param soldat    Soldat à deplacer.
 	 * @param direction Direction du soldat.
@@ -392,6 +453,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
 					/* Si faisCombattre retourne true, la partie est terminée donc on stoppe tout */
 					if(faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
+						/* Si le héros meurs au cours du combat , on supprime le brouillard qui lui était associé */
+						if(soldat[caseActionnee].estMort())
+							changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
+
 						return;
 				}
 				/* Sinon déplacement */
@@ -465,6 +530,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		tourJoueur = true;
 		genererCarte();
 		genererSoldats();
+		genererBrouillard();
 		caseActionnee = -1;	
 
 		if(imagePresentation != null){
@@ -625,6 +691,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				soldat[i].dessineVie(g, pos.x, pos.y);
 			}
 
+		/* Affichage du brouillard, que l'on affiche avant l'infobulle */
+		dessinerBrouillard(g, brouillard);
+		
 		/* Affichage de l'infobulle si un soldat est pointé */
 		if(soldatPointe != null ){ 
 			Position pos = soldatPointe.getPosition();
@@ -649,13 +718,25 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @param y Point de départ y du rectangle
 	 * @param c Couleur du rectangle a dessiner
 	 */
-	
 	protected void dessineRectangle(Graphics g, int x, int y, Color c) 
 	{
 		g.setColor(c);
 		g.fillRect(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE, IConfig.NB_PIX_CASE);
 	}
 	
+	/** 
+	 * Méthode dessinant le brouillard 
+	 * @param g Graphics ou sera dessiner le brouillard
+	 * @param brouillard tableau de char contenant le brouillard 
+	 */
+	protected void dessinerBrouillard(Graphics g, char[] brouillard) {
+		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++) {
+			if(brouillard[i] == 0) {
+				Position coord = new Position(i);
+				dessineRectangle(g, coord.x, coord.y, IConfig.COULEUR_BROUILLARD);
+			}
+		}
+	}
 
 	public void setSoldat(int i, Soldat s) {
 		soldat[i] = s;

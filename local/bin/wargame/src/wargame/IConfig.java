@@ -104,7 +104,8 @@ public interface IConfig
 	int ATTENDRE_MONSTRE_REPOS = 1000;
 	int ATTENDRE_MONSTRE_COMBAT = 1000;
 	
-	
+	/** Couleur du brouillard */
+	Color COULEUR_BROUILLARD = new Color(50, 50, 50, 245);
  
     
 }
