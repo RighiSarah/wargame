@@ -454,12 +454,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* Combat avec un héros aux alentours */
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
 					/* Si faisCombattre retourne true, la partie est terminée donc on stoppe tout */
-					if(!faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition()))) {
+					if(faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
 						/* Si le héros meurs au cours du combat , on supprime le brouillard qui lui était associé */
-						if(soldat[caseActionnee].estMort())
-							changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
-					}
-					else return;
+						if(soldat[p.getNumCase()].estMort())
+							changeBrouillard(soldat[p.getNumCase()].getPosition(), soldat[p.getNumCase()].getPortee() , -1);
+						return;
 				}
 				/* Sinon déplacement */
 				else {							
