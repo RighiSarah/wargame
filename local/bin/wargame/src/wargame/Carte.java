@@ -41,6 +41,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/** Brouillard. */
 	protected char []brouillard;
+	private boolean brouillardActive = false;
 	
 	/** Carte. */
 	protected char []carte;
@@ -854,5 +855,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		return retour;
 	}
+	
+	public boolean getBrouillardActive() {
+		return brouillardActive;
+	}
+	
+	
+	public void setBrouillardActive(boolean active) {
+		brouillardActive = active;
+	}
+	
 }
 

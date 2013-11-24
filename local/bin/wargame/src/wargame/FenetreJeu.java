@@ -46,6 +46,7 @@ public class FenetreJeu extends JFrame
 	private JMenu sauvegarder;
 	private JMenu charger;
 	private JMenu config;
+	
 	private static JButton finTour;
 
 	/* Options des menus. */
@@ -64,6 +65,9 @@ public class FenetreJeu extends JFrame
 
 	/** activer / désactiver son */
 	private JMenuItem son;
+	
+	/** activer / désactiver le brouillard */
+	private JMenuItem brouillard;
 	
 	/** Carte du jeu. */
     Carte carte;
@@ -107,6 +111,7 @@ public class FenetreJeu extends JFrame
 		quitter = new JMenuItem("Quitter");
 		
 		son = new JMenuItem("Désactiver Son");
+		brouillard = new JMenuItem("Désactiver brouillard");
 		
 		sauvegarde = new JMenuItem[IConfig.NB_SAUVEGARDES];
 		slot = new JMenuItem[IConfig.NB_SAUVEGARDES];
@@ -149,6 +154,7 @@ public class FenetreJeu extends JFrame
 	    }
 	    
 	    config.add(son);
+	    config.add(brouillard);
 	    
 	    /* Ajout des menus dans la barre de menus. */
 	    menu.add(jeu);
@@ -206,8 +212,17 @@ public class FenetreJeu extends JFrame
 				}
 			}
 		});
-	   
+	    
 	    son.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
+	   
+	    brouillard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+					;
+			}
+		});
+
+	    brouillard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.CTRL_MASK));
 	    
 	    /* Sauvegarder */
 	    sauvegarder.addMenuListener(new MenuListener() {
