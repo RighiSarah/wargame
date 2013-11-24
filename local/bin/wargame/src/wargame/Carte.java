@@ -3,11 +3,14 @@ package wargame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.TextLayout;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -451,12 +454,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* Combat avec un héros aux alentours */
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
 					/* Si faisCombattre retourne true, la partie est terminée donc on stoppe tout */
-					if(faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
+					if(!faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition()))) {
 						/* Si le héros meurs au cours du combat , on supprime le brouillard qui lui était associé */
 						if(soldat[caseActionnee].estMort())
 							changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
-
-						return;
+					}
+					else return;
 				}
 				/* Sinon déplacement */
 				else {							
@@ -786,8 +789,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		
-		FenetreJeu.information.setText("Vous avez perdu ! ");
+		String s = new String("Game Over");
 		
+		FenetreJeu.information.setText("Vous avez perdu ! ");
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));
@@ -801,7 +805,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				e.printStackTrace();
 			}
 			g.setColor(new Color(0, 0, 0, i));
-			g.drawString("Game Over", 100, 100);
+			TextLayout textTl = new TextLayout(s, g.getFont(), ((Graphics2D) g).getFontRenderContext());
+			Shape outline = textTl.getOutline(null);
+			((Graphics2D) g).draw(outline);
+			//g.drawString(outline, 100, 100);
+
 			repaint();
 		}
 
