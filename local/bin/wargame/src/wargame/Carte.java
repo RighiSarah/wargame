@@ -566,7 +566,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		try {
 			FileOutputStream fichier = new FileOutputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fichier);
-
+			oos.write(nbHerosRestant);
+			oos.write(nbMonstresRestant);
 			oos.writeObject(carte);
 			oos.writeObject(monstre);
 			oos.writeObject(heros);
@@ -596,6 +597,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			FileInputStream fichier = new FileInputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectInputStream ois = new ObjectInputStream(fichier);
 
+			nbHerosRestant = (int)ois.read();
+			nbMonstresRestant = (int)ois.read();
 			carte   = (char[])ois.readObject();
 			monstre = (Monstre[])ois.readObject();
 			heros   = (Heros[])ois.readObject();
@@ -614,7 +617,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				monstre[i].setImage();
 				monstre[i].setDirection(Direction.DROITE);
 			}
-
 			chargerTileset(); // Charge uniquement si tileset null.
 			generee = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
 

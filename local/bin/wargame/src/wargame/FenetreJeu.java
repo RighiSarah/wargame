@@ -253,6 +253,7 @@ public class FenetreJeu extends JFrame
 	    charger.addMenuListener(new MenuListener() {
 			public void menuSelected(MenuEvent e) 
 			{
+				finTour.setPreferredSize(new Dimension(150,10));
 				/*int[] key =
 					{KeyEvent.VK_0, KeyEvent.VK_1,
 					 KeyEvent.VK_2, KeyEvent.VK_3,
