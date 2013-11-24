@@ -755,6 +755,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
+		
+		FenetreJeu.information.setText("Vous avez gagné ! ");
+
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));
@@ -771,10 +774,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			g.drawString("You win !", 100, 100);
 			repaint();
 		}
-			
-			
-		
-		System.out.println("Vous avez perdu !");
+	
+		System.out.println("Vous avez gagné !");
 	}
 	
 	public void joueurPerd(){
@@ -783,6 +784,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
+		
+		FenetreJeu.information.setText("Vous avez perdu ! ");
+		
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));
@@ -799,9 +803,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			g.drawString("Game Over", 100, 100);
 			repaint();
 		}
-			
-			
-		
+
 		System.out.println("Vous avez perdu !");
 	}
 	
