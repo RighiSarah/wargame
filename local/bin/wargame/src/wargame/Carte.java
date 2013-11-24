@@ -566,6 +566,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		try {
 			FileOutputStream fichier = new FileOutputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fichier);
+			
+			oos.write(tour);
 			oos.write(nbHerosRestant);
 			oos.write(nbMonstresRestant);
 			oos.writeObject(carte);
@@ -597,6 +599,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			FileInputStream fichier = new FileInputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectInputStream ois = new ObjectInputStream(fichier);
 
+			tour = (int)ois.read();
 			nbHerosRestant = (int)ois.read();
 			nbMonstresRestant = (int)ois.read();
 			carte   = (char[])ois.readObject();
