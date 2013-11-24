@@ -20,8 +20,89 @@
 
 
 \section{Introduction}
+Le but du projet est de créer un jeu en interface graphique reprenant le thème du Seigneur des Anneaux. 
+Le plateau de jeu est découpé en cases, et chaque case peut être occupé par un soldat. 
+Ce soldat appartient soit à l'armée des Monstres (les méchants), soit à l'armée des Héros (les gentils).
+Le but étant de détruire completement tous les soldats de l'armée des monstres. Dans le cas contraire, le joueur a perdu.
+Nous allons détailler la façon dont s'est déroulé le projet au sein de ce rapport.
+Dans un premier temps nous ferons l'analyse du projet avec un schéma des différentes classes et interfaces crées.
+Dans un deuxième temps, nous décrirons les techniques du langage orienté objet qu'est Java mis en oeuvre dans le projet.
+Nous continuerons alors en faisant une synthèse du résultat global du projet, en décrivant les différentes fonctionnalités implémentées.
+Nous expliquerons ensuite comment le projet s'est déroulé et comment nous nous sommes organisé (au niveau du temps et du projet en général).
+Puis nous citerons nos différentes sources (images et sons notament) ainsi que les différentes documentations utilisées.
+Enfin, nous terminerons par une conclusion qui fera un bilan du projet en général. 
+Chaque membre du groupe en profitera pour donner son avis sur la programmation orienté objet.
+
+
 \section{Analyse du projet}
+En étudiant de plus près le sujet, plusieurs classes décrivant plusieurs éléments du projet étaient évidentes (car aussi donnés par le sujet) :
+\begin{itemize}
+  \item Pour les interfaces : 
+        \begin{itemize}
+         \item IConfig représentant la configuration du jeu (nombre de soldats, taille de la carte...)
+         \item ICarte qui donne la signature des méthodes que Carte doit implémenter
+         \item ISoldat, qui de même que pour ICarte doit donner la signature des méthodes que Soldat doit implémenter
+         \item CarteListener qui représente les évènements de Carte
+        \end{itemize}
+  \item Pour les classe abstraites :
+	\begin{itemize}
+	 \item Soldat qui représente les methodes et attributs communes aux monstres et aux héros
+	\end{itemize}
+  \item Pour les classes concrètes :
+	\begin{itemize}
+	 \item Aléatoire qui nous donnera des méthodes statiques pour générer des nombres aléatoires entre deux bornes
+	 \item Carte qui représente la carte du jeu avec les actions associées
+	 \item Heros et Monstre qui comprennent les méthodes spécifiques à ces deux types d'objet
+	 \item Position permettant de connaitre les positions des soldats sur la carte
+	\end{itemize}
+\end{itemize}
+
+Nous avons ensuite convenu de faire une interface graphique plus poussée que celle demandée dans le sujet à l'aide d'images animées.
+Pour ce faire, il nous fallait créer plusieurs classe : % Merci Ronan de continuer 
+
+Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant et animé. Il nous fallait donc créer une classe Son.
+
+% Schema des classes !!!
+
 \section{Techniques}
+\paragraph{Environnement de travail :}
+~\\
+Nous codons sous le système d'exploitation GNU/Linux avec la version 7 d'OpenJDK.
+Nous avons décidé de coder sous Eclipse car c'est l'IDE dont nous avons appris à nous servir en TP. De plus (quand on oublie ses nombreux crash, si on parvient à l'installer et si on a le temps suffisant pour l'exécuter), il fait bien son travail.
+Concernant le partage des sources, nous avions déjà expérimenté l'outil de versionnage Git couplé à GitHub et cela avait très bien fonctionné. 
+Nous avons donc décidé de réutiliser cette méthode malgré la menace qu'un autre groupe puisse nous plagier. Mais bon, il fallait d'abord qu'ils sachent que nous faisions notre projet sous GitHub, puis trouver nos pseudo. 
+De plus, avec l'historique des commit nous pouvions faire preuve de notre bonne fois.
+
+
+\paragraph{Classes Java utilisées}
+  \subparagraph{Classes graphiques :} Nous avons décidé d'utiliser Swing comme classes graphiques. % Merci Ronan de continuer
+  
+  \subparagraph{Classes pour gérer le son :} Pour gérer le son, nous avons dûr plus ou moins ruser. 
+  En effet, dans les classes de base de Java permettant de gérer les son, rien ne permettait de jouer du mp3. 
+  Nous devions convertir les musiques trouvées en wav. Hors, le format contenu par wav n'est pas compressé. 
+  Les musique de fond faisaient plus de 50 Mo. Ce n'était donc pas envisageable. 
+  Nous nous sommes alors tourné vers le format midi très léger. Il nous a donc fallu utiliser la classe Sequencer pour pouvoir jouer ce type de morceau.
+  De plus, le format midi se faisant rare, pour les bruitages nous avons décidé d'utiliser du wav (car séquences très courtes, le poids était négligeable).
+  Il nous a donc aussi fallu utiliser la classe principale AudioClip.
+
+\paragraph{Héritage :}  
+Nous avons décidé de faire hériter Monstre et Heros de Soldat car c'est objets sont des soldats ; ils implémentaient beaucoup de méthodes et attributs communes. 
+
+\paragraph{Polymorphisme :}
+Soldat implémente les principales méthodes de Monstre et Heros. 
+Les objets soldats instanciés sont issus de l'une ou l'autre classe.
+De plus, un objet Carte possède quelques méthodes prenant en paramètre un Soldat. 
+Nous passons en paramètre de ce genre de méthode un Soldat rangé à la ième case d'un tableau de Soldat. 
+Hors, nous plaçons dans ce tableau non pas des Soldats mais soit des Heros soit des Monstres.
+
+\paragraph{Exceptions}
+Nous avons placé plusieurs gestions d'exceptions dans notre projet.
+Ainsi, nous vérifions que chaque image d'un type de Heros ou de Monstre est bien chargée. 
+La classe Son implémente aussi quelques gestions d'exceptions. 
+En effet, nous vérifions qu'un son midi est bien trouvé, que celui-ci est bien chargé et qu'il n'y a pas d'erreur lorsqu'on le joue.
+De même, pour les sons wav nous vérifions à l'aide des exceptions que le son est chargé correctement.
+
+
 \section{Synthèse}
 \section{Organisation}
 \section{Ressources}
