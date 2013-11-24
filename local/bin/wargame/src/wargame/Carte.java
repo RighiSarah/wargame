@@ -36,8 +36,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	private CarteListener carteListener;
 	
-	
-
 	/** Tileset de la carte. */
 	private Tileset tileset;
 
