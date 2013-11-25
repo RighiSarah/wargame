@@ -829,8 +829,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		int v = attaquant.combat(defenseur, distance);
 		
 		if(attaquant instanceof Monstre){
-			if(v == -1)
+			if(v == -1){
 				nbMonstresRestant--;	
+			}
 			else if(v == 1) {
 				nbHerosRestant--;
 				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
@@ -841,8 +842,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				nbHerosRestant--;
 				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
 			}
-			else if(v == 1)
+			else if(v == 1){
 				nbMonstresRestant--;
+			}
 		}
 		
 		if(nbMonstresRestant <= 0){
