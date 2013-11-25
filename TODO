@@ -18,5 +18,6 @@ Bien penser a tout sauvegarder
 	
 Corriger bug 
 	-> les soldats qui tourne tous FAIT 
-	-> au chargement tout les héros tournent FAIT ?
-    -> mettre les cases des soldats mort a null 
+	-> au chargement tout les héros tournent ? FAIT
+    -> mettre les cases des soldats mort a null : PAS BESOIN
+    -> sauvegarde, exception pour dossier non présent ou directement le créer
