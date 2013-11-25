@@ -812,9 +812,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		System.out.println("Vous avez perdu !");
 	}
 	
-	public void joueurEgalite(){
-		
-	}
 	
 	/**
 	 * Méthode permettant de faire combattre 2 soldats et vérifie ensuite si une armée a gagné
@@ -832,29 +829,24 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		int v = attaquant.combat(defenseur, distance);
 		
 		if(attaquant instanceof Monstre){
-			if(v == -1 /* || v == 2 */)
+			if(v == -1)
 				nbMonstresRestant--;	
-
-			if(v == 1  /* || v == 2 */) {
+			else if(v == 1) {
 				nbHerosRestant--;
 				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
 			}
 		}
 		else{
-			if(v == -1  /* || v == 2 */) {
+			if(v == -1) {
 				nbHerosRestant--;
 				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
 			}
-			
-			if(v == 1  /* || v == 2 */)
+			else if(v == 1)
 				nbMonstresRestant--;
 		}
 		
 		if(nbMonstresRestant <= 0){
-			//if(nbHerosRestant > 0)
-				joueurGagne(); // La MORT DES 2 EN MEME TEMPS N'EST PAS POSSIBLE !
-			//else
-			//	joueurEgalite();
+			joueurGagne();
 			
 			retour = true;
 		}
