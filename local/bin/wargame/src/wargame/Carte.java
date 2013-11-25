@@ -452,10 +452,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
 					/* Si faisCombattre retourne true, la partie est terminée donc on stoppe tout */
 					if(faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
-						/* Si le héros meurs au cours du combat , on supprime le brouillard qui lui était associé */
-						if(soldat[caseActionnee].estMort())
-							changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
-
 						return;
 				}
 				/* Sinon déplacement */
@@ -570,11 +566,15 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		try {
 			FileOutputStream fichier = new FileOutputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fichier);
-
+			
+			oos.write(tour);
+			oos.write(nbHerosRestant);
+			oos.write(nbMonstresRestant);
 			oos.writeObject(carte);
 			oos.writeObject(monstre);
 			oos.writeObject(heros);
 			oos.writeObject(soldat);
+			oos.writeObject(brouillard);
 
 			oos.flush();
 			oos.close();
@@ -599,10 +599,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			FileInputStream fichier = new FileInputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
 			ObjectInputStream ois = new ObjectInputStream(fichier);
 
+			tour = (int)ois.read();
+			nbHerosRestant = (int)ois.read();
+			nbMonstresRestant = (int)ois.read();
 			carte   = (char[])ois.readObject();
 			monstre = (Monstre[])ois.readObject();
 			heros   = (Heros[])ois.readObject();
 			soldat  = (Soldat[])ois.readObject();
+			brouillard = (char[])ois.readObject();
 
 			/* Les images ne sont pas sérializées... */
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
@@ -616,7 +620,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				monstre[i].setImage();
 				monstre[i].setDirection(Direction.DROITE);
 			}
-
 			chargerTileset(); // Charge uniquement si tileset null.
 			generee = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
 
@@ -787,7 +790,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		tourJoueur = false;
 		
 		FenetreJeu.information.setText("Vous avez perdu ! ");
-		
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));
@@ -801,7 +803,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				e.printStackTrace();
 			}
 			g.setColor(new Color(0, 0, 0, i));
+
 			g.drawString("Game Over", 100, 100);
+
 			repaint();
 		}
 
@@ -828,23 +832,29 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		int v = attaquant.combat(defenseur, distance);
 		
 		if(attaquant instanceof Monstre){
-			if(v == -1 || v == 2)
+			if(v == -1 /* || v == 2 */)
 				nbMonstresRestant--;	
-			if(v == 1 || v == 2)
+
+			if(v == 1  /* || v == 2 */) {
 				nbHerosRestant--;
+				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
+			}
 		}
 		else{
-			if(v == -1 || v == 2)
+			if(v == -1  /* || v == 2 */) {
 				nbHerosRestant--;
-			if(v == 1 || v == 2)
+				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
+			}
+			
+			if(v == 1  /* || v == 2 */)
 				nbMonstresRestant--;
 		}
 		
 		if(nbMonstresRestant <= 0){
-			if(nbHerosRestant > 0)
-				joueurGagne();
-			else
-				joueurEgalite();
+			//if(nbHerosRestant > 0)
+				joueurGagne(); // La MORT DES 2 EN MEME TEMPS N'EST PAS POSSIBLE !
+			//else
+			//	joueurEgalite();
 			
 			retour = true;
 		}

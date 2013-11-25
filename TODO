@@ -1,8 +1,22 @@
-Last update : 23 Novembre 19h50
+Last update : 24 Novembre 22h20
 
 Brouillard de guerre.
-	-> 	En cours [ en local by Nico ]
+	-> 	En cours [ fait ] [Amélioration a faire]
+	
 Compte rendu java.
+	-> commencé par flo
 Amélioration IA.
+
 Trouver des images pour les persos invisible.
+et pour l'eau
+	-> fait par roro Lundi 25 
+	
 Corriger bug fin de combat (trop longtemps)
+
+Bien penser a tout sauvegarder 
+	-> sauvegarde du reste fait ;)
+	
+Corriger bug 
+	-> les soldats qui tourne tous 
+	-> au chargement tout les héros tournent
+	-> mettre les cases des soldats mort a null 

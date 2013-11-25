@@ -107,5 +107,9 @@ public interface IConfig
 	/** Couleur du brouillard */
 	Color COULEUR_BROUILLARD = new Color(50, 50, 50, 245);
  
+	/** Coéfficien de réduction pour le combat ( dégat fait en temps normal / coéfficient réducteur ) 
+	 * ATTENTION : Ne peut etre égale a 0 ! 
+	 */
+	 int COEFFICIENT_REDUC = 3;
     
 }

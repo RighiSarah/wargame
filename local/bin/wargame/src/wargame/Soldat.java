@@ -177,7 +177,7 @@ public abstract class Soldat extends Charset implements ISoldat
     	/* Mise à jour de l'animation. */
         if(estVisible) {
     		if(this.mort){
-    			System.out.println("J'augmente la direction de " + this.toString());
+    			//System.out.println("J'augmente la direction de " + this.toString());
     			/* Si on a atteint la direction maximale */
     			if(direction.augmenteDirection() == false)
     				estVisible = false;
@@ -220,7 +220,7 @@ public abstract class Soldat extends Charset implements ISoldat
 			/* Et si le soldat a une portée assez grande pour répliquer */
 			if(soldat.getPortee() >= distance) {
 				/* Alors une réplique est crée */
-				degat = (distance == 1) ? soldat.getPuissance() : soldat.getTir();
+				degat = (distance == 1) ? soldat.getPuissance() / IConfig.COEFFICIENT_REDUC : soldat.getTir() / IConfig.COEFFICIENT_REDUC;
 				FenetreJeu.information.setText("Un " + soldat.nom + " vous frappe, vous perdez " + degat + " points de vie");
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
@@ -240,9 +240,10 @@ public abstract class Soldat extends Charset implements ISoldat
 			Son.joueMourir(soldat);
 			soldat.setMort(true);	
 			
-			if(valeur_retour == -1)
-				valeur_retour = 2;
-			else
+			//if(valeur_retour == -1)
+			//	valeur_retour = 2;
+			//else
+			// J'AI COMPRIS LE CODE CEPENDANT CECI EST IMPOSSIBLE !
 				valeur_retour = 1;
 			
 		}
