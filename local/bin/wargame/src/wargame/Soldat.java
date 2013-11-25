@@ -177,9 +177,10 @@ public abstract class Soldat extends Charset implements ISoldat
     	/* Mise à jour de l'animation. */
         if(estVisible) {
     		if(this.mort){
-    			//System.out.println("J'augmente la direction de " + this.toString());
-    			/* Si on a atteint la direction maximale */
-    			if(direction.augmenteDirection() == false)
+    			/* On fait tourner le perso */
+    			direction = direction.directionSuivante();
+    			
+    			if(direction == Direction.HAUT)
     				estVisible = false;
     		}
     		if(seDeplace){

@@ -26,45 +26,33 @@ public class Charset implements ActionListener
 		BAS(2),
 		GAUCHE(3); 
 		
-		private int value;
-	 
-		/**
-		 * Constructeur privé permettant de construire une direction avec sa valeur assignée
-		 * @param value Valeur de la direction
-		 */
-		private Direction(int value) {
-			this.value = value;
-		}
-	 
-		/** 
-		 * Permet de récupérer la valeur numérique de la direction
-		 * @return La valeur numérique de la direction
-		 */
-		public int getValue() {
-			return this.value;
-		}
+		private final int VALEUR;
 		
-		/**
-		 * Permet de fixer une autre valeur de direction
-		 * @param value La nouvelle valeur à assigner
-		 */
-		public void setValue(int value){
-			this.value = value;
+		
+		Direction(int valeur){
+			this.VALEUR = valeur;
 		}
 		
 		/**
 		 * Permet d'augmenter la direction de 1
-		 * @return Vrai si on a atteint la direction maximale, faux sinon
+		 * @return Vrai si on a atteint la direction maximale (arbitrairement GAUCHE), faux sinon
 		 */
-		public boolean augmenteDirection(){
-			this.value++;
-				
-			if(this.value >= N_DIRECTIONS){
-				this.value = 0;
-				return false;
+		public Direction directionSuivante(){
+			switch(this){
+				case HAUT : return(Direction.DROITE);
+				case DROITE : return(Direction.BAS);
+				case BAS : return(Direction.GAUCHE);
+				case GAUCHE : return(Direction.HAUT);
+				default : return(Direction.HAUT);
 			}
-			
-			return true;
+		}
+		
+		/**
+		 * Retourne le numéro associé à la direction (arbitrairement, haut = 0)
+		 * @return le numéro associé à la direction
+		 */
+		public int getValeur(){
+			return this.VALEUR;
 		}
 		
 		/**
@@ -77,7 +65,7 @@ public class Charset implements ActionListener
 			t[2] = "BAS";
 			t[3] = "GAUCHE";
 			
-			return t[this.value];
+			return t[this.VALEUR];
 		}
 	};
 
@@ -140,7 +128,7 @@ public class Charset implements ActionListener
 		int height = image.getHeight() / N_DIRECTIONS;
 		
 		int sx = animation * width;
-		int sy = direction.getValue() * height;
+		int sy = direction.getValeur() * height;
 		int dx = x * IConfig.NB_PIX_CASE;
 		int dy = y * IConfig.NB_PIX_CASE;
 		
@@ -171,7 +159,7 @@ public class Charset implements ActionListener
 	 */
 	public void setDirection(Direction direction)
 	{
-		if(direction.getValue() < 0 || direction.getValue() >= N_DIRECTIONS)
+		if(direction.getValeur() < 0 || direction.getValeur() >= N_DIRECTIONS)
 			return;
 		
 		this.direction = direction;
