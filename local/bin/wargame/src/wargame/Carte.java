@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
@@ -85,8 +87,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Initialisation taux de rafraichissement. */
 		timer = new Timer((int)(1000.0 * 1.0 / IConfig.FPS), this);
 		timer.setInitialDelay(0);
-		timer.start();
-
+		timer.start();	             
+		
 		/* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
 
@@ -707,6 +709,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		Infobulle.dessiner(g);
 
 		FenetreJeu.historique.setText(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
+
 	}
 
 	public void actionPerformed(ActionEvent e) 
@@ -862,7 +865,28 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		return retour;
 	}
+		
+	/** 
+	 * Change la valeur de la caseActionnée en fonction du numéro d'un héros
+	 * @param numHeros Case Actuel du héros séléctionnée
+	 * @return numéro de la case du nouveau héros
+	 */
+	public int trouverProchainHeros(int numHeros) {
+		
+		if(++numHeros >= nbHerosRestant)
+			numHeros = 0;
+		
+		caseActionnee = heros[numHeros].getPosition().getNumCase();
+		
+		return numHeros;
+	}
 	
+	/** 
+	 * Retourne la valeur du boolean brouillardActive
+	 *
+	 * @return true si brouillard est actif
+	 * 		   false sinon
+	 */
 	public boolean getBrouillardActive() {
 		return brouillardActive;
 	}

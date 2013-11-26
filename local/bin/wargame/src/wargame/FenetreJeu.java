@@ -25,6 +25,7 @@ import javax.swing.event.MenuListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -75,6 +76,9 @@ public class FenetreJeu extends JFrame
     /** Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
 	
+	/** Numéro de la case du héros actionnée */
+	int numHeros = 0;
+	
 	/** Objet Son servant à gérer le son d'arrière plan */
 	private Son sonArriere;
 
@@ -86,12 +90,33 @@ public class FenetreJeu extends JFrame
 	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
 		FenetreJeu fenetre = new FenetreJeu();
-
 		fenetre.setVisible(true);
 	}
-
+	
+	 public void keyTyped(KeyEvent ke) {
+		    char recu = ke.getKeyChar();
+	 		System.out.println(recu);
+		} 
+	 
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
+		/* No Tab key-pressed or key-released events are received by the key event listener.
+		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
+		 */
+		setFocusTraversalKeysEnabled(false);
+		addKeyListener(new KeyListener() {
+		    public void keyPressed(KeyEvent e) { 
+		    	if (e.getKeyCode() == KeyEvent.VK_TAB) { 
+		    		numHeros = carte.trouverProchainHeros(numHeros);
+		    	}
+		    }
+
+			public void keyTyped(KeyEvent e) {	}
+
+			public void keyReleased(KeyEvent e) { }
+		});
+		//setFocusTraversalKeysEnabled(true);
+		
 		this.setTitle("Wargame");
         this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
         
@@ -324,7 +349,7 @@ public class FenetreJeu extends JFrame
 	    this.pack();
 	    
 	    this.setVisible(true);
-	    
+	        
 	    /* Événements de carte */
 	    carte.onStateRealized(new CarteListener() {
 			
