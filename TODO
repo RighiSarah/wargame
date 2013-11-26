@@ -1,4 +1,4 @@
-Last update : 24 Novembre 22h20
+Last update : 25 Novembre 19h33
 
 Brouillard de guerre.
 	-> 	En cours [ fait ] [Amélioration a faire]
@@ -17,6 +17,9 @@ Bien penser a tout sauvegarder
 	-> sauvegarde du reste fait ;)
 	
 Corriger bug 
-	-> les soldats qui tourne tous FAIT 
-	-> au chargement tout les héros tournent FAIT ?
     -> mettre les cases des soldats mort a null 
+    
+    
+Liste des bugs corrigées :
+	-> les soldats ne tourne plus au chargement
+	-> plus 50 sldats qui tourne [ Gg flo ]
