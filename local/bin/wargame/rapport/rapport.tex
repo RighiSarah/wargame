@@ -3,8 +3,28 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
-\usepackage{url}
+\usepackage{hyperref}
 \usepackage{color}
+
+\hypersetup{
+  unicode=false, % non-Latin characters bookmarks
+  pdftoolbar=false, % show Acrobat's toolbar?
+  pdfmenubar=false, % show Acrobat's menu?
+  pdffitwindow=true, % page fit to window when opened
+  pdftitle={Thèse de Curie}, % title
+  pdfauthor={Marie CURIE}, % author
+  pdfsubject={thèse}, % subject of the document
+  pdfnewwindow=true, % links in new window
+  pdfkeywords={polonium, P6}, % list of keywords
+  colorlinks=true, % false: boxed links; true: colored links
+  linkcolor=blue, % color of internal links
+  citecolor=green, % color of links to bibliography
+  filecolor=magenta, % color of file links
+  urlcolor=blue % color of external links
+}
+
+
+
 
 \title{Rapport Projet Java - Wargame}
 \author{Ronan \bsc{Abhamon}, Florian \bsc{Bigard}, Nicolas \bsc{Reynaud}}
@@ -172,10 +192,48 @@ Il faut logiquement qu'il recommence un partie, ou qu'il quitte le jeu.
 %Ajoutons à ceci une profondeur minimum de 3 pour avoir une IA qui fasse des actions logiques. Celà fait donc $9^{3}$ * NB_MONSTRES
 
 \section{Organisation}
+Au commencement du projet Ronan a décidé de créer la base de l'interface de la carte. 
+En effet, il avait déjà des experiences en 2D et animations. 
+Il s'est donc occupé de chercher les images adaptées et de créer les classes correspondantes.
+
+Florian s'est alors chargé de créer la classe Son et de chercher les bruitages et musiques ainsi que de l'implémentation de la classe Position.
+
+La carte créée, Nicolas pouvait créer une classe permettant d'afficher une sorte d'infobulle lorsque la souris passe sur un soldat.
+Via cette classe, des sortes d'infobulles qui montaient ou descendraient pour à la fin disparaitre afin d'afficher l'augmentation des points de vies lors d'un repos ou la diminition de ces derniers après un combat par exemple. 
+
+En ce qui concerne le reste du projet, tout le monde modifiait tous les fichiers après que l'on se soit convenu des taches de chacun.
+C'est ici que nous nous somes encore rendu compte de l'avantage d'utiliser Git, dans le sens où Carte était un peu le "noyau" du projet et tout le monde devait au moins légèrement modifier cette classe afin d'incorporer les nouvelles fonctionnalités.
 
 \section{Ressources}
-\section{Conclusion}
+Nous avons cherché toute documentation et informations concernant le Java sur le cours bien évidemment, mais aussi sur Internet.
+Nous avons trouvé quelques pistes lorsque nous étions bloqué sur plusieurs forums comme \href{http://stackoverflow.com}{StackOverflow}, le \href{http://siteduzero.com}{SiteDuZero}.
 
+En ce qui concerne les sons, nous avons trouvé les bruitages sur \href{http://www.sound-fishing.net}{sound-fishing.net} et les musiques MIDI sur \href{http://moviethemes.net/lord-rings.html}{moviethemes.net}
+
+Enfin, en ce qui concerne les imgaes nous avons extrait les décors (herbe, rochers...) et quelques personnages du jeu Zelda. % Merci Ronan de continuer
+
+\section{Conclusion}
+Dans cette conclusion, nous allons chacun notre tour donner notre impression sur le projet, le Java et la POO en général.
+
+Nous trouvons que notre interface graphique constitue le point fort de notre projet. En effet, nous l'avons beaucoup travaillé.
+Nous avons essayé de faire quelque chose de joli, en 2D avec des "effets" lorsqu'il y a des actions.
+
+Nous trouvons que le point faible du projet reste l'intelligence artificielle assez limitée des monstres. 
+
+Nous aurions voulu créer une fenêtre d'options permettant au joueur de configurer le jeu comme il le souhaite (nombre de monstres, taille de la carte...).
+Malheureusement nous nous n'avions pas le temps libre pour implémenter cette fonctionnalité.
+
+\subsection{Abhamon Ronan}
+
+\subsection{Bigard Florian}
+J'ai trouvé ce projet très intéressant. 
+Faire un jeu est assez plaisant, surtout qu'il s'agit d'un domaine que j'aime bien (les jeux de stratégie et le Seigneur des Anneaux).
+Je connaissais déjà la POO avant ce cours, mais pas aussi poussé et j'avais beaucoup moins la logique POO. 
+
+Au final je peux affirmer que la POO est un concept qui me plait beaucoup, car il est bien plus facile de séparer le travail lorsque nous travaillons en groupe.
+De plus, je trouve que le programme final est beaucoup plus facile à faire évoluer ou à corriger si on considère qu'il a été bien conçu au départ. 
+
+\subsection{Reynaud Nicolas}
 
 
 \end{document}
