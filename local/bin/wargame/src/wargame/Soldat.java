@@ -226,7 +226,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
 				
-				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, -1);
+				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, 0);
 				this.setVie(vie);
 				
 				/* Si la réplique est fatale, le soldat qui a attaqué meurt */
