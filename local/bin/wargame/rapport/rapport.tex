@@ -1,0 +1,241 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{hyperref}
+\usepackage{color}
+
+\hypersetup{
+  unicode=false, % non-Latin characters bookmarks
+  pdftoolbar=false, % show Acrobat's toolbar?
+  pdfmenubar=false, % show Acrobat's menu?
+  pdffitwindow=true, % page fit to window when opened
+  pdftitle={Thèse de Curie}, % title
+  pdfauthor={Marie CURIE}, % author
+  pdfsubject={thèse}, % subject of the document
+  pdfnewwindow=true, % links in new window
+  pdfkeywords={polonium, P6}, % list of keywords
+  colorlinks=true, % false: boxed links; true: colored links
+  linkcolor=black, % color of internal links
+  citecolor=green, % color of links to bibliography
+  filecolor=magenta, % color of file links
+  urlcolor=blue % color of external links
+}
+
+
+
+
+\title{Rapport Projet Java - Wargame}
+\author{Ronan \bsc{Abhamon}, Florian \bsc{Bigard}, Nicolas \bsc{Reynaud}}
+\date{2013-2014}
+
+
+\begin{document}
+
+\maketitle
+\newpage
+
+\renewcommand{\contentsname}{Sommaire}
+\tableofcontents
+\newpage
+
+
+\section{Introduction}
+Le but du projet est de créer un jeu en interface graphique reprenant le thème du Seigneur des Anneaux. \\
+Le plateau de jeu est découpé en cases, et chaque case peut être occupé par un soldat.
+Ce soldat appartient soit à l'armée des Monstres (les méchants), soit à l'armée des Héros (les gentils).
+Le but étant de détruire complètement tous les soldats de l'armée des monstres. Dans le cas contraire, le joueur a perdu.
+
+Nous allons maintenant détailler la façon dont s'est déroulé le projet au sein de ce rapport. \\
+Dans un premier temps nous ferons l'analyse du projet avec un schéma des différentes classes et interfaces crées. \\
+Dans un deuxième temps, nous décrirons les techniques du langage orienté objet qu'est Java mis en œuvre dans le projet. \\
+Nous continuerons alors en faisant une synthèse du résultat global du projet, en décrivant les différentes fonctionnalités implémentées. \\
+Nous expliquerons ensuite comment le projet s'est déroulé et comment nous nous sommes organisé (au niveau du temps et du projet en général). \\
+Puis nous citerons nos différentes sources (images et sons notamment) ainsi que les différentes documentations utilisées. \\
+Enfin, nous terminerons par une conclusion qui fera un bilan du projet en général.
+Chaque membre du groupe en profitera pour donner son avis sur la programmation orienté objet. \\
+
+
+\section{Analyse du projet}
+En étudiant de plus près le sujet, plusieurs classes décrivant plusieurs éléments du projet étaient évidentes (car aussi donnés par le sujet) :
+\begin{itemize}
+  \item[\textbullet] \begin{bf}Pour les interfaces\end{bf}
+        \begin{itemize}
+         \item IConfig représentant la configuration du jeu (nombre de soldats, taille de la carte...)
+         \item ICarte qui donne la signature des méthodes que Carte doit implémenter
+         \item ISoldat, qui de même que pour ICarte doit donner la signature des méthodes que Soldat doit implémenter
+         \item CarteListener qui représente les événements de Carte
+        \end{itemize}
+  \item[\textbullet] \begin{bf}Pour les classe abstraites\end{bf}
+        \begin{itemize}
+         \item Soldat qui représente les méthodes et attributs communes aux monstres et aux héros
+        \end{itemize}
+  \item[\textbullet] \begin{bf}Pour les classes concrètes\end{bf}
+        \begin{itemize}
+         \item Aléatoire qui nous donnera des méthodes statiques pour générer des nombres aléatoires entre deux bornes
+         \item Carte qui représente la carte du jeu avec les actions associées
+         \item Heros et Monstre qui comprennent les méthodes spécifiques à ces deux types d'objet
+         \item Position permettant de connaître les positions des soldats sur la carte
+        \end{itemize}
+\end{itemize}
+
+\paragraph{}
+Nous avons ensuite convenu de faire une interface graphique plus poussée que celle demandée dans le sujet à l'aide d'images animées.
+Pour ce faire, il nous fallait créer plusieurs classe :
+\begin{itemize}
+ \item % Merci Ronan de continuer
+\end{itemize}
+
+\paragraph{}
+Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant et animé. Il nous fallait donc en plus créer une classe Son.
+
+% Schema des classes !!!
+
+\section{Techniques}
+  \subsection{Environnement de travail}
+  Nous codons sous le système d'exploitation GNU/Linux avec la version 7 d'OpenJDK. \\
+  Nous avons décidé d'utiliser Eclipse car c'est l'IDE dont nous avons appris à nous servir en TP.
+  De plus (quand on oublie ses nombreux crash, si on parvient à l'installer et si on a le temps suffisant pour l'exécuter), il fait bien son travail.
+  
+  Concernant le partage des sources, nous avions déjà expérimenté l'outil de versionnage Git couplé à GitHub et cela avait très bien fonctionné.
+  Nous avons donc décidé de réutiliser cette méthode malgré la menace qu'un autre groupe puisse nous plagier. Mais bon, il fallait d'abord qu'ils sachent que nous faisions notre projet sous GitHub, puis trouver nos pseudo.
+  De plus, avec l'historique des commit nous pouvions faire preuve de notre bonne fois.
+
+
+\subsection{Classes Java utilisées}
+  \subsubsection{Classes graphiques} Nous avons décidé d'utiliser Swing comme classes graphiques. % Merci Ronan de continuer
+  
+  \subsubsection{Classes pour gérer le son}
+  Pour gérer le son, nous avons dû plus ou moins ruser.
+  En effet, dans les classes de base de Java permettant de gérer les son, rien ne permettait de jouer du MP3.
+  Nous devions convertir les musiques trouvées en WAV. Hors, le format contenu par WAV n'est pas compressé.
+  Les musiques de fond faisaient plus de 50 Mo. Ce n'était donc pas envisageable.
+  Nous nous sommes alors tourné vers le format MIDI très léger.
+  Il nous a donc fallu utiliser la classe Sequencer pour pouvoir jouer ce type de morceau.
+  
+  De l'autre côté (les formats MIDI se faisant rare), pour les bruitages nous avons décidé d'utiliser du wav (car il s'agissait de séquences très courtes, le poids était négligeable).
+  Il nous a alors aussi fallu utiliser la classe principale AudioClip.
+
+  \subsection{Héritage}
+  Nous avons décidé de faire hériter Monstre et Heros de Soldat car c'est objets sont des soldats ; ils implémentaient beaucoup de méthodes et attributs communes.
+
+  \subsection{Polymorphisme}
+  Soldat implémente les principales méthodes de Monstre et Heros.
+  Les objets Soldats instanciés sont issus de l'une ou l'autre classe.
+  
+  De plus, un objet Carte possède quelques méthodes prenant en paramètre un Soldat.
+  Nous passons en paramètre de ce genre de méthode un Soldat rangé à la ième case d'un tableau de Soldat.
+  Hors, nous plaçons dans ce tableau non pas des Soldats mais soit des Heros soit des Monstres.
+
+  \subsection{Exceptions}
+  Nous avons placé plusieurs gestions d'exceptions dans notre projet.
+  Ainsi, nous vérifions que chaque image d'un type de Heros ou de Monstre est bien chargée.
+  La classe Son implémente aussi quelques gestions d'exceptions.
+  En effet, nous vérifions qu'un son midi est bien trouvé, que celui-ci est bien chargé et qu'il n'y a pas d'erreur lorsqu'on le joue.
+  De même, pour les sons wav nous vérifions à l'aide des exceptions que le son est chargé correctement.
+
+  \subsection{Événements}
+  Lors du déroulement du projet, nous nous sommes heurtés à un problème.
+  Nous possédons un objet finTour implémenté dans FenetreJeu.
+  Il nous fallait alors bloquer ce bouton lorsque les monstres exécutaient leur action.
+  Hors, c'était Carte qui exécutait les actions des monstres, et il fallait donc que Carte puisse accéder au bouton de FenetreJeu.
+  Nous avions plusieurs solutions :
+  \begin{itemize}
+    \item Passer le bouton en statique et donc pouvoir y accéder via Carte. C'était la pire solution possible, car pas POO du tout.
+    C'était de la "triche", et vraiment pas adapté à une évolution possible du projet
+    \item Passer FenetreJeu en paramètre du constructeur de Carte, pour que ce dernier puisse agir sur l'objet FenetreJeu via une simple méthode.
+    Le soucis était donc que Carte et FenetreJeu étaient liés. Et une modification du bouton de FenetreJeu entraînait une modification alors une modification Carte.
+    \item Passer par un événement. Lorsque Carte a fini de faire jouer les monstres, il déclenche un événement que FenetreJeu attrape.
+    Lorsqu'il reçoit cet événement, il réactive tout simplement ce bouton. Cette méthode était à notre sens la meilleur solution.
+    En effet, si nous décidions de ne plus avoir besoin de savoir quand les monstes avaient terminé leur tours, il nous suffisait pas exemple d'ignorer cet événement.
+  \end{itemize}
+ 
+
+\section{Synthèse}
+Le projet terminé, nous allons vous présenter différentes fonctionnalités que nous avons implémentées.
+Tout d'abord, nous avons décidé de créer une interface graphique.
+Les personnages sont animés quand ils se déplacent, mais pas quand ils combattent car nous n'avons pas pu trouver les images qui allaient.
+
+Nous avons implémenté toutes les fonctionnalités demandées par le sujet.
+Nous allons donc présenter les principales, par ordre chronologique au lancement du jeu.
+
+Lorsque le joueur lance le jeu, nous jouons une musique d'arrière plan choisie aléatoirement parmi trois autres musique.
+Le joueur peut alors lancer une nouvelle partie, ou charger une de ses parties sauvegardées.
+Il peut aussi couper le son via le menu ou un raccourci clavier.
+
+Lorsqu'il est dans une partie, il possède l'historique des actions sur la partie droite de la fenêtre.
+Il peut sauvegarder une partie parmi 10 slots proposés.
+Les héros sont sur la partie droite et les monstres sur la partie gauche. Ils sont tous placés aléatoirement sur la carte.
+
+Le joueur peut déplacer, reposer ou faire combattre chacun de ses heros.
+Pour cela, il doit cliquer sur son héros.
+Les cases où le joueur peut déplacer son héros sont en surbrillance.
+Lorsqu'il passe sa souris sur un soldat, une infobulle apparaît pour donner ses caractéristiques.
+Il est possible de reposer son heros en cliquant sur lui-même après l'avoir sélectionné, ou bien en ne déclenchant aucune action sur ce dernier à la fin du tour.
+Lorsque le joueur déplace ou fait combattre son soldat, des bruitages sont joués.
+En effet, si le soldat combat à plus d'une case d'un autre soldat, un bruit d'arc est exécuté.
+Si c'est du corps à corps c'est un bruit d'épée.
+
+Lorsqu'un soldat meurt, selon que c'est un monstre ou un héros un bruitage de cri est exécuté.
+De plus, il tourne sur lui-même avant de disparaître.
+
+Concernant l'intelligence artificielle des monstres, celle-ci est basique.
+Si un monstre possède peu de points de vie, il se repose.
+Sinon s'il voit un ennemi à sa porté il l'attaque.
+Sinon il se déplace aléatoirement.
+
+Enfin, lorsque le joueur perd ou gagne, un son est joué et un message apparaît à l'écran. Il ne peut alors plus exécuter d'actions.
+Il faut logiquement qu'il recommence un partie, ou qu'il quitte le jeu.
+%Nous avions réfléchi à implémenter une IA plus évoluée, reposant sur l'algorithme Min-Max couplé à un arbre.
+%Mais pour cela il aurait fallu créer autant d'arbre que de monstres, chaque noeud de l'arbre ayant au minimum 9 fils (car 9 déplacements possibles).
+%Ajoutons à ceci une profondeur minimum de 3 pour avoir une IA qui fasse des actions logiques. Celà fait donc $9^{3}$ * NB_MONSTRES
+
+\section{Organisation}
+Au commencement du projet Ronan a décidé de créer la base de l'interface de la carte.
+En effet, il avait déjà des experiences en 2D et animations.
+Il s'est donc occupé de chercher les images adaptées et de créer les classes correspondantes.
+
+Florian s'est alors chargé de créer la classe Son et de chercher les bruitages et musiques ainsi que de l'implémentation de la classe Position.
+
+La carte créée, Nicolas pouvait créer une classe permettant d'afficher une sorte d'infobulle lorsque la souris passe sur un soldat.
+Via cette classe, des sortes d'infobulles qui montaient ou descendraient pour à la fin disparaitre afin d'afficher l'augmentation des points de vies lors d'un repos ou la diminition de ces derniers après un combat par exemple.
+
+En ce qui concerne le reste du projet, tout le monde modifiait tous les fichiers après que l'on se soit convenu des taches de chacun.
+C'est ici que nous nous somes encore rendu compte de l'avantage d'utiliser Git, dans le sens où Carte était un peu le "noyau" du projet et tout le monde devait au moins légèrement modifier cette classe afin d'incorporer les nouvelles fonctionnalités.
+
+\section{Ressources}
+Nous avons cherché toute documentation et informations concernant le Java sur le cours bien évidemment, mais aussi sur Internet.
+Nous avons trouvé quelques pistes lorsque nous étions bloqué sur plusieurs forums comme \href{http://stackoverflow.com}{StackOverflow}, le \href{http://siteduzero.com}{SiteDuZero}.
+
+En ce qui concerne les sons, nous avons trouvé les bruitages sur \href{http://www.sound-fishing.net}{sound-fishing.net} et les musiques MIDI sur \href{http://moviethemes.net/lord-rings.html}{moviethemes.net}
+
+Enfin, en ce qui concerne les imgaes nous avons extrait les décors (herbe, rochers...) et quelques personnages du jeu Zelda. % Merci Ronan de continuer
+
+\section{Conclusion}
+\subsection{Analyse critique}
+Dans cette conclusion, nous allons chacun notre tour donner notre impression sur le projet, le Java et la POO en général.
+
+Nous trouvons que notre interface graphique constitue le point fort de notre projet. En effet, nous l'avons beaucoup travaillé.
+Nous avons essayé de faire quelque chose de joli, en 2D avec des "effets" lorsqu'il y a des actions.
+
+Nous trouvons que le point faible du projet reste l'intelligence artificielle assez limitée des monstres.
+
+Nous aurions voulu créer une fenêtre d'options permettant au joueur de configurer le jeu comme il le souhaite (nombre de monstres, taille de la carte...).
+Malheureusement nous nous n'avions pas le temps libre pour implémenter cette fonctionnalité.
+
+\subsection{Analyses personnelles}
+  \subsubsection{Abhamon Ronan}
+
+  \subsubsection{Bigard Florian}
+  J'ai trouvé ce projet très intéressant.
+  Faire un jeu est assez plaisant, surtout qu'il s'agit d'un domaine que j'aime bien (les jeux de stratégie et le Seigneur des Anneaux).
+  Je connaissais déjà la POO avant ce cours, mais pas aussi poussé et j'avais beaucoup moins la logique POO.
+
+  Au final je peux affirmer que la POO est un concept qui me plait beaucoup, car il est bien plus facile de séparer le travail lorsque nous travaillons en groupe.
+  De plus, je trouve que le programme final est beaucoup plus facile à faire évoluer ou à corriger si on considère qu'il a été bien conçu au départ.
+
+  \subsubsection{Reynaud Nicolas}
+
+
+\end{document}
