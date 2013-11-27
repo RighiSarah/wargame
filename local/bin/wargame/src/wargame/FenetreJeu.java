@@ -367,7 +367,6 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(carte.isGeneree()){
-					carte.joueMonstres();
 					carte.reinitAJoue();
 				}
 			}

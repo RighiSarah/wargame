@@ -251,6 +251,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * Méthode permettant de reinitialiser le tour de tous les soldats
 	 */
 	public void reinitAJoue() {
+		joueMonstres();
+		
 		tour++;
 		
 		FenetreJeu.information.setText("Début du tour " + tour);
@@ -417,6 +419,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	{
 		Son.joueCourir();
 		soldat.setAJoue(true);
+		nbToPlay--;
 		int sx = soldat.getPosition().x;
 		int sy = soldat.getPosition().y;
 		int dx = nouvelle_position.x;
@@ -755,6 +758,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	public void actionPerformed(ActionEvent e) 
 	{	
+		if(nbToPlay == 0)	reinitAJoue();
+		System.out.println(nbToPlay);
 		repaint();
 	}
 
