@@ -6,6 +6,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ConcurrentModificationException;
 import java.util.LinkedList;
 
 /**
@@ -280,11 +281,13 @@ final class Infobulle extends Rectangle
 		if(File.size() == 0)
 			return fini;
 		
-		for(Message m : File){
-			if(m.timer != 0){
-//				System.out.println("La valeur du timer : " + m.timer + " pour une file de " + File.size() + " éléments");
-				fini = false;
-			}
+		try {
+			for(Message m : File)
+				if(m.timer != 0)
+					fini = false;
+		} catch (ConcurrentModificationException e) {
+			
+			
 		}
 		return fini;
 	}

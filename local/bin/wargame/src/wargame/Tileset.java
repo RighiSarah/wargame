@@ -53,6 +53,12 @@ public class Tileset
 		tile[1].setTraversable(true); tile[1].setPraticable(true);
 		tile[8].setTraversable(true); tile[8].setPraticable(true);
 		tile[9].setTraversable(true); tile[9].setPraticable(true);
+		
+		/* Eau. */
+		tile[24].setTraversable(true);
+		tile[25].setTraversable(true);
+		tile[32].setTraversable(true);
+		tile[33].setTraversable(true);
 	}
 	
 	/** Ajoute une case d'herbe sur la carte.
@@ -157,6 +163,19 @@ public class Tileset
 			return false;
 		
 		return dessinerPartie(carte, new Point(4, 0), new Point(7, 3), p);
+	}
+	
+	/** Dessine une flaque d'eau sur la carte.
+	 * @param carte Carte où dessiner.
+	 * @param p		Position où ajouter l'eau.
+	 * @return      false si x, y ne font pas partis de la carte, true sinon.
+	 */
+	protected boolean setEau(Carte carte, Position p)
+	{
+		if(!p.estValide())
+			return false;
+		
+		return dessinerPartie(carte, new Point(0, 3), new Point(1, 4), p);
 	}
 	
 	/** Dessine un tile du Tileset.

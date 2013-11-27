@@ -28,8 +28,6 @@ public final class Son {
 	private boolean sonArriereActive = false;
 	/** Pour jouer un wma quand il se passe un grand événement (partie perdue ou gagnée) */
 	private AudioClip musiqueEven = null;
-	
-	
 
 	/* Différents sons de bruitage */
 	private static AudioClip bruitCourir = null;

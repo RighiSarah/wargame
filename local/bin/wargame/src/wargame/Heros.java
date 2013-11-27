@@ -18,7 +18,7 @@ public class Heros extends Soldat
 	private TypesH typeHeros;
 	
 	/** Images des Héros. */
-	static protected BufferedImage imageHumain, imageElfe, imageNain;
+	static protected BufferedImage imageHumain, imageElfe, imageSoldat;
 	
 	/** Change l'image du héros selon son type */
 	protected void setImage() throws IOException
@@ -38,11 +38,11 @@ public class Heros extends Soldat
 				image = imageElfe;
 				break;
 				
-			case NAIN:				
-				if(imageNain == null) 
-					imageNain = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_NAIN));
+			case SOLDAT:				
+				if(imageSoldat == null) 
+					imageSoldat = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_SOLDAT));
 				
-				image = imageNain;
+				image = imageSoldat;
 				break;
 				
 			default: break;
