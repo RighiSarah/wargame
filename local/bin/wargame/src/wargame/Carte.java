@@ -328,6 +328,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 			if(!tileset.setPaille(this, p)) i--;
 		}
+		
+		/* Eau. */
+		for(int i = 0; i < IConfig.NB_EAU; i++)
+		{
+		     Position p = new Position();
+		     if(!tileset.setEau(this, p)) i--;
+		}
 	}
 
 	/**
@@ -1052,6 +1059,5 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void setBrouillardActive(boolean active) {
 		brouillardActive = active;
 	}
-	
 }
 

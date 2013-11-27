@@ -18,7 +18,7 @@ public class Monstre extends Soldat
 	private TypesM typeMonstre;
 	
 	/** Images des Monstres. */
-	static protected BufferedImage imageGobelin, imageOrc, imageTroll;
+	static protected BufferedImage imageGobelin, imageOrc, imageSquelette;
 
 	/** Change l'image du monstre selon son type */
 	protected void setImage() throws IOException
@@ -36,10 +36,10 @@ public class Monstre extends Soldat
 				image = imageOrc;
 				break;
 				
-			case TROLL:				
-				if(imageTroll == null) 
-					imageTroll = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_TROLL));
-				image = imageTroll;
+			case SQUELETTE:				
+				if(imageSquelette == null) 
+					imageSquelette = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_SQUELETTE));
+				image = imageSquelette;
 				break;
 			default: break;
 		}

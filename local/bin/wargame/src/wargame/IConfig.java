@@ -32,12 +32,12 @@ public interface IConfig
 	String NOM_FENETRE = "The JAVA War";
 	
 	/** Liste des images des soldats. */
-	String IMAGE_HUMAIN  = "archer.png";
-	String IMAGE_ELFE    = "elfe.png";
-	String IMAGE_NAIN 	 = "nain.png";
-	String IMAGE_GOBELIN = "gobelin.png";
-	String IMAGE_ORC     = "orc.png";
-	String IMAGE_TROLL 	 = "troll.png";
+	String IMAGE_HUMAIN    = "archer.png";
+	String IMAGE_ELFE      = "elfe.png";
+	String IMAGE_SOLDAT    = "soldat.png";
+	String IMAGE_GOBELIN   = "gobelin.png";
+	String IMAGE_ORC       = "orc.png";
+	String IMAGE_SQUELETTE = "squelette.png";
 
 	/** Taille de la carte. */
 	int LARGEUR_CARTE = 25; 
@@ -63,6 +63,7 @@ public interface IConfig
 	int NB_ROCHERS = 10;
 	int NB_ARBRES = 3;	
 	int NB_PAILLES = 4;
+	int NB_EAU = 4;
 	
 	/** Repos maximum dont peut bénéficier un soldat */
 	int REPOS_MAX = 10;
