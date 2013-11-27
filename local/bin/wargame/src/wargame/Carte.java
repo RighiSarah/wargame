@@ -652,7 +652,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Charge une carte.
 	 * @param num Numéro de la sauvegarde.
 	 */
-	void charge(int num)
+	void charge(String chemin)
 	{
 
 		if(imagePresentation != null){
@@ -661,7 +661,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}
 
 		try {
-			FileInputStream fichier = new FileInputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
+			FileInputStream fichier = new FileInputStream(chemin);
 			ObjectInputStream ois = new ObjectInputStream(fichier);
 
 			tour = (int)ois.read();

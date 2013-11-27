@@ -260,7 +260,7 @@ public class FenetreJeu extends JFrame
 	    		private final int NUM = k;
 		    	public void actionPerformed(ActionEvent arg0) 
 		    	{
-					carte.charge(NUM);
+					carte.charge(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + NUM + ".ser");
 				    menu.add(Box.createHorizontalGlue()); 
 				    menu.add(finTour);
 				    setJMenuBar(menu);
@@ -426,6 +426,31 @@ public class FenetreJeu extends JFrame
 	    sousMenu.add(boutonSauvegarder);
 	    sousMenu.add(navigerHistoriqueUp);
 	    sousMenu.add(navigerHistoriqueDown);
+	    
+	    boutonCharger.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+			        JFileChooser fichier = new JFileChooser();
+			        fichier.setDialogTitle("Ouvrir fichier");
+			        fichier.setCurrentDirectory(new File("."));
+			        fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
+
+			        int choix = fichier.showOpenDialog(carte);
+	                if (choix != JFileChooser.APPROVE_OPTION) {
+                        JOptionPane.showMessageDialog(carte, "Erreur : Le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+                        return;
+	                }
+	                
+	               	File fichierChoisit = fichier.getSelectedFile();
+
+	                if(fichierChoisit.getPath().endsWith(".ser") == false) {
+                        JOptionPane.showMessageDialog(carte, "Erreur : Le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+                        return;
+	                }
+	                	                
+	                carte.charge(fichierChoisit.getPath());
+			}
+		});
 	    
 	    boutonSauvegarder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
