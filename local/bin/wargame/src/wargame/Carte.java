@@ -860,6 +860,72 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		return retour;
 	}
 	
+	public boolean obstacleEntreCase(Position position1, Position position2){
+		boolean obstacle = false;
+		
+		/* On prend la coordonnée haut gauche du pixel de la case position */
+		Point p1 = position1.getCoordPixel();
+		Point p2 = position2.getCoordPixel();
+		
+		/* On se place au centre de la case */
+		p1.x -= IConfig.NB_PIX_CASE/2;
+		p1.y -= IConfig.NB_PIX_CASE/2;
+		p2.x -= IConfig.NB_PIX_CASE/2;
+		p2.y -= IConfig.NB_PIX_CASE/2;
+		
+		double a = (double)(p2.y - p1.y)/(double)(p2.x - p1.x);
+		double b = p1.y - a * p1.x;
+		
+		/* Si il n'y a pas de x, l'autre position est soit en bas soit en haut de la première position */
+		if(a == 0){
+			/* On choisit la position la plus en dessous de l'autre */
+			Position dessus, dessous;
+			if(position1.y < position2.y){
+				dessus = position2;
+				dessous = position1;
+			}
+			else{
+				dessus = position1;
+				dessous = position2;
+			}
+			
+			/* On se place sur la case juste au dessus */
+			for(int y=dessous.y + 1; y<dessus.y && obstacle == false; y++){
+				Position position_en_cours = new Position(dessus.x, y);
+				int num_tile = carte[position_en_cours.getNumCase()];
+				Tile tile = tileset.getTile(num_tile);
+				
+				if(soldat[position_en_cours.getNumCase()] != null || !tile.estPraticable() || !position_en_cours.estValide() ){
+					obstacle = true;
+				}
+			}
+		}
+		else{
+			Position droite, gauche;
+			if(position1.x < position2.x){
+				droite = position2;
+				gauche = position1;
+			}
+			else{
+				droite = position1;
+				gauche = position2;
+			}
+			
+			for(int x = gauche.x; x < droite.x; x++){
+				int y = (int) (a * x + b);
+				Position position_en_cours = new Position(x / IConfig.NB_PIX_CASE , y / IConfig.NB_PIX_CASE);
+				int num_tile = carte[position_en_cours.getNumCase()];
+				Tile tile = tileset.getTile(num_tile);
+				
+				if(soldat[position_en_cours.getNumCase()] != null || !tile.estPraticable() || !position_en_cours.estValide() ){
+					obstacle = true;
+				}
+			}
+		}
+		
+		return obstacle;
+	}
+	
 	public boolean getBrouillardActive() {
 		return brouillardActive;
 	}
