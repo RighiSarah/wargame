@@ -45,10 +45,9 @@ public class Position extends Point implements IConfig{
 	
 	/**
 	 * Méthode permettant de renvoyer non pas les coordonnées d'une case, mais les coordonnées des pixels de p
-	 * @param p Position de la case
 	 * @return Un point avec pour coordonnées le x et y du pixel en haut à gauche de la case
 	 */
-	public Point getCoordPixel(Position p){
+	public Point getCoordPixel(){
 		return (new Point(x * IConfig.NB_PIX_CASE, y * IConfig.NB_PIX_CASE));
 	}
 	
@@ -134,13 +133,17 @@ public class Position extends Point implements IConfig{
 		return direction;
 	}
 	
-
+	
+	public boolean equals(Position pos){
+		return ((pos.x == this.x) && (pos.y == this.y));  
+	}
+	
+	
 	/**
 	 * Méthode toString affichant les coordonnées de la position
 	 */
 	public String toString() { 
 		return "(" + x + "," + y +")"; 
 	}
-	
 	
 }

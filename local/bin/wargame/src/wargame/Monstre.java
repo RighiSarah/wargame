@@ -18,7 +18,7 @@ public class Monstre extends Soldat
 	private TypesM typeMonstre;
 	
 	/** Images des Monstres. */
-	static protected BufferedImage imageGobelin, imageOrc, imageTroll;
+	static protected BufferedImage imageGobelin, imageOrc, imageSquelette;
 
 	/** Change l'image du monstre selon son type */
 	protected void setImage() throws IOException
@@ -36,10 +36,10 @@ public class Monstre extends Soldat
 				image = imageOrc;
 				break;
 				
-			case TROLL:				
-				if(imageTroll == null) 
-					imageTroll = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_TROLL));
-				image = imageTroll;
+			case SQUELETTE:				
+				if(imageSquelette == null) 
+					imageSquelette = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_SQUELETTE));
+				image = imageSquelette;
 				break;
 			default: break;
 		}
@@ -54,13 +54,32 @@ public class Monstre extends Soldat
 	{
 		super();
 		
-		this.vieMax = this.vie = type_monstre.getPoints();
-		this.portee = type_monstre.getPortee();
-		this.puissance = type_monstre.getPuissance();
-		this.tir = type_monstre.getTir();
-		this.nom = type_monstre.getNom();
+		this.vie = type_monstre.getPoints();
 		this.typeMonstre = type_monstre;
 		
 		setImage();
 	}
+	
+	
+	public int getPortee(){
+		return typeMonstre.getPortee();
+	}
+	
+	public int getPuissance(){
+		return typeMonstre.getPuissance();
+	}
+	
+	public int getTir(){
+		return typeMonstre.getTir();
+	}
+	
+	
+	public String getNom(){
+		return typeMonstre.getNom();
+	}
+	
+	public int getVieMax(){
+		return typeMonstre.getPoints();
+	}
+	
 }

@@ -16,10 +16,10 @@ public interface ISoldat extends Serializable
 	 */
 	static enum TypesH 
 	{
-		HUMAIN(40, 3, 10, 2, "humain"), 
-		NAIN(80, 1, 20, 0, "nain"), 
-		ELFE(70, 5, 10, 6, "elfe"), 
-		HOBBIT(20, 3, 5, 2, "hobbit");
+		HUMAIN(40, 3, 10, 2, "Humain"), 
+		SOLDAT(80, 1, 20, 0, "Soldat"), 
+		ELFE(70, 5, 10, 6, "Elfe"), 
+		HOBBIT(20, 3, 5, 2, "Hobbit");
 		
 		private final int POINTS_DE_VIE, PORTEE_VISUELLE, PUISSANCE, TIR;
 		private final String NOM;
@@ -69,9 +69,9 @@ public interface ISoldat extends Serializable
 	 */
 	public static enum TypesM 
 	{
-		TROLL(100, 1, 30, 0, "troll"), 
-		ORC(40, 2, 10, 3, "orc"), 
-		GOBELIN(20, 2, 5, 2, "gobelin");
+		SQUELETTE(100, 1, 30, 0, "Squelette"), 
+		ORC(40, 2, 10, 3, "Orc"), 
+		GOBELIN(20, 2, 5, 2, "Gobelin");
 
 		private final int POINTS_DE_VIE, PORTEE_VISUELLE, PUISSANCE, TIR;
 		private final String NOM;
@@ -119,6 +119,10 @@ public interface ISoldat extends Serializable
 	int getPoints();
 	int getTour();
 	int getPortee();
+	int getPuissance();
+	int getTir();
+	int getVieMax();
+	String getNom();
 	
 	void joueTour(int tour);
 	int combat(Soldat soldat,int distance);

@@ -1,32 +1,9 @@
-Last update : 25 Novembre 19h33
+A FAIRE :
+    fin de jeu
+    Amélioration IA.
+    historique (voir Soldat.java méthodes repos et combat)
 
-Brouillard de guerre.
-	-> 	En cours [ fait ] [Amélioration a faire]
-	
-Compte rendu java.
-	-> commencé par flo
-Amélioration IA.
-
-Trouver des images pour les persos invisible.
-et pour l'eau
-	-> fait par roro Lundi 25 
-	
-Corriger bug fin de combat (trop longtemps)
-
-Bien penser a tout sauvegarder 
-	-> sauvegarde du reste fait ;)
-	
 Corriger bug 
-<<<<<<< HEAD
-    -> mettre les cases des soldats mort a null 
     
     
-Liste des bugs corrigées :
-	-> les soldats ne tourne plus au chargement
-	-> plus 50 sldats qui tourne [ Gg flo ]
-=======
-	-> les soldats qui tourne tous FAIT 
-	-> au chargement tout les héros tournent ? FAIT
-    -> mettre les cases des soldats mort a null : PAS BESOIN
-    -> sauvegarde, exception pour dossier non présent ou directement le créer : FAIT
->>>>>>> 39e73e20a29646c30f9960ecb61049b4f8a5f824
+

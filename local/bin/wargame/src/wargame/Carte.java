@@ -136,9 +136,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			public void mouseClicked(MouseEvent e) { 
 				if(!generee || tourJoueur == false)
 					return;
-
+				
 				/* On crée une position aux coordonnées du clic de la souris pour connaitre la coordonnée de la case (et non pas du pixel) */
 				Position pos = new Position(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
+				
 				int case_cliquee = pos.getNumCase();
 
 				/* On vient de cliquer sur la même case : on veut se reposer */
@@ -164,11 +165,17 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						if(soldat[case_cliquee] instanceof Monstre 
 							&& distance <= soldat[caseActionnee].getPortee() 
 							&& !soldat[caseActionnee].getAJoue() 
-							&& soldat[case_cliquee].estVisible() 
+							&& soldat[case_cliquee].estVisible()
+							&& !soldat[case_cliquee].estMort() 
 						) {
+							if(obstacleEntreCase(soldat[caseActionnee].getPosition(), soldat[case_cliquee].getPosition())){
+								System.out.println("Impossible d'attaque ce soldat, un élément bloque la flêche");
+								return;
+							}
+						
 							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
 							nbToPlay--;
-							/* Si le héros meurt oau cours du combat on supprime le brouillard */
+							/* Si le héros meurt au cours du combat on supprime le brouillard */
 							if(soldat[caseActionnee].estMort()) {
 								changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
 								caseActionnee = -1;
@@ -217,7 +224,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @param caseArrivee Case sur laquel finira le soldat
 	 */
 	public void deplaceSoldat(Soldat sold,int caseArrivee) {
-		FenetreJeu.information.setText(sold.nom + " se deplace en " + caseActionnee );
+		carteListener.information(sold.getNom() + " se deplace en " + caseActionnee );
 
 		/* On supprime le brouillard du perso */
 		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
@@ -254,7 +261,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		tour++;
 		
-		FenetreJeu.information.setText("Début du tour " + tour);
+		carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -320,6 +327,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			Position p = new Position();
 
 			if(!tileset.setPaille(this, p)) i--;
+		}
+		
+		/* Eau. */
+		for(int i = 0; i < IConfig.NB_EAU; i++)
+		{
+		     Position p = new Position();
+		     if(!tileset.setEau(this, p)) i--;
 		}
 	}
 
@@ -465,8 +479,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 				if(pos.estValide()){
 					/* Si il y a un héros à la case indiquée, qu'il est visible et pas mort */
-					if(soldat[pos.getNumCase()] != null && soldat[pos.getNumCase()] instanceof Heros 
-						&& soldat[pos.getNumCase()].estVisible() && soldat[pos.getNumCase()].estMort() == false){
+					if(soldat[pos.getNumCase()] != null 
+						&& soldat[pos.getNumCase()] instanceof Heros 
+						&& soldat[pos.getNumCase()].estVisible() && soldat[pos.getNumCase()].estMort() == false
+						&& !obstacleEntreCase(pos, p)
+					){
 						return pos;
 					}
 				}
@@ -599,7 +616,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 			num_tile = carte[pos.getNumCase()];
 			tile = tileset.getTile(num_tile);
-		} while(soldat[pos.getNumCase()] != null || !tile.estPraticable() || !pos.estValide() );
+		} while(!pos.estValide() || soldat[pos.getNumCase()] != null || !tile.estPraticable());
 
 		return pos;
 	}
@@ -751,7 +768,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 
-		FenetreJeu.historique.setText(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
+		carteListener.historique(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
 
 	}
 
@@ -808,7 +825,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		
-		FenetreJeu.information.setText("Vous avez gagné ! ");
+		carteListener.information("Vous avez gagné ! ");
 
 		Graphics g = this.getGraphics();
 		
@@ -837,7 +854,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		
-		FenetreJeu.information.setText("Vous avez perdu ! ");
+		carteListener.information("Vous avez perdu ! ");
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));
@@ -930,6 +947,104 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		return numHeros;
 	}
 	
+
+	/**
+	 * Méthode permettant de savoir s'il y a un obstacle entre deux positions en prenant un chemin linéaire
+	 * @param position1 La position
+	 * @param position2 L'autre position
+	 * @return Vrai si il y a un obstacle, faux sinon
+	 */
+	public boolean obstacleEntreCase(Position position1, Position position2){
+		boolean obstacle = false;
+		
+		/* On prend la coordonnée haut gauche du pixel de la case position */
+		Point p1 = position1.getCoordPixel();
+		Point p2 = position2.getCoordPixel();
+		
+		/* On se place au centre de la case */
+		p1.x -= IConfig.NB_PIX_CASE/2;
+		p1.y -= IConfig.NB_PIX_CASE/2;
+		p2.x -= IConfig.NB_PIX_CASE/2;
+		p2.y -= IConfig.NB_PIX_CASE/2;	
+		
+		/* Si les deux positions sont sur le même axe vertical, on vérifie juste les cases une à une entre les deux positions */
+		if(position1.x == position2.x){
+			
+			/* On choisit la position la plus en dessous de l'autre */
+			Position dessus, dessous;
+			if(position1.y < position2.y){
+				dessus = position2;
+				dessous = position1;
+			}
+			else{
+				dessus = position1;
+				dessous = position2;
+			}
+			
+			/* On se place sur la case juste au dessus de la position du dessous */
+			for(int y=dessous.y + 1; y<dessus.y && obstacle == false; y++){
+				/* Et on vérifie que chaque case entre les deux positions est traversable */
+				Position position_en_cours = new Position(dessus.x, y);
+				int num_tile = carte[position_en_cours.getNumCase()];
+				Tile tile = tileset.getTile(num_tile);
+				
+				if(!position_en_cours.estValide() || soldat[position_en_cours.getNumCase()] != null || !tile.estTraversable()){
+					obstacle = true;
+				}
+			}
+		}
+		else{
+			/* On regarde la position des deux points l'un par rapport à l'autre */
+			Point droite, gauche;
+			if(p1.x < p2.x){
+				droite = p2;
+				gauche = p1;
+			}
+			else{
+				droite = p1;
+				gauche = p2;
+			}
+			
+			/* On construit l'équation de notre fonction, rappelons que y = ax + b */
+			double a = (double)(droite.y - gauche.y)/(double)(droite.x - gauche.x);
+			double b = gauche.y - a * gauche.x;
+			
+//			System.out.println("a vaut :" + a + " et b vaut " + b);
+			
+			/* Pour chaque pixel entre les deux positions */
+			for(int x = gauche.x; x < droite.x; x++){
+				/* On calcule le y */
+				int y = (int) (a * x + b);
+				
+//				System.out.println("y  :" + (double) (y / IConfig.NB_PIX_CASE));
+				/* On calcule dans quelle case est le pixel */
+				double x_case = Math.round((double)x / (double)IConfig.NB_PIX_CASE);
+				double y_case = Math.round((double)y / (double)IConfig.NB_PIX_CASE);
+				
+//				System.out.println("J'ai x : " + x_case + " y : " + y_case);
+				
+				Position position_en_cours = new Position((int)x_case, (int)y_case);
+				
+//				System.out.println("La position de la case est " + position_en_cours.toString());
+				
+				
+				int num_tile = carte[position_en_cours.getNumCase()];
+				Tile tile = tileset.getTile(num_tile);
+
+				/* Et on vérifie que cette case est traversable.
+				 * Il faut aussi vérifier que le pixel n'est pas dans la case d'une des deux positions (car on ne veut voir si il n'y a pas d'obstacle seulement ENTRE les deux positons)
+				 */
+				if(!position_en_cours.equals(position1) && !position_en_cours.equals(position2) && 
+					(!position_en_cours.estValide() || soldat[position_en_cours.getNumCase()] != null || !tile.estTraversable())){
+					obstacle = true;
+				}
+			}
+		}
+		
+		return obstacle;
+	}
+	
+
 	/** 
 	 * Retourne la valeur du boolean brouillardActive
 	 *
@@ -944,6 +1059,5 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void setBrouillardActive(boolean active) {
 		brouillardActive = active;
 	}
-	
 }
 

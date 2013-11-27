@@ -40,7 +40,14 @@ import java.util.Date;
 public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 7794325642011100784L;
+<<<<<<< HEAD
 	
+=======
+    private JPanel barreEtat;
+    private JSeparator separator;
+    private JLabel historique;
+    private JLabel information;
+>>>>>>> ba2c25f321df647735d819575094abad88647f22
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;
@@ -474,8 +481,19 @@ public class FenetreJeu extends JFrame
 				sonArriere.joueGagne();
 			}
 			
+			@Override
 			public void deplaceMonstre(){
 				finTour.setEnabled(!finTour.isEnabled());
+			}
+			
+			@Override
+			public void historique(String s){
+				historique.setText(s);
+			}
+			
+			@Override
+			public void information(String s){
+				information.setText(s);
 			}
 		});
 	    
