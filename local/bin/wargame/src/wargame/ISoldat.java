@@ -119,6 +119,10 @@ public interface ISoldat extends Serializable
 	int getPoints();
 	int getTour();
 	int getPortee();
+	int getPuissance();
+	int getTir();
+	int getVieMax();
+	String getNom();
 	
 	void joueTour(int tour);
 	int combat(Soldat soldat,int distance);

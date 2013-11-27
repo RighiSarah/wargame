@@ -54,13 +54,32 @@ public class Monstre extends Soldat
 	{
 		super();
 		
-		this.vieMax = this.vie = type_monstre.getPoints();
-		this.portee = type_monstre.getPortee();
-		this.puissance = type_monstre.getPuissance();
-		this.tir = type_monstre.getTir();
-		this.nom = type_monstre.getNom();
+		this.vie = type_monstre.getPoints();
 		this.typeMonstre = type_monstre;
 		
 		setImage();
 	}
+	
+	
+	public int getPortee(){
+		return typeMonstre.getPortee();
+	}
+	
+	public int getPuissance(){
+		return typeMonstre.getPuissance();
+	}
+	
+	public int getTir(){
+		return typeMonstre.getTir();
+	}
+	
+	
+	public String getNom(){
+		return typeMonstre.getNom();
+	}
+	
+	public int getVieMax(){
+		return typeMonstre.getPoints();
+	}
+	
 }

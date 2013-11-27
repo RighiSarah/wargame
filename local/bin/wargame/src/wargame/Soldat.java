@@ -16,9 +16,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	protected Point coord = null;
 	
 	/** Informations de base d'un soldat. */
-	protected int vieMax;
-	protected int vie, portee, puissance, tir;
-	protected String nom;
+	protected int vie;
 	
 	/** Numéro de la case où se situe le soldat. */
 	private Position position;
@@ -44,48 +42,14 @@ public abstract class Soldat extends Charset implements ISoldat
 	}
 	
 	public double getPourcentageVie(){
-		return ((double)(vie/(double)vieMax)) * 100.;
-	}
-	
-	public int getVieMax() 
-	{
-		return vieMax;
+		return ((double)(vie/(double)this.getVieMax())) * 100.;
 	}
 
 	public void setVie(int vie) 
 	{
-		this.vie = ((vie > vieMax) ? vieMax : (vie < 0 ) ? 0 : vie);
+		this.vie = ((vie > this.getVieMax()) ? this.getVieMax() : (vie < 0 ) ? 0 : vie);
 	}
 	
-	public int getPortee() 
-	{
-		return portee;
-	}
-
-	public void setPortee(int portee) 
-	{
-		this.portee = portee;
-	}
-
-	public int getPuissance() 
-	{
-		return puissance;
-	}
-
-	public void setPuissance(int puissance) 
-	{
-		this.puissance = puissance;
-	}
-
-	public int getTir() 
-	{
-		return tir;
-	}
-
-	public void setTir(int tir) 
-	{
-		this.tir = tir;
-	}
 		
 	public void setSeDeplace(boolean value)
 	{
@@ -222,7 +186,7 @@ public abstract class Soldat extends Charset implements ISoldat
 			if(soldat.getPortee() >= distance) {
 				/* Alors une réplique est crée */
 				degat = (distance == 1) ? soldat.getPuissance() / IConfig.COEFFICIENT_REDUC : soldat.getTir() / IConfig.COEFFICIENT_REDUC;
-				FenetreJeu.information.setText("Un " + soldat.nom + " vous frappe, vous perdez " + degat + " points de vie");
+				FenetreJeu.information.setText("Un " + soldat.getNom() + " vous frappe, vous perdez " + degat + " points de vie");
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
 				
@@ -240,13 +204,6 @@ public abstract class Soldat extends Charset implements ISoldat
 		else {
 			Son.joueMourir(soldat);
 			soldat.setMort(true);	
-			
-			//if(valeur_retour == -1)
-			//	valeur_retour = 2;
-			//else
-			// J'AI COMPRIS LE CODE CEPENDANT CECI EST IMPOSSIBLE !
-				valeur_retour = 1;
-			
 		}
 		
 		this.setAJoue(true);
@@ -269,7 +226,7 @@ public abstract class Soldat extends Charset implements ISoldat
 			if(!afficherMessage)
 				return;
 			
-			FenetreJeu.information.setText(this.nom + " " + position.toString() + " a sa vie au maximum");
+			FenetreJeu.information.setText(this.getNom()+ " " + position.toString() + " a sa vie au maximum");
 			
 			Infobulle.newMessage(case_courante, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
 			return;
@@ -278,7 +235,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		/* Définition du message et de sa couleur */
 		Infobulle.newMessage(case_courante, "+ " + regain, IConfig.MESSAGE_POSITIF, IConfig.MOUV_INFOBULLE_HAUT, 0);
 		
-		FenetreJeu.information.setText(this.nom + " se repose et regagne " + regain + " points de vie");
+		FenetreJeu.information.setText(this.getNom() + " se repose et regagne " + regain + " points de vie");
 		
 		/* On met a jour sa vie et on indique qu'il a joué */
 		this.setVie(vie + regain);
@@ -335,7 +292,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		g.drawRect(dx + offsetX, dy + offsetY, 4, IConfig.NB_PIX_CASE - 2);
 		
 		/* Contenu. */
-		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)vieMax);
+		int offset = (int)(IConfig.NB_PIX_CASE * vie / (double)this.getVieMax());
 		g.setColor(color);
 		g.fillRect(dx + 1 + offsetX , dy + 1 + offsetY + IConfig.NB_PIX_CASE - offset, 3, offset - 3);
 
@@ -346,11 +303,11 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * @return La chaine formatée comprenant les caractéristiques du soldat
 	 */
 	public String toString(){
-		String chaine = nom + " " + getPosition().toString();
-		chaine += "\nVie: " + this.vie + " /" + this.vieMax;
-		chaine += "\nPuissance: " + this.puissance;
-		chaine += "\nTir: " + this.tir;
-		chaine += "\nPortee: " + this.portee;
+		String chaine = this.getNom() + " " + getPosition().toString();
+		chaine += "\nVie: " + this.vie + " /" + this.getVieMax();
+		chaine += "\nPuissance: " + this.getPuissance();
+		chaine += "\nTir: " + this.getTir();
+		chaine += "\nPortee: " + this.getPortee();
 		
 		return chaine;
 	}

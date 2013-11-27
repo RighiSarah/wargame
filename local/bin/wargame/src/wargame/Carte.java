@@ -224,7 +224,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @param caseArrivee Case sur laquel finira le soldat
 	 */
 	public void deplaceSoldat(Soldat sold,int caseArrivee) {
-		FenetreJeu.information.setText(sold.nom + " se deplace en " + caseActionnee );
+		FenetreJeu.information.setText(sold.getNom() + " se deplace en " + caseActionnee );
 
 		/* On supprime le brouillard du perso */
 		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
@@ -474,8 +474,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					/* Si il y a un héros à la case indiquée, qu'il est visible et pas mort */
 					if(soldat[pos.getNumCase()] != null 
 						&& soldat[pos.getNumCase()] instanceof Heros 
+						&& soldat[pos.getNumCase()].estVisible() && soldat[pos.getNumCase()].estMort() == false
 						&& !obstacleEntreCase(pos, p)
-						&& soldat[pos.getNumCase()].estVisible() && soldat[pos.getNumCase()].estMort() == false){
+					){
 						return pos;
 					}
 				}
