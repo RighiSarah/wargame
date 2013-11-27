@@ -224,7 +224,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @param caseArrivee Case sur laquel finira le soldat
 	 */
 	public void deplaceSoldat(Soldat sold,int caseArrivee) {
-		FenetreJeu.information.setText(sold.getNom() + " se deplace en " + caseActionnee );
+		carteListener.information(sold.getNom() + " se deplace en " + caseActionnee );
 
 		/* On supprime le brouillard du perso */
 		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
@@ -261,7 +261,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		tour++;
 		
-		FenetreJeu.information.setText("Début du tour " + tour);
+		carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -768,7 +768,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 
-		FenetreJeu.historique.setText(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
+		carteListener.historique(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
 
 	}
 
@@ -825,7 +825,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		
-		FenetreJeu.information.setText("Vous avez gagné ! ");
+		carteListener.information("Vous avez gagné ! ");
 
 		Graphics g = this.getGraphics();
 		
@@ -854,7 +854,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		
-		FenetreJeu.information.setText("Vous avez perdu ! ");
+		carteListener.information("Vous avez perdu ! ");
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));

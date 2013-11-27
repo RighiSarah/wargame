@@ -40,8 +40,8 @@ public class FenetreJeu extends JFrame
 	private static final long serialVersionUID = 7794325642011100784L;
     private JPanel barreEtat;
     private JSeparator separator;
-    static JLabel historique;
-    static JLabel information;
+    private JLabel historique;
+    private JLabel information;
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;
@@ -421,8 +421,19 @@ public class FenetreJeu extends JFrame
 				sonArriere.joueGagne();
 			}
 			
+			@Override
 			public void deplaceMonstre(){
 				finTour.setEnabled(!finTour.isEnabled());
+			}
+			
+			@Override
+			public void historique(String s){
+				historique.setText(s);
+			}
+			
+			@Override
+			public void information(String s){
+				information.setText(s);
 			}
 		});
 	    
