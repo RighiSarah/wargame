@@ -77,6 +77,7 @@ public class FenetreJeu extends JFrame
 	private JButton navigerHistoriqueUp;
 	private JButton navigerHistoriqueDown;
 	
+	/** Trigger*/
 	private boolean scroll = false;
 	
 	/** Carte du jeu. */
