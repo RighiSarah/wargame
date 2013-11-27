@@ -194,7 +194,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * Fonction permettant de crée un combat entre 2 soldats
 	 * @param soldat Instance du soldat à attaquer
 	 * @param distance Distance séparant soldat1 de soldat 2
-	 * @return -1 si le soldat qui attaque est mort, 1 si le soldat attaqué est mort 0 sinon
+	 * @return -1 si le soldat qui attaque est mort, 1 si le soldat attaqué est mort, 2 si les deux soldats sont morts et 0 sinon
 	 */
 	public int combat(Soldat soldat, int distance)
 	{	
@@ -226,7 +226,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
 				
-				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, -1);
+				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, 0);
 				this.setVie(vie);
 				
 				/* Si la réplique est fatale, le soldat qui a attaqué meurt */

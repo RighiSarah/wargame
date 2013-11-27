@@ -62,7 +62,40 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * Correspond également au soldat selectionné dans le combat.
 	 */
 	private int caseActionnee = -1;
-
+	
+	/* Rappel sur l'ordre du tableau :
+	 * 	HAUT, BAS, GAUCHE, DROITE
+	 */
+	public void changePos(boolean[] tabKey) {
+		if(caseActionnee == -1 || !generee)
+			return;
+		Position pos = soldat[caseActionnee].getPosition();
+		Position caseArrivee = null;
+		
+		if(tabKey[0]) {			// Si on a haut
+			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y - 1); } 	// Si Haut - Gauche
+			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y - 1); } 	// Si Haut - Droite
+			else				  caseArrivee = new Position(pos.x, pos.y - 1);  		// Si Haut
+		}
+		else if(tabKey[1]) {	// Sinon si on a bas
+			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y + 1); } 	// Si Bas - Gauche
+			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y + 1); } 	// Si Bas - Droite
+			else				  caseArrivee = new Position(pos.x, pos.y + 1);			// Si Bas
+		}
+		else if(tabKey[2]) 		  caseArrivee = new Position(pos.x - 1, pos.y);			// Si Gauche
+		else if(tabKey[3]) 		  caseArrivee = new Position(pos.x + 1, pos.y);			// Si Droite	
+		else					  return;
+		
+		if( caseArrivee.estValide() 
+				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
+				&& soldat[caseArrivee.getNumCase()] == null
+				&& !soldat[caseActionnee].getAJoue()) {
+			deplaceSoldat(soldat[caseActionnee], caseArrivee.getNumCase());
+			caseActionnee = -1;
+		}
+		
+	}
+	
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
 
@@ -85,8 +118,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Initialisation taux de rafraichissement. */
 		timer = new Timer((int)(1000.0 * 1.0 / IConfig.FPS), this);
 		timer.setInitialDelay(0);
-		timer.start();
-
+		timer.start();	             
+		
 		/* Création d'une carte vide. */
 		carte = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];	
 
@@ -111,6 +144,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
 					soldat[case_cliquee].repos(true);
+					nbToPlay--;
 				}
 
 				/* On change de héros si la case n'est pas vide, qu'il s'agit bien d'un soldat et que le soldat est affiché. */
@@ -133,11 +167,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& soldat[case_cliquee].estVisible() 
 						) {
 							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
-							
+							nbToPlay--;
 							/* Si le héros meurt oau cours du combat on supprime le brouillard */
-							if(soldat[caseActionnee].estMort())
+							if(soldat[caseActionnee].estMort()) {
 								changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
-
+								caseActionnee = -1;
+							}
 							return;
 						}
 
@@ -149,25 +184,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& tileset.getTile(carte[case_cliquee]).estPraticable() 
 							&& ( soldat[case_cliquee] == null || soldat[case_cliquee].estMort() ) && !soldat[caseActionnee].getAJoue()
 						) {
-							FenetreJeu.information.setText(soldat[caseActionnee].nom + " se deplace en " + caseActionnee );
-
-							/* On supprime le brouillard du perso */
-							changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
-
-							
-							soldat[case_cliquee] = soldat[caseActionnee];
-							soldat[caseActionnee] = null;
-
-							/* On déplace le soldat à la nouvelle position */
-							deplaceSoldat(soldat[case_cliquee], new Position(case_cliquee));
-							
-							/* on recré le brouillard associé au perso */
-							
-							/* Petit cheat sur new Position(case_cliquee) ;
-							 * étant donné que le mouvement n'est pas encore finis , 
-							 * la position n'est pas mis a jours, cependant ont sait qu'il sera a la position case_cliquee
-							 */
-							changeBrouillard(new Position(case_cliquee), soldat[case_cliquee].getPortee() , 1);
+							 deplaceSoldat(soldat[caseActionnee],case_cliquee);
 						}
 					}
 					/* Fin deplacement on re-initialise la case */
@@ -194,6 +211,32 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		});
 	}
 	
+	/** 
+	 * Regenere le brouillard du au déplacement et deplace le soldat
+	 * @param sold Soldat a deplacer
+	 * @param caseArrivee Case sur laquel finira le soldat
+	 */
+	public void deplaceSoldat(Soldat sold,int caseArrivee) {
+		FenetreJeu.information.setText(sold.nom + " se deplace en " + caseActionnee );
+
+		/* On supprime le brouillard du perso */
+		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
+		
+		soldat[caseArrivee] = soldat[sold.getPosition().getNumCase()];
+		soldat[sold.getPosition().getNumCase()] = null;
+
+		/* On déplace le soldat à la nouvelle position */
+		deplaceSoldat(soldat[caseArrivee], new Position(caseArrivee));
+		
+		/* on recré le brouillard associé au perso */
+		
+		/* Petit cheat sur new Position(case_cliquee) ;
+		 * étant donné que le mouvement n'est pas encore finis , 
+		 * la position n'est pas mis a jours, cependant ont sait qu'il sera a la position case_cliquee
+		 */
+		changeBrouillard(new Position(caseArrivee), soldat[caseArrivee].getPortee() , 1);
+	}
+	
 	/**
 	 * Méthode permettant d'associer un listener
 	 * @param l Le listener
@@ -207,6 +250,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * Méthode permettant de reinitialiser le tour de tous les soldats
 	 */
 	public void reinitAJoue() {
+		joueMonstres();
+		
 		tour++;
 		
 		FenetreJeu.information.setText("Début du tour " + tour);
@@ -373,6 +418,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	{
 		Son.joueCourir();
 		soldat.setAJoue(true);
+		nbToPlay--;
 		int sx = soldat.getPosition().x;
 		int sy = soldat.getPosition().y;
 		int dx = nouvelle_position.x;
@@ -706,10 +752,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		Infobulle.dessiner(g);
 
 		FenetreJeu.historique.setText(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
+
 	}
 
 	public void actionPerformed(ActionEvent e) 
 	{	
+		if(nbToPlay == 0)	reinitAJoue();
 		repaint();
 	}
 
@@ -834,12 +882,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			}
 			else if(v == 1) {
 				nbHerosRestant--;
+				caseActionnee = -1;
 				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
 			}
 		}
 		else{
 			if(v == -1) {
 				nbHerosRestant--;
+				caseActionnee = -1;
 				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
 			}
 			else if(v == 1){
@@ -859,7 +909,28 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		return retour;
 	}
+		
+	/** 
+	 * Change la valeur de la caseActionnée en fonction du numéro d'un héros
+	 * @param numHeros Case Actuel du héros séléctionnée
+	 * @return numéro de la case du nouveau héros
+	 */
+	public int trouverProchainHeros(int numHeros) {
+		if(++numHeros >= nbHerosRestant)
+			numHeros = 0;
+		
+		// La boucle s'arretera car , si on a plus de héros qui peuvent jouer, le tour s'arrete
+		// si jamais on veut avoir tout les perso, retirer entierement la boucle si dessous
+		while(heros[numHeros].getAJoue())
+			if(++numHeros >= nbHerosRestant)
+				numHeros = 0;
+		
+		caseActionnee = heros[numHeros].getPosition().getNumCase();
+		
+		return numHeros;
+	}
 	
+
 	public boolean obstacleEntreCase(Position position1, Position position2){
 		boolean obstacle = false;
 		
@@ -926,6 +997,13 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		return obstacle;
 	}
 	
+
+	/** 
+	 * Retourne la valeur du boolean brouillardActive
+	 *
+	 * @return true si brouillard est actif
+	 * 		   false sinon
+	 */
 	public boolean getBrouillardActive() {
 		return brouillardActive;
 	}

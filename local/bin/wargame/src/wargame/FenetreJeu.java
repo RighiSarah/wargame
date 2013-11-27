@@ -19,12 +19,14 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -75,6 +77,34 @@ public class FenetreJeu extends JFrame
     /** Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
 	
+	/** Numéro de la case du héros actionnée */
+	int numHeros = 0;
+	
+	/** 
+	 * Tableau contenant les touches actionnées 
+	 * Dans cette ordre :
+	 * 			HAUT, BAS, GAUCHE, DROITE
+	 */
+	boolean[] tabKey = {false,false,false,false};
+	
+	/** Timer. */
+	Timer timer = new Timer(IConfig.DELAI_TOUCHE, 
+													new ActionListener() {
+														public void actionPerformed (ActionEvent event) {
+															if(timerOn) {
+																//System.out.println("Up : "+tabKey[0] + " Down : "+tabKey[1] +" Left : "+ tabKey[2] +" Right : "+ tabKey[3]);
+																carte.changePos(tabKey);
+																timerOn = false;
+															}
+														}
+													});
+	/** 
+	 * Boolean qui indique si le timer est activé ou non
+	 * 				True si le timer est en route
+	 * 				False sinon
+	 */
+	boolean timerOn = false;
+	
 	/** Objet Son servant à gérer le son d'arrière plan */
 	private Son sonArriere;
 
@@ -86,12 +116,66 @@ public class FenetreJeu extends JFrame
 	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
 		FenetreJeu fenetre = new FenetreJeu();
-
 		fenetre.setVisible(true);
 	}
-
+	
+	public void timer() {
+		if(timerOn)
+			return;
+		
+		timer.setDelay(IConfig.DELAI_TOUCHE);	
+		timer.start();
+		timerOn = true;
+	}
+	
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
+
+		/* No Tab key-pressed or key-released events are received by the key event listener.
+		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
+		 */
+		setFocusTraversalKeysEnabled(false);
+		addKeyListener(new KeyListener() {
+			
+		    public void keyPressed(KeyEvent e) { 
+		    	int key = e.getKeyCode();
+
+		    	if (key == KeyEvent.VK_TAB) { 
+		    		numHeros = carte.trouverProchainHeros(numHeros);
+		    	}
+		    	else if(key == KeyEvent.VK_UP) {
+		    		timer();
+		    		tabKey[0] = true;
+		    		//System.out.println("UP");
+		    	}
+		    	else if(key == KeyEvent.VK_DOWN) {
+		    		timer();
+		    		tabKey[1] = true;
+		    		//System.out.println("DOWN");
+		    	}
+		    	else if(key == KeyEvent.VK_LEFT) {
+		    		timer();
+		    		tabKey[2] = true;
+		    		//System.out.println("LEFT");
+		    	}
+		    	else if(key == KeyEvent.VK_RIGHT) {
+		    		timer();
+		    		tabKey[3] = true;
+		    		//System.out.println("RIGHT");
+		    	} 	
+		    }
+
+			public void keyReleased(KeyEvent e) { 
+				int key = e.getKeyCode();
+		    	if(key == KeyEvent.VK_UP)   		tabKey[0] = false;
+		    	else if(key == KeyEvent.VK_DOWN) 	tabKey[1] = false;
+		    	else if(key == KeyEvent.VK_LEFT)	tabKey[2] = false;
+		    	else if(key == KeyEvent.VK_RIGHT)	tabKey[3] = false;
+			}
+
+			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
+		});
+		
 		this.setTitle("Wargame");
         this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
         
@@ -236,10 +320,6 @@ public class FenetreJeu extends JFrame
 	    sauvegarder.addMenuListener(new MenuListener() {
 			public void menuSelected(MenuEvent e) 
 			{
-				File dir = new File(IConfig.CHEMIN_SAUVEGARDE);
-				if(!dir.exists())
-					dir.mkdir();
-				
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
 					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");
@@ -287,7 +367,6 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(carte.isGeneree()){
-					carte.joueMonstres();
 					carte.reinitAJoue();
 				}
 			}
@@ -328,7 +407,7 @@ public class FenetreJeu extends JFrame
 	    this.pack();
 	    
 	    this.setVisible(true);
-	    
+	        
 	    /* Événements de carte */
 	    carte.onStateRealized(new CarteListener() {
 			
