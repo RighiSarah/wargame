@@ -88,8 +88,8 @@ public class Tileset
 	
 	/** Ajoute une case de rochers sur la carte.
 	 * @param carte Carte du jeu
-	 * @param x     Position où ajouter le rocher
-	 * @return      false si x, y ne font pas partis de la carte, true sinon.
+	 * @param p     Position où ajouter le rocher
+	 * @return      false si p n'est pas sur la carte, true sinon.
 	 */
 	protected boolean setRocher(Carte carte, Position p)
 	{

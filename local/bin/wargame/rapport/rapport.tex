@@ -84,7 +84,16 @@ En étudiant de plus près le sujet, plusieurs classes décrivant plusieurs él�
 Nous avons ensuite convenu de faire une interface graphique plus poussée que celle demandée dans le sujet à l'aide d'images animées.
 Pour ce faire, il nous fallait créer plusieurs classe :
 \begin{itemize}
- \item % Merci Ronan de continuer
+ \item Tileset : Par définition un tileset est une image composée d'un ensemble de tiles. Ces tiles sont des morceaux du tileset d'une taille de 32x32 ici. Le tileset permet donc de facilement créer une carte en sélectionnant une case de décor sur une grande image.
+ \item Tile : Un tile est comme indiqué ci-dessus, est un morceau du tileset. Un tile est définit par sa praticabilité (Peut-on marcher dessus ?) et sa traversabilité (Une flèche peut-elle passer à travers ?). Il va de soit qu'avec cette configuration, il est inutile de passer par une classe Obstacle. D'autant plus qu'avec notre configuration, nous pouvons dessiner des grands décors, comme un arbre de 4 cases par 4.
+ \item Charset : Une image contenant un ensemble de sprites d'un personnage. Un charset dans notre projet est composé de 4 directions :
+   \begin{itemize}
+     \item Haut
+     \item Bas
+     \item Droite
+     \item Gauche
+   \end{itemize}
+   Ainsi que de 4 animations de déplacements. Un charset est aussi caractérisé par une vitesse de déplacement et de visibilité sur la carte. Enfin Soldat hérite de cette classe.
 \end{itemize}
 
 \paragraph{}
@@ -210,7 +219,7 @@ Nous avons trouvé quelques pistes lorsque nous étions bloqué sur plusieurs fo
 
 En ce qui concerne les sons, nous avons trouvé les bruitages sur \href{http://www.sound-fishing.net}{sound-fishing.net} et les musiques MIDI sur \href{http://moviethemes.net/lord-rings.html}{moviethemes.net}
 
-Enfin, en ce qui concerne les imgaes nous avons extrait les décors (herbe, rochers...) et quelques personnages du jeu Zelda. % Merci Ronan de continuer
+Enfin, en ce qui concerne les images nous avons extrait les décors (herbe, rochers...) et quelques personnages du jeu The Legend Zelda - Minish Cap. Nous les avons assemblés à partir du jeu original (Par émulateur.) et avec des sources du site \href{http://www.spriters-resource.com/}{spriters-ressources}
 
 \section{Conclusion}
 \subsection{Analyse critique}
@@ -226,6 +235,9 @@ Malheureusement nous nous n'avions pas le temps libre pour implémenter cette fo
 
 \subsection{Analyses personnelles}
   \subsubsection{Abhamon Ronan}
+  Projet sympathique. Cependant très insatisfait d'eclipse, beaucoup d'instabilité sur de nombreux systèmes Unix. Soit je suis maudit, soit c'est réellement le cas. Mise à part ces problèmes, j'ai trouvé une très grande productivité avec swing. Même si je vois Java ainsi que Swing comme une grande usine à gaz, je peux dire qu'en temps de développement, c'est assez rentable. 
+
+  Concernant la POO, je possède des notions par le C++ et Ruby. Java instaure cependant, des concepts que je ne connaissais pas vraiment, j'ai donc pu comprendre plusieurs nouvelles choses par ce projet. Enfin, un grand avantage de la POO dans la conception de ce jeu est de facilement pouvoir décomposer le travail entre chaque personne du groupe. C'est un bon point sachant qu'un développement en C ou en d'autres langages plus bas niveau, il n'est pas évident de s'organiser correctement. Ici il n'est pas necessaire d'être très rigoureux pour avancer.
 
   \subsubsection{Bigard Florian}
   J'ai trouvé ce projet très intéressant.
