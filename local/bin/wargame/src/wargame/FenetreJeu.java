@@ -27,6 +27,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -38,19 +40,16 @@ import java.util.Date;
 public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 7794325642011100784L;
-    private JPanel barreEtat;
-    private JSeparator separator;
-    static JLabel historique;
-    static JLabel information;
+	
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;
 	private JMenu sauvegarder;
 	private JMenu charger;
 	private JMenu config;
-	
+		
 	private static JButton finTour;
-
+	
 	/* Options des menus. */
 	
 	/** Nouvelle partie. */
@@ -71,8 +70,22 @@ public class FenetreJeu extends JFrame
 	/** activer / désactiver le brouillard */
 	private JMenuItem brouillard;
 	
+	private JPanel sousMenu;
+	
+	private JButton boutonCharger;
+	private JButton boutonSauvegarder;
+	private JButton navigerHistoriqueUp;
+	private JButton navigerHistoriqueDown;
+	
+	private boolean scroll = false;
+	
 	/** Carte du jeu. */
     Carte carte;
+
+	private JSeparator separator;
+    private JPanel barreEtat;
+    static JLabel historique;
+    static JLabel information;
 
     /** Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
@@ -174,6 +187,19 @@ public class FenetreJeu extends JFrame
 			}
 
 			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
+		});
+		
+		addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				scroll = !scroll;
+				if(!scroll)
+					return;
+				
+	            if (e.getPreciseWheelRotation() < 0) // Haut
+	            	System.out.println("Up " + e.getPreciseWheelRotation());
+	            else
+	            	System.out.println("Down " + e.getPreciseWheelRotation() + e.getClickCount());
+			}
 		});
 		
 		this.setTitle("Wargame");
@@ -372,17 +398,43 @@ public class FenetreJeu extends JFrame
 			}
 		});
 	    
+	    
         carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
         									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
-        this.add(carte, BorderLayout.NORTH);
-        
-        /* Do Not Touch plz */
-        
+	    
+	    sousMenu = new JPanel();
+	    sousMenu.setPreferredSize(new Dimension(carte.getWidth(), 35));
+	    
+	    boutonCharger 			= new JButton("Charger");
+	    boutonCharger.setPreferredSize(new Dimension(30,30));
+	    
+		boutonSauvegarder 		= new JButton("Sauvegarder");
+		boutonSauvegarder.setPreferredSize(new Dimension(30,30));
+		
+		navigerHistoriqueUp 	= new JButton("Naviger Up");
+		navigerHistoriqueUp.setPreferredSize(new Dimension(30,30));
+		
+		navigerHistoriqueDown 	= new JButton("Naviger Down");
+		navigerHistoriqueDown.setPreferredSize(new Dimension(30,30));
+		
+	    sousMenu.add(boutonCharger);
+	    sousMenu.add(boutonSauvegarder);
+	    sousMenu.add(navigerHistoriqueUp);
+	    sousMenu.add(navigerHistoriqueDown);
+
+	    
+	    this.add(sousMenu,BorderLayout.PAGE_START);
+	    
         separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBackground(Color.DARK_GRAY);
         separator.setSize(new Dimension(carte.getWidth(), 5));
         
-        this.add(separator,BorderLayout.CENTER);
+        JSeparator sep = separator;
+        this.add(sep,BorderLayout.NORTH);
+
+        this.add(carte, BorderLayout.CENTER);
+        
+        this.add(separator, BorderLayout.SOUTH);
 
         barreEtat = new JPanel();
         historique = new JLabel("Pour commencer, crée une nouvelle partie ou charger en une", JLabel.RIGHT);
@@ -394,12 +446,12 @@ public class FenetreJeu extends JFrame
         barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(information);
 
-        this.add(barreEtat,BorderLayout.SOUTH);
+        this.add(barreEtat,BorderLayout.PAGE_END);
 	    
         
         /* On joue le son d'arrière plan */
-		sonArriere = new Son();
-		sonArriere.joueSonArriere();
+		//sonArriere = new Son();
+		//sonArriere.joueSonArriere();
 
         
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
