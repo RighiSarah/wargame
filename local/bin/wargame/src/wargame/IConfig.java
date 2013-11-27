@@ -34,8 +34,10 @@ public interface IConfig
 	/** Liste des images des soldats. */
 	String IMAGE_HUMAIN  = "archer.png";
 	String IMAGE_ELFE    = "elfe.png";
+	String IMAGE_NAIN 	 = "nain.png";
 	String IMAGE_GOBELIN = "gobelin.png";
 	String IMAGE_ORC     = "orc.png";
+	String IMAGE_TROLL 	 = "troll.png";
 
 	/** Taille de la carte. */
 	int LARGEUR_CARTE = 25; 

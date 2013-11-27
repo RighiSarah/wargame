@@ -760,7 +760,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void actionPerformed(ActionEvent e) 
 	{	
 		if(nbToPlay == 0)	reinitAJoue();
-		System.out.println(nbToPlay);
 		repaint();
 	}
 
