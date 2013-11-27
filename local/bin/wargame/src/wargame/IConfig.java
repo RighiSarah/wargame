@@ -111,5 +111,7 @@ public interface IConfig
 	 * ATTENTION : Ne peut etre égale a 0 ! 
 	 */
 	 int COEFFICIENT_REDUC = 3;
+	 
+	 int DELAI_TOUCHE = 100;
     
 }

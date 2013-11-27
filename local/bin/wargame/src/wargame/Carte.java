@@ -6,8 +6,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.FileInputStream;
@@ -64,7 +62,42 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * Correspond également au soldat selectionné dans le combat.
 	 */
 	private int caseActionnee = -1;
-
+	
+	/* Rappel sur l'ordre du tableau :
+	 * 	HAUT, BAS, GAUCHE, DROITE
+	 */
+	public void changePos(boolean[] tabKey) {
+		if(caseActionnee == -1 || !generee)
+			return;
+		Position pos = soldat[caseActionnee].getPosition();
+		Position caseArrivee = null;
+		
+		if(tabKey[0]) {			// Si on a haut
+			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y - 1); } 	// Si Haut - Gauche
+			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y - 1); } 	// Si Haut - Droite
+			else				  caseArrivee = new Position(pos.x, pos.y - 1);  		// Si Haut
+		}
+		else if(tabKey[1]) {	// Sinon si on a bas
+			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y + 1); } 	// Si Bas - Gauche
+			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y + 1); } 	// Si Bas - Droite
+			else				  caseArrivee = new Position(pos.x, pos.y + 1);			// Si Bas
+		}
+		else if(tabKey[2]) 		  caseArrivee = new Position(pos.x - 1, pos.y);			// Si Gauche
+		else if(tabKey[3]) 		  caseArrivee = new Position(pos.x + 1, pos.y);			// Si Droite	
+		else					  return;
+		
+		System.out.println(pos.getNumCase());
+		System.out.println(caseArrivee.getNumCase());
+		if( caseArrivee.estValide() 
+				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
+				&& soldat[caseArrivee.getNumCase()] == null
+				&& !soldat[caseActionnee].getAJoue()) {
+			deplaceSoldat(soldat[caseActionnee], caseArrivee.getNumCase());
+			caseActionnee = -1;
+		}
+		
+	}
+	
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
 
@@ -152,25 +185,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& tileset.getTile(carte[case_cliquee]).estPraticable() 
 							&& ( soldat[case_cliquee] == null || soldat[case_cliquee].estMort() ) && !soldat[caseActionnee].getAJoue()
 						) {
-							FenetreJeu.information.setText(soldat[caseActionnee].nom + " se deplace en " + caseActionnee );
-
-							/* On supprime le brouillard du perso */
-							changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
-
-							
-							soldat[case_cliquee] = soldat[caseActionnee];
-							soldat[caseActionnee] = null;
-
-							/* On déplace le soldat à la nouvelle position */
-							deplaceSoldat(soldat[case_cliquee], new Position(case_cliquee));
-							
-							/* on recré le brouillard associé au perso */
-							
-							/* Petit cheat sur new Position(case_cliquee) ;
-							 * étant donné que le mouvement n'est pas encore finis , 
-							 * la position n'est pas mis a jours, cependant ont sait qu'il sera a la position case_cliquee
-							 */
-							changeBrouillard(new Position(case_cliquee), soldat[case_cliquee].getPortee() , 1);
+							 deplaceSoldat(soldat[caseActionnee],case_cliquee);
 						}
 					}
 					/* Fin deplacement on re-initialise la case */
@@ -195,6 +210,32 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				}
 			}
 		});
+	}
+	
+	/** 
+	 * Regenere le brouillard du au déplacement et deplace le soldat
+	 * @param sold Soldat a deplacer
+	 * @param caseArrivee Case sur laquel finira le soldat
+	 */
+	public void deplaceSoldat(Soldat sold,int caseArrivee) {
+		FenetreJeu.information.setText(sold.nom + " se deplace en " + caseActionnee );
+
+		/* On supprime le brouillard du perso */
+		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
+		
+		soldat[caseArrivee] = soldat[sold.getPosition().getNumCase()];
+		soldat[sold.getPosition().getNumCase()] = null;
+
+		/* On déplace le soldat à la nouvelle position */
+		deplaceSoldat(soldat[caseArrivee], new Position(caseArrivee));
+		
+		/* on recré le brouillard associé au perso */
+		
+		/* Petit cheat sur new Position(case_cliquee) ;
+		 * étant donné que le mouvement n'est pas encore finis , 
+		 * la position n'est pas mis a jours, cependant ont sait qu'il sera a la position case_cliquee
+		 */
+		changeBrouillard(new Position(caseArrivee), soldat[caseArrivee].getPortee() , 1);
 	}
 	
 	/**
