@@ -86,8 +86,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		else if(tabKey[3]) 		  caseArrivee = new Position(pos.x + 1, pos.y);			// Si Droite	
 		else					  return;
 		
-		System.out.println(pos.getNumCase());
-		System.out.println(caseArrivee.getNumCase());
 		if( caseArrivee.estValide() 
 				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
 				&& soldat[caseArrivee.getNumCase()] == null
@@ -918,9 +916,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @return numéro de la case du nouveau héros
 	 */
 	public int trouverProchainHeros(int numHeros) {
-		
 		if(++numHeros >= nbHerosRestant)
 			numHeros = 0;
+		
+		// La boucle s'arretera car , si on a plus de héros qui peuvent jouer, le tour s'arrete
+		// si jamais on veut avoir tout les perso, retirer entierement la boucle si dessous
+		while(heros[numHeros].getAJoue())
+			if(++numHeros >= nbHerosRestant)
+				numHeros = 0;
 		
 		caseActionnee = heros[numHeros].getPosition().getNumCase();
 		
