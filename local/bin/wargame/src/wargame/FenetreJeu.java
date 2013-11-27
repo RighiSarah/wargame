@@ -10,11 +10,13 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
@@ -22,6 +24,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +33,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -40,14 +44,12 @@ import java.util.Date;
 public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 7794325642011100784L;
-<<<<<<< HEAD
-	
-=======
-    private JPanel barreEtat;
+
+	private JPanel barreEtat;
     private JSeparator separator;
     private JLabel historique;
     private JLabel information;
->>>>>>> ba2c25f321df647735d819575094abad88647f22
+
 	/** Menus. */
 	private JMenuBar menu;
 	private JMenu jeu;
@@ -89,11 +91,6 @@ public class FenetreJeu extends JFrame
 	
 	/** Carte du jeu. */
     Carte carte;
-
-	private JSeparator separator;
-    private JPanel barreEtat;
-    static JLabel historique;
-    static JLabel information;
 
     /** Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
@@ -255,7 +252,7 @@ public class FenetreJeu extends JFrame
 	    		private final int NUM = k;
 		    	public void actionPerformed(ActionEvent arg0) 
 		    	{
-					carte.sauvegarde(NUM);
+					carte.sauvegarde(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + NUM + ".ser");
 		    	}       
 		    });
 	    	
@@ -429,8 +426,34 @@ public class FenetreJeu extends JFrame
 	    sousMenu.add(boutonSauvegarder);
 	    sousMenu.add(navigerHistoriqueUp);
 	    sousMenu.add(navigerHistoriqueDown);
-
 	    
+	    boutonSauvegarder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+			        JFileChooser fichier = new JFileChooser();
+			        fichier.setDialogTitle("Ouvrir fichier");
+			        fichier.setCurrentDirectory(new File("."));
+			        fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
+
+			        int choix = fichier.showOpenDialog(carte);
+	                if (choix != JFileChooser.APPROVE_OPTION)
+	                        return;
+	                
+	               	File fichierChoisit = fichier.getSelectedFile();
+
+	                if(fichierChoisit.getPath().endsWith(".ser") == false)
+	                	fichierChoisit = new File(fichierChoisit + ".ser");
+	                
+	                if (fichierChoisit.exists()){
+                        choix = JOptionPane.showConfirmDialog(carte, "Le fichier " + fichierChoisit + " existe déjà\nVoulez-vous vraiment l'écraser ?", "Fichier déjà existant", JOptionPane.YES_NO_OPTION);
+                        if (choix == JOptionPane.NO_OPTION)  return;
+	                }
+	                
+	                carte.sauvegarde(fichierChoisit.getPath());
+			}
+		});
+	    
+
 	    this.add(sousMenu,BorderLayout.PAGE_START);
 	    
         separator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -455,8 +478,7 @@ public class FenetreJeu extends JFrame
         barreEtat.add(information);
 
         this.add(barreEtat,BorderLayout.PAGE_END);
-	    
-        
+	            
         /* On joue le son d'arrière plan */
 		//sonArriere = new Son();
 		//sonArriere.joueSonArriere();

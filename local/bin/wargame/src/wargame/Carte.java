@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -624,23 +626,23 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Sauvegarde une carte.
 	 * @param num Numéro de la sauvegarde.
 	 */
-	public void sauvegarde(int num)
+	public void sauvegarde(String chemin)
 	{
 		try {
-			FileOutputStream fichier = new FileOutputStream(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + num + ".ser");
-			ObjectOutputStream oos = new ObjectOutputStream(fichier);
-			
-			oos.write(tour);
-			oos.write(nbHerosRestant);
-			oos.write(nbMonstresRestant);
-			oos.writeObject(carte);
-			oos.writeObject(monstre);
-			oos.writeObject(heros);
-			oos.writeObject(soldat);
-			oos.writeObject(brouillard);
-
-			oos.flush();
-			oos.close();
+				FileOutputStream fichier = new FileOutputStream(chemin);
+				ObjectOutputStream oos = new ObjectOutputStream(fichier);
+				
+				oos.write(tour);
+				oos.write(nbHerosRestant);
+				oos.write(nbMonstresRestant);
+				oos.writeObject(carte);
+				oos.writeObject(monstre);
+				oos.writeObject(heros);
+				oos.writeObject(soldat);
+				oos.writeObject(brouillard);
+	
+				oos.flush();
+				oos.close();
 		}
 		catch(java.io.IOException e) {
 			e.printStackTrace();
