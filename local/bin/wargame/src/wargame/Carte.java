@@ -146,6 +146,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
 					soldat[case_cliquee].repos(true);
+					nbToPlay--;
 				}
 
 				/* On change de héros si la case n'est pas vide, qu'il s'agit bien d'un soldat et que le soldat est affiché. */
@@ -168,7 +169,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							&& soldat[case_cliquee].estVisible() 
 						) {
 							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
-							
+							nbToPlay--;
 							/* Si le héros meurt oau cours du combat on supprime le brouillard */
 							if(soldat[caseActionnee].estMort()) {
 								changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
