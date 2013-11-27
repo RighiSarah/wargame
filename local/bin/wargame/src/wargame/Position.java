@@ -133,13 +133,17 @@ public class Position extends Point implements IConfig{
 		return direction;
 	}
 	
-
+	
+	public boolean equals(Position pos){
+		return ((pos.x == this.x) && (pos.y == this.y));  
+	}
+	
+	
 	/**
 	 * Méthode toString affichant les coordonnées de la position
 	 */
 	public String toString() { 
 		return "(" + x + "," + y +")"; 
 	}
-	
 	
 }
