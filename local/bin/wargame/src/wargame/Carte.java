@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -19,7 +18,6 @@ import java.io.Serializable;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -226,7 +224,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @param caseArrivee Case sur laquel finira le soldat
 	 */
 	public void deplaceSoldat(Soldat sold,int caseArrivee) {
-		carteListener.information(sold.getNom() + " se deplace en " + caseActionnee );
+		
+		Historique.addMessage(sold.getNom() + " se deplace en " + caseActionnee);
+		//carteListener.information(sold.getNom() + " se deplace en " + caseActionnee );
 
 		/* On supprime le brouillard du perso */
 		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
@@ -262,8 +262,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		joueMonstres();
 		
 		tour++;
-		
-		carteListener.information("Début du tour " + tour);
+		Historique.addMessage("Début du tour " + tour);
+		//carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -826,8 +826,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
-		
-		carteListener.information("Vous avez gagné ! ");
+		Historique.addMessage("Vous avez gagné ! ");
+		//carteListener.information("Vous avez gagné ! ");
 
 		Graphics g = this.getGraphics();
 		
@@ -855,8 +855,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
+		Historique.addMessage("Vous avez perdu ! ");
+		//carteListener.information("Vous avez perdu ! ");
 		
-		carteListener.information("Vous avez perdu ! ");
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));

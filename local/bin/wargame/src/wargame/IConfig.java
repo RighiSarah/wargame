@@ -116,5 +116,8 @@ public interface IConfig
 	 int COEFFICIENT_REDUC = 3;
 	 
 	 int DELAI_TOUCHE = 100;
+	 
+	 /** Nombre maximum de message dans la file de l'historique */
+	 int TAILLE_MAX_HISTORIQUE = 50;
     
 }

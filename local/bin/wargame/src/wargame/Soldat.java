@@ -187,10 +187,12 @@ public abstract class Soldat extends Charset implements ISoldat
 				/* Alors une réplique est crée */
 				degat = (distance == 1) ? soldat.getPuissance() / IConfig.COEFFICIENT_REDUC : soldat.getTir() / IConfig.COEFFICIENT_REDUC;
 				
+				Historique.addMessage("Un " + soldat.getNom() + " vous frappe, vous perdez " + degat + " points de vie");
 //				FenetreJeu.information.setText("Un " + soldat.getNom() + " vous frappe, vous perdez " + degat + " points de vie");
 				
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
+				
 				
 				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, 0);
 				this.setVie(vie);
@@ -228,6 +230,7 @@ public abstract class Soldat extends Charset implements ISoldat
 			if(!afficherMessage)
 				return;
 			
+			Historique.addMessage(this.getNom()+ " " + position.toString() + " a sa vie au maximum");
 //			FenetreJeu.information.setText(this.getNom()+ " " + position.toString() + " a sa vie au maximum");
 			
 			Infobulle.newMessage(case_courante, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
@@ -237,6 +240,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		/* Définition du message et de sa couleur */
 		Infobulle.newMessage(case_courante, "+ " + regain, IConfig.MESSAGE_POSITIF, IConfig.MOUV_INFOBULLE_HAUT, 0);
 		
+		Historique.addMessage(this.getNom() + " se repose et regagne " + regain + " points de vie");
 //		FenetreJeu.information.setText(this.getNom() + " se repose et regagne " + regain + " points de vie");
 		
 		/* On met a jour sa vie et on indique qu'il a joué */

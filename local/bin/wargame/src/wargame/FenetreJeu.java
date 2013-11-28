@@ -33,7 +33,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -48,7 +47,7 @@ public class FenetreJeu extends JFrame
 	private JPanel barreEtat;
     private JSeparator separator;
     private JLabel historique;
-    private JLabel information;
+    static JLabel information;
 
 	/** Menus. */
 	private JMenuBar menu;
@@ -88,6 +87,8 @@ public class FenetreJeu extends JFrame
 	
 	/** Trigger*/
 	private boolean scroll = false;
+	
+	private int compteurMessageActuel = 0;
 	
 	/** Carte du jeu. */
     Carte carte;
@@ -200,10 +201,21 @@ public class FenetreJeu extends JFrame
 				if(!scroll)
 					return;
 				
-	            if (e.getPreciseWheelRotation() < 0) // Haut
-	            	System.out.println("Up " + e.getPreciseWheelRotation());
-	            else
-	            	System.out.println("Down " + e.getPreciseWheelRotation() + e.getClickCount());
+	            if (e.getPreciseWheelRotation() < 0) { // Haut 
+	            	System.out.println(compteurMessageActuel);
+	            	System.out.println("Taille : "+Historique.getSize());
+	            	if(compteurMessageActuel + 1 < Historique.getSize())
+	            		information.setText(Historique.getMessage(++compteurMessageActuel));
+
+	            }
+	            else {
+	            	System.out.println(compteurMessageActuel);
+	            	System.out.println("Taille : "+Historique.getSize());
+	            	if(compteurMessageActuel - 1 >= 0)
+	            		information.setText(Historique.getMessage(--compteurMessageActuel));
+
+
+	            }
 			}
 		});
 		
@@ -493,6 +505,8 @@ public class FenetreJeu extends JFrame
         this.add(separator, BorderLayout.SOUTH);
 
         barreEtat = new JPanel();
+        
+       
         historique = new JLabel("Pour commencer, crée une nouvelle partie ou charger en une", JLabel.RIGHT);
         information = new JLabel("Ici s'affichera l'historique des actions", JLabel.LEFT);
         barreEtat.setSize(new Dimension(carte.getWidth(), 16));
@@ -505,8 +519,8 @@ public class FenetreJeu extends JFrame
         this.add(barreEtat,BorderLayout.PAGE_END);
 	            
         /* On joue le son d'arrière plan */
-		//sonArriere = new Son();
-		//sonArriere.joueSonArriere();
+		sonArriere = new Son();
+		sonArriere.joueSonArriere();
 
         
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
