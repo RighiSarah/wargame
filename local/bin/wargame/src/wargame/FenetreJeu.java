@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
@@ -82,8 +84,10 @@ public class FenetreJeu extends JFrame
 	
 	private JButton boutonCharger;
 	private JButton boutonSauvegarder;
-	private JButton navigerHistoriqueUp;
+	private JButton navigerHistoriquePremier;
 	private JButton navigerHistoriqueDown;
+	private JButton navigerHistoriqueUp;
+	private JButton navigerHistoriqueDernier;
 	
 	/** Trigger*/
 	private boolean scroll = false;
@@ -202,15 +206,11 @@ public class FenetreJeu extends JFrame
 					return;
 				
 	            if (e.getPreciseWheelRotation() < 0) { // Haut 
-	            	System.out.println(compteurMessageActuel);
-	            	System.out.println("Taille : "+Historique.getSize());
 	            	if(compteurMessageActuel + 1 < Historique.getSize())
 	            		information.setText(Historique.getMessage(++compteurMessageActuel));
 
 	            }
 	            else {
-	            	System.out.println(compteurMessageActuel);
-	            	System.out.println("Taille : "+Historique.getSize());
 	            	if(compteurMessageActuel - 1 >= 0)
 	            		information.setText(Historique.getMessage(--compteurMessageActuel));
 
@@ -428,16 +428,56 @@ public class FenetreJeu extends JFrame
 		boutonSauvegarder 		= new JButton("Sauvegarder");
 		boutonSauvegarder.setPreferredSize(new Dimension(30,30));
 		
-		navigerHistoriqueUp 	= new JButton("Naviger Up");
-		navigerHistoriqueUp.setPreferredSize(new Dimension(30,30));
+		navigerHistoriquePremier 	= new JButton("First");
+		navigerHistoriquePremier.setPreferredSize(new Dimension(30,30));
 		
 		navigerHistoriqueDown 	= new JButton("Naviger Down");
 		navigerHistoriqueDown.setPreferredSize(new Dimension(30,30));
 		
+		navigerHistoriqueUp 	= new JButton("Naviger Up");
+		navigerHistoriqueUp.setPreferredSize(new Dimension(30,30));
+		
+		navigerHistoriqueDernier 	= new JButton("Last");
+		navigerHistoriqueDernier.setPreferredSize(new Dimension(30,30));
+		
 	    sousMenu.add(boutonCharger);
 	    sousMenu.add(boutonSauvegarder);
-	    sousMenu.add(navigerHistoriqueUp);
+	    sousMenu.add(navigerHistoriquePremier);
 	    sousMenu.add(navigerHistoriqueDown);
+	    sousMenu.add(navigerHistoriqueUp);
+	    sousMenu.add(navigerHistoriqueDernier);
+	    
+	    navigerHistoriquePremier.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				information.setText(Historique.getFirst());
+				compteurMessageActuel = 0;
+			}
+		});
+	    
+	    navigerHistoriqueDown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				if(compteurMessageActuel - 1 >= 0)
+					information.setText(Historique.getMessage(--compteurMessageActuel));
+			}
+		});
+	    
+	    navigerHistoriqueUp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				if(compteurMessageActuel + 1 < Historique.getSize())
+					information.setText(Historique.getMessage(++compteurMessageActuel));
+			}
+		});
+	    
+	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{ 
+				information.setText(Historique.getLast());
+				compteurMessageActuel = Historique.getSize() - 1;
+			}
+		});
 	    
 	    boutonCharger.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
@@ -506,9 +546,21 @@ public class FenetreJeu extends JFrame
 
         barreEtat = new JPanel();
         
-       
         historique = new JLabel("Pour commencer, crée une nouvelle partie ou charger en une", JLabel.RIGHT);
         information = new JLabel("Ici s'affichera l'historique des actions", JLabel.LEFT);
+        
+        information.addMouseListener( new MouseListener() {
+			public void mouseReleased(MouseEvent e) { }
+			public void mousePressed(MouseEvent e) { }
+			public void mouseExited(MouseEvent e) {	}
+			public void mouseClicked(MouseEvent e) { }	
+			
+			public void mouseEntered(MouseEvent e) {
+				for(int i = 0; i < Historique.getSize(); i++)
+					System.out.println(Historique.getMessage(i));
+			}
+        });
+        
         barreEtat.setSize(new Dimension(carte.getWidth(), 16));
         barreEtat.setLayout(new BoxLayout(barreEtat, BoxLayout.X_AXIS));
         
@@ -521,7 +573,6 @@ public class FenetreJeu extends JFrame
         /* On joue le son d'arrière plan */
 		sonArriere = new Son();
 		sonArriere.joueSonArriere();
-
         
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setResizable(false);
