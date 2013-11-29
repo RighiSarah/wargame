@@ -209,7 +209,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					int num_case_curseur = new Position((e.getX() / IConfig.NB_PIX_CASE), (e.getY() / IConfig.NB_PIX_CASE)).getNumCase();
 
 					/* Si il y a bien un soldat pointé, alors on met ce dernier dans l'objet soldatPointe, sinon on le met à null (pas de soldat pointé) */
-					if(soldat[num_case_curseur] != null && soldat[num_case_curseur].estVisible())
+					if(soldat[num_case_curseur] != null && soldat[num_case_curseur].estVisible() && (!brouillardActive || brouillard[num_case_curseur] > 0) )
 						soldatPointe = soldat[num_case_curseur];
 					else
 						soldatPointe = null;
@@ -764,7 +764,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Affichage de l'infobulle si un soldat est pointé */
 		if(soldatPointe != null ){ 
 			Position pos = soldatPointe.getPosition();
-			Infobulle.dessinerText(g, pos.x, pos.y, soldatPointe.toString(), IConfig.MESSAGE_NEUTRE, IConfig.ARRIERE_PLAN);
+			if(soldatPointe instanceof Heros)
+				Infobulle.dessinerText(g, pos.x, pos.y, soldatPointe.toString(), IConfig.MESSAGE_INFOBULLE, IConfig.ARRIERE_PLAN_HEROS);
+			else
+				Infobulle.dessinerText(g, pos.x, pos.y, soldatPointe.toString(), IConfig.MESSAGE_INFOBULLE, IConfig.ARRIERE_PLAN_MONSTRE);
 		}
 
 		/* Auto gestion de l'affichage de la file de message */

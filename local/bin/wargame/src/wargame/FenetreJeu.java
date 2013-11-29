@@ -88,6 +88,7 @@ public class FenetreJeu extends JFrame
 	private JButton navigerHistoriqueDown;
 	private JButton navigerHistoriqueUp;
 	private JButton navigerHistoriqueDernier;
+	private JButton exit;
 	
 	/** Trigger*/
 	private boolean scroll = false;
@@ -160,7 +161,10 @@ public class FenetreJeu extends JFrame
 		setFocusTraversalKeysEnabled(false);
 		addKeyListener(new KeyListener() {
 			
-		    public void keyPressed(KeyEvent e) { 
+		    public void keyPressed(KeyEvent e) {
+		    	if(!carte.isGeneree())
+		    		return;
+		    	
 		    	int key = e.getKeyCode();
 
 		    	if (key == KeyEvent.VK_TAB) { 
@@ -198,7 +202,7 @@ public class FenetreJeu extends JFrame
 
 			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
 		});
-		
+
 		addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
 				scroll = !scroll;
@@ -423,22 +427,53 @@ public class FenetreJeu extends JFrame
 	    sousMenu.setPreferredSize(new Dimension(carte.getWidth(), 35));
 	    
 	    boutonCharger 			= new JButton("Charger");
+	    boutonCharger.setToolTipText("Load"); 
+	    boutonCharger.setBackground(Color.LIGHT_GRAY);
+	    boutonCharger.setOpaque(true);
+	    boutonCharger.setMnemonic(KeyEvent.VK_F1);
 	    boutonCharger.setPreferredSize(new Dimension(30,30));
 	    
-		boutonSauvegarder 		= new JButton("Sauvegarder");
+		boutonSauvegarder 		= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "save.png"));
+		boutonSauvegarder.setToolTipText("Sauvegarder"); 
+		boutonSauvegarder.setBackground(Color.LIGHT_GRAY);
+		boutonSauvegarder.setOpaque(true);
+		boutonSauvegarder.setMnemonic(KeyEvent.VK_F2);
 		boutonSauvegarder.setPreferredSize(new Dimension(30,30));
 		
 		navigerHistoriquePremier 	= new JButton("First");
+		navigerHistoriquePremier.setToolTipText("First"); 
+		navigerHistoriquePremier.setBackground(Color.LIGHT_GRAY);
+		navigerHistoriquePremier.setOpaque(true);
+		navigerHistoriquePremier.setMnemonic(KeyEvent.VK_F3);
 		navigerHistoriquePremier.setPreferredSize(new Dimension(30,30));
 		
-		navigerHistoriqueDown 	= new JButton("Naviger Down");
+		navigerHistoriqueDown 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "previous.png"));
+		navigerHistoriqueDown.setToolTipText("Naviger Down"); 
+		navigerHistoriqueDown.setBackground(Color.LIGHT_GRAY);
+		navigerHistoriqueDown.setOpaque(true);
+		navigerHistoriqueDown.setMnemonic(KeyEvent.VK_F4);
 		navigerHistoriqueDown.setPreferredSize(new Dimension(30,30));
 		
-		navigerHistoriqueUp 	= new JButton("Naviger Up");
+		navigerHistoriqueUp 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "next.png"));
+		navigerHistoriqueUp.setToolTipText("Naviger Up"); 
+		navigerHistoriqueUp.setBackground(Color.LIGHT_GRAY);
+		navigerHistoriqueUp.setOpaque(true);
+		navigerHistoriqueDown.setMnemonic(KeyEvent.VK_F5);
 		navigerHistoriqueUp.setPreferredSize(new Dimension(30,30));
 		
-		navigerHistoriqueDernier 	= new JButton("Last");
+		navigerHistoriqueDernier 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "last.png"));
+		navigerHistoriqueDernier.setToolTipText("Last"); 
+		navigerHistoriqueDernier.setBackground(Color.LIGHT_GRAY);
+		navigerHistoriqueDernier.setOpaque(true);
+		navigerHistoriqueDown.setMnemonic(KeyEvent.VK_F6);
 		navigerHistoriqueDernier.setPreferredSize(new Dimension(30,30));
+		
+		exit = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "exit.png"));
+		exit.setToolTipText("Quitter"); 
+		exit.setBackground(Color.LIGHT_GRAY);
+		exit.setOpaque(true);
+		exit.putClientProperty(KeyEvent.VK_Q, "salu");
+		exit.setPreferredSize(new Dimension(30,30));
 		
 	    sousMenu.add(boutonCharger);
 	    sousMenu.add(boutonSauvegarder);
@@ -446,6 +481,7 @@ public class FenetreJeu extends JFrame
 	    sousMenu.add(navigerHistoriqueDown);
 	    sousMenu.add(navigerHistoriqueUp);
 	    sousMenu.add(navigerHistoriqueDernier);
+	    sousMenu.add(exit);
 	    
 	    navigerHistoriquePremier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
@@ -530,7 +566,14 @@ public class FenetreJeu extends JFrame
 			}
 		});
 	    
-
+	    exit.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent arg0) 
+	    	{
+	    		System.exit(0);
+	    	}       
+	    });
+	    
+	    
 	    this.add(sousMenu,BorderLayout.PAGE_START);
 	    
         separator = new JSeparator(SwingConstants.HORIZONTAL);

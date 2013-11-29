@@ -89,7 +89,9 @@ public interface IConfig
 	Color MESSAGE_NEUTRE = Color.BLACK;
 	
 	/** Couleur de l'arrière plan de l'infobulle */
-	Color ARRIERE_PLAN = new Color(240, 240, 0, 220);
+	Color MESSAGE_INFOBULLE = Color.WHITE;
+	Color ARRIERE_PLAN_MONSTRE = new Color(170, 0, 65, 220);
+	Color ARRIERE_PLAN_HEROS = new Color(0, 130, 180, 220);
     
     /** Marge interne de l'infobulle */
     int MARGE_INFOBULLE = 5;
