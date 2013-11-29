@@ -3,7 +3,7 @@ package wargame;
 import java.util.LinkedList;
 
 /**
- * Classe implémentant une méthode statique permettant de dessiner une infobulle sur la carte
+ * Classe implémentant une méthode statique permettant de crée la file de message de l'historique 
  */
 final class Historique
 {
