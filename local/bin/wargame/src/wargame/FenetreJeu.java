@@ -521,7 +521,7 @@ public class FenetreJeu extends JFrame
 	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(compteurMessageActuel - 1 >= 0) {
+				if(compteurMessageActuel + 1 < Historique.getSize()) {
 					information.setText(Historique.getLast());
 					compteurMessageActuel = Historique.getSize() - 1;
 				}
