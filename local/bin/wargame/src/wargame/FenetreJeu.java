@@ -613,10 +613,13 @@ public class FenetreJeu extends JFrame
 			public void mousePressed(MouseEvent e) { }
 			public void mouseExited(MouseEvent e) {	}
 			public void mouseClicked(MouseEvent e) { }	
-			
+
 			public void mouseEntered(MouseEvent e) {
+				String s = "";
 				for(int i = 0; i < Historique.getSize(); i++)
-					System.out.println(Historique.getMessage(i));
+					s += Historique.getMessage(i) + "\n";
+				if(s != "")
+					Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
 			}
         });
         
