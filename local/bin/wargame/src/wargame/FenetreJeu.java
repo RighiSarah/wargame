@@ -159,65 +159,7 @@ public class FenetreJeu extends JFrame
 		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
 		 */
 		setFocusTraversalKeysEnabled(false);
-		addKeyListener(new KeyListener() {
-			
-		    public void keyPressed(KeyEvent e) {
-		    	int key = e.getKeyCode();
-		    	System.out.println(key);
-		    	
-		    	if(key == KeyEvent.VK_F1)
-		    		boutonCharger.doClick();
-		    	else if(key == KeyEvent.VK_F2)
-		    		boutonSauvegarder.doClick();
-		    	else if(key == KeyEvent.VK_F3)
-		    		navigerHistoriquePremier.doClick();
-		    	else if(key == KeyEvent.VK_F4)
-		    		navigerHistoriqueDown.doClick();
-		    	else if(key == KeyEvent.VK_F5)
-		    		navigerHistoriqueUp.doClick();
-		    	else if(key == KeyEvent.VK_F6)
-		    		navigerHistoriqueDernier.doClick();
-		    	else if(key == KeyEvent.VK_F7)
-		    		exit.doClick();
-		    	
-		    	if(!carte.isGeneree())
-		    		return;
-		    	
-		    	if (key == KeyEvent.VK_TAB) { 
-		    		numHeros = carte.trouverProchainHeros(numHeros);
-		    	}
-		    	else if(key == KeyEvent.VK_UP) {
-		    		timer();
-		    		tabKey[0] = true;
-		    		//System.out.println("UP");
-		    	}
-		    	else if(key == KeyEvent.VK_DOWN) {
-		    		timer();
-		    		tabKey[1] = true;
-		    		//System.out.println("DOWN");
-		    	}
-		    	else if(key == KeyEvent.VK_LEFT) {
-		    		timer();
-		    		tabKey[2] = true;
-		    		//System.out.println("LEFT");
-		    	}
-		    	else if(key == KeyEvent.VK_RIGHT) {
-		    		timer();
-		    		tabKey[3] = true;
-		    		//System.out.println("RIGHT");
-		    	} 	
-		    }
 
-			public void keyReleased(KeyEvent e) { 
-				int key = e.getKeyCode();
-		    	if(key == KeyEvent.VK_UP)   		tabKey[0] = false;
-		    	else if(key == KeyEvent.VK_DOWN) 	tabKey[1] = false;
-		    	else if(key == KeyEvent.VK_LEFT)	tabKey[2] = false;
-		    	else if(key == KeyEvent.VK_RIGHT)	tabKey[3] = false;
-			}
-
-			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
-		});
 
 		addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -446,49 +388,42 @@ public class FenetreJeu extends JFrame
 	    boutonCharger.setToolTipText("Load"); 
 	    boutonCharger.setBackground(Color.LIGHT_GRAY);
 	    boutonCharger.setOpaque(true);
-	    boutonCharger.setMnemonic(KeyEvent.VK_F1);
 	    boutonCharger.setPreferredSize(new Dimension(30,30));
 	    
 		boutonSauvegarder 		= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "save.png"));
 		boutonSauvegarder.setToolTipText("Sauvegarder"); 
 		boutonSauvegarder.setBackground(Color.LIGHT_GRAY);
 		boutonSauvegarder.setOpaque(true);
-		boutonSauvegarder.setMnemonic(KeyEvent.VK_F2);
 		boutonSauvegarder.setPreferredSize(new Dimension(30,30));
 		
 		navigerHistoriquePremier 	= new JButton("First");
 		navigerHistoriquePremier.setToolTipText("First"); 
 		navigerHistoriquePremier.setBackground(Color.LIGHT_GRAY);
 		navigerHistoriquePremier.setOpaque(true);
-		navigerHistoriquePremier.setMnemonic(KeyEvent.VK_F3);
 		navigerHistoriquePremier.setPreferredSize(new Dimension(30,30));
 		
 		navigerHistoriqueDown 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "previous.png"));
 		navigerHistoriqueDown.setToolTipText("Naviger Down"); 
 		navigerHistoriqueDown.setBackground(Color.LIGHT_GRAY);
 		navigerHistoriqueDown.setOpaque(true);
-		navigerHistoriqueDown.setMnemonic(KeyEvent.VK_F4);
 		navigerHistoriqueDown.setPreferredSize(new Dimension(30,30));
 		
 		navigerHistoriqueUp 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "next.png"));
 		navigerHistoriqueUp.setToolTipText("Naviger Up"); 
 		navigerHistoriqueUp.setBackground(Color.LIGHT_GRAY);
 		navigerHistoriqueUp.setOpaque(true);
-		navigerHistoriqueDown.setMnemonic(KeyEvent.VK_F5);
 		navigerHistoriqueUp.setPreferredSize(new Dimension(30,30));
 		
 		navigerHistoriqueDernier 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "last.png"));
 		navigerHistoriqueDernier.setToolTipText("Last"); 
 		navigerHistoriqueDernier.setBackground(Color.LIGHT_GRAY);
 		navigerHistoriqueDernier.setOpaque(true);
-		navigerHistoriqueDown.setMnemonic(KeyEvent.VK_F6);
 		navigerHistoriqueDernier.setPreferredSize(new Dimension(30,30));
 		
 		exit = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "exit.png"));
 		exit.setToolTipText("Quitter"); 
 		exit.setBackground(Color.LIGHT_GRAY);
 		exit.setOpaque(true);
-		exit.setMnemonic(KeyEvent.VK_F7);
 		exit.setPreferredSize(new Dimension(30,30));
 		
 	    sousMenu.add(boutonCharger);
@@ -583,16 +518,15 @@ public class FenetreJeu extends JFrame
 		});
 	    
 	    exit.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent arg0) 
+	    	public void actionPerformed(ActionEvent e) 
 	    	{
-	    		System.out.println("lol"); 
 	    		System.exit(0);
 	    	}       
 	    });
 	    
 	    
 	    this.add(sousMenu,BorderLayout.PAGE_START);
-	    
+	    this.setFocusableWindowState(true);
         separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBackground(Color.DARK_GRAY);
         separator.setSize(new Dimension(carte.getWidth(), 5));
@@ -632,7 +566,7 @@ public class FenetreJeu extends JFrame
 	            
         /* On joue le son d'arrière plan */
 		sonArriere = new Son();
-		sonArriere.joueSonArriere();
+		//sonArriere.joueSonArriere();
         
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setResizable(false);
@@ -669,6 +603,65 @@ public class FenetreJeu extends JFrame
 			}
 		});
 	    
+		addKeyListener(new KeyListener() {
+			
+		    public void keyPressed(KeyEvent e) {
+		    	int key = e.getKeyCode();
+		    	System.out.println(key);
+		    	
+		    	if(key == KeyEvent.VK_F1)
+		    		boutonCharger.doClick();
+		    	else if(key == KeyEvent.VK_F2)
+		    		boutonSauvegarder.doClick();
+		    	else if(key == KeyEvent.VK_F3)
+		    		navigerHistoriquePremier.doClick();
+		    	else if(key == KeyEvent.VK_F4)
+		    		navigerHistoriqueDown.doClick();
+		    	else if(key == KeyEvent.VK_F5)
+		    		navigerHistoriqueUp.doClick();
+		    	else if(key == KeyEvent.VK_F6)
+		    		navigerHistoriqueDernier.doClick();
+		    	else if(key == KeyEvent.VK_F7)
+		    		exit.doClick();
+		    	
+		    	if(!carte.isGeneree())
+		    		return;
+		    	
+		    	if (key == KeyEvent.VK_TAB) { 
+		    		numHeros = carte.trouverProchainHeros(numHeros);
+		    	}
+		    	else if(key == KeyEvent.VK_UP) {
+		    		timer();
+		    		tabKey[0] = true;
+		    		//System.out.println("UP");
+		    	}
+		    	else if(key == KeyEvent.VK_DOWN) {
+		    		timer();
+		    		tabKey[1] = true;
+		    		//System.out.println("DOWN");
+		    	}
+		    	else if(key == KeyEvent.VK_LEFT) {
+		    		timer();
+		    		tabKey[2] = true;
+		    		//System.out.println("LEFT");
+		    	}
+		    	else if(key == KeyEvent.VK_RIGHT) {
+		    		timer();
+		    		tabKey[3] = true;
+		    		//System.out.println("RIGHT");
+		    	} 	
+		    }
+
+			public void keyReleased(KeyEvent e) { 
+				int key = e.getKeyCode();
+		    	if(key == KeyEvent.VK_UP)   		tabKey[0] = false;
+		    	else if(key == KeyEvent.VK_DOWN) 	tabKey[1] = false;
+		    	else if(key == KeyEvent.VK_LEFT)	tabKey[2] = false;
+		    	else if(key == KeyEvent.VK_RIGHT)	tabKey[3] = false;
+			}
+
+			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
+		});
 	    
 	}
 	public static void activableFinTour(boolean b) {
