@@ -154,91 +154,6 @@ public class FenetreJeu extends JFrame
 	
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
-
-		/* No Tab key-pressed or key-released events are received by the key event listener.
-		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
-		 */
-		setFocusTraversalKeysEnabled(false);
-	    
-		addKeyListener(new KeyListener() {
-			
-		    public void keyPressed(KeyEvent e) {
-		    	int key = e.getKeyCode();
-		    	System.out.println(key);
-		    	
-		    	if(key == KeyEvent.VK_F1)
-		    		boutonCharger.doClick();
-		    	else if(key == KeyEvent.VK_F2)
-		    		boutonSauvegarder.doClick();
-		    	else if(key == KeyEvent.VK_F3)
-		    		navigerHistoriquePremier.doClick();
-		    	else if(key == KeyEvent.VK_F4)
-		    		navigerHistoriqueDown.doClick();
-		    	else if(key == KeyEvent.VK_F5)
-		    		navigerHistoriqueUp.doClick();
-		    	else if(key == KeyEvent.VK_F6)
-		    		navigerHistoriqueDernier.doClick();
-		    	else if(key == KeyEvent.VK_F7)
-		    		exit.doClick();
-		    	
-		    	if(!carte.isGeneree())
-		    		return;
-		    	
-		    	if (key == KeyEvent.VK_TAB) { 
-		    		numHeros = carte.trouverProchainHeros(numHeros);
-		    	}
-		    	else if(key == KeyEvent.VK_UP) {
-		    		timer();
-		    		tabKey[0] = true;
-		    		//System.out.println("UP");
-		    	}
-		    	else if(key == KeyEvent.VK_DOWN) {
-		    		timer();
-		    		tabKey[1] = true;
-		    		//System.out.println("DOWN");
-		    	}
-		    	else if(key == KeyEvent.VK_LEFT) {
-		    		timer();
-		    		tabKey[2] = true;
-		    		//System.out.println("LEFT");
-		    	}
-		    	else if(key == KeyEvent.VK_RIGHT) {
-		    		timer();
-		    		tabKey[3] = true;
-		    		//System.out.println("RIGHT");
-		    	} 	
-		    }
-
-			public void keyReleased(KeyEvent e) { 
-				int key = e.getKeyCode();
-		    	if(key == KeyEvent.VK_UP)   		tabKey[0] = false;
-		    	else if(key == KeyEvent.VK_DOWN) 	tabKey[1] = false;
-		    	else if(key == KeyEvent.VK_LEFT)	tabKey[2] = false;
-		    	else if(key == KeyEvent.VK_RIGHT)	tabKey[3] = false;
-			}
-
-			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
-		});
-
-		addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(MouseWheelEvent e) {
-				scroll = !scroll;
-				if(!scroll)
-					return;
-				
-	            if (e.getPreciseWheelRotation() < 0) { // Haut 
-	            	if(compteurMessageActuel + 1 < Historique.getSize())
-	            		information.setText(Historique.getMessage(++compteurMessageActuel));
-
-	            }
-	            else {
-	            	if(compteurMessageActuel - 1 >= 0)
-	            		information.setText(Historique.getMessage(--compteurMessageActuel));
-
-
-	            }
-			}
-		});
 		
 		this.setTitle("Wargame");
         this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
@@ -591,7 +506,7 @@ public class FenetreJeu extends JFrame
 	    
 	    
 	    this.add(sousMenu,BorderLayout.PAGE_START);
-	    this.setFocusableWindowState(true);
+
         separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBackground(Color.DARK_GRAY);
         separator.setSize(new Dimension(carte.getWidth(), 5));
@@ -618,8 +533,8 @@ public class FenetreJeu extends JFrame
 				String s = "";
 				for(int i = 0; i < Historique.getSize(); i++)
 					s += Historique.getMessage(i) + "\n";
-				if(s != "")
-					Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
+				//if(s != "")
+				//	Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
 			}
         });
         
@@ -642,6 +557,95 @@ public class FenetreJeu extends JFrame
 	    
 	    this.setVisible(true);
 	        
+	    
+	    /** Capture des actions au clavier */
+		/* No Tab key-pressed or key-released events are received by the key event listener.
+		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
+		 */
+		this.setFocusableWindowState(true);
+		setFocusTraversalKeysEnabled(false);
+	    
+		addKeyListener(new KeyListener() {
+			
+		    public void keyPressed(KeyEvent e) {
+		    	int key = e.getKeyCode();
+		    	System.out.println(key);
+		    	
+		    	if(key == KeyEvent.VK_F1)
+		    		boutonCharger.doClick();
+		    	else if(key == KeyEvent.VK_F2)
+		    		boutonSauvegarder.doClick();
+		    	else if(key == KeyEvent.VK_F3)
+		    		navigerHistoriquePremier.doClick();
+		    	else if(key == KeyEvent.VK_F4)
+		    		navigerHistoriqueDown.doClick();
+		    	else if(key == KeyEvent.VK_F5)
+		    		navigerHistoriqueUp.doClick();
+		    	else if(key == KeyEvent.VK_F6)
+		    		navigerHistoriqueDernier.doClick();
+		    	else if(key == KeyEvent.VK_F7)
+		    		exit.doClick();
+		    	
+		    	if(!carte.isGeneree())
+		    		return;
+		    	
+		    	if (key == KeyEvent.VK_TAB) { 
+		    		numHeros = carte.trouverProchainHeros(numHeros);
+		    	}
+		    	else if(key == KeyEvent.VK_UP) {
+		    		timer();
+		    		tabKey[0] = true;
+		    		//System.out.println("UP");
+		    	}
+		    	else if(key == KeyEvent.VK_DOWN) {
+		    		timer();
+		    		tabKey[1] = true;
+		    		//System.out.println("DOWN");
+		    	}
+		    	else if(key == KeyEvent.VK_LEFT) {
+		    		timer();
+		    		tabKey[2] = true;
+		    		//System.out.println("LEFT");
+		    	}
+		    	else if(key == KeyEvent.VK_RIGHT) {
+		    		timer();
+		    		tabKey[3] = true;
+		    		//System.out.println("RIGHT");
+		    	} 	
+		    }
+
+			public void keyReleased(KeyEvent e) { 
+				int key = e.getKeyCode();
+		    	if(key == KeyEvent.VK_UP)   		tabKey[0] = false;
+		    	else if(key == KeyEvent.VK_DOWN) 	tabKey[1] = false;
+		    	else if(key == KeyEvent.VK_LEFT)	tabKey[2] = false;
+		    	else if(key == KeyEvent.VK_RIGHT)	tabKey[3] = false;
+			}
+
+			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
+		});
+
+		/** Capture des actions de la molette */
+		addMouseWheelListener(new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				scroll = !scroll;
+				if(!scroll)
+					return;
+				
+	            if (e.getPreciseWheelRotation() < 0) { // Haut 
+	            	if(compteurMessageActuel + 1 < Historique.getSize())
+	            		information.setText(Historique.getMessage(++compteurMessageActuel));
+
+	            }
+	            else {
+	            	if(compteurMessageActuel - 1 >= 0)
+	            		information.setText(Historique.getMessage(--compteurMessageActuel));
+
+
+	            }
+			}
+		});
+		
 	    /* Événements de carte */
 	    carte.onStateRealized(new CarteListener() {
 			
