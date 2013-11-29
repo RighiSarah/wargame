@@ -162,11 +162,27 @@ public class FenetreJeu extends JFrame
 		addKeyListener(new KeyListener() {
 			
 		    public void keyPressed(KeyEvent e) {
+		    	int key = e.getKeyCode();
+		    	System.out.println(key);
+		    	
+		    	/*if(key == KeyEvent.VK_F1)
+		    		boutonCharger.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	else if(key == KeyEvent.VK_F2)
+		    		boutonSauvegarder.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	else if(key == KeyEvent.VK_F3)
+		    		navigerHistoriquePremier.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	else if(key == KeyEvent.VK_F4)
+		    		navigerHistoriqueDown.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	else if(key == KeyEvent.VK_F5)
+		    		navigerHistoriqueUp.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	else if(key == KeyEvent.VK_F6)
+		    		navigerHistoriqueDernier.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	else if(key == KeyEvent.VK_F7)
+		    		exit.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	 */
 		    	if(!carte.isGeneree())
 		    		return;
 		    	
-		    	int key = e.getKeyCode();
-
 		    	if (key == KeyEvent.VK_TAB) { 
 		    		numHeros = carte.trouverProchainHeros(numHeros);
 		    	}
@@ -472,7 +488,7 @@ public class FenetreJeu extends JFrame
 		exit.setToolTipText("Quitter"); 
 		exit.setBackground(Color.LIGHT_GRAY);
 		exit.setOpaque(true);
-		exit.putClientProperty(KeyEvent.VK_Q, "salu");
+		exit.setMnemonic(KeyEvent.VK_F7);
 		exit.setPreferredSize(new Dimension(30,30));
 		
 	    sousMenu.add(boutonCharger);
@@ -569,6 +585,7 @@ public class FenetreJeu extends JFrame
 	    exit.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent arg0) 
 	    	{
+	    		System.out.println("lol"); 
 	    		System.exit(0);
 	    	}       
 	    });
