@@ -443,7 +443,7 @@ public class FenetreJeu extends JFrame
 	    sousMenu = new JPanel();
 	    sousMenu.setPreferredSize(new Dimension(carte.getWidth(), 35));
 	    
-	    boutonCharger 			= new JButton("Charger");
+	    boutonCharger 			= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "load.png"));
 	    boutonCharger.setToolTipText("Load"); 
 	    boutonCharger.setBackground(Color.LIGHT_GRAY);
 	    boutonCharger.setOpaque(true);
@@ -560,7 +560,7 @@ public class FenetreJeu extends JFrame
 					return;
 				
 			    JFileChooser fichier = new JFileChooser();
-			    fichier.setDialogTitle("Ouvrir fichier");
+			    fichier.setDialogTitle("Sauvegarder fichier");
 			    fichier.setCurrentDirectory(new File("."));
 			    fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
 
