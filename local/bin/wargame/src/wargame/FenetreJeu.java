@@ -556,26 +556,29 @@ public class FenetreJeu extends JFrame
 	    boutonSauvegarder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-			        JFileChooser fichier = new JFileChooser();
-			        fichier.setDialogTitle("Ouvrir fichier");
-			        fichier.setCurrentDirectory(new File("."));
-			        fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
+				if(!carte.isGeneree())
+					return;
+				
+			    JFileChooser fichier = new JFileChooser();
+			    fichier.setDialogTitle("Ouvrir fichier");
+			    fichier.setCurrentDirectory(new File("."));
+			    fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
 
-			        int choix = fichier.showOpenDialog(carte);
-	                if (choix != JFileChooser.APPROVE_OPTION)
-	                        return;
+			    int choix = fichier.showOpenDialog(carte);
+			    if (choix != JFileChooser.APPROVE_OPTION)
+			    	return;
 	                
-	               	File fichierChoisit = fichier.getSelectedFile();
+			    File fichierChoisit = fichier.getSelectedFile();
 
-	                if(fichierChoisit.getPath().endsWith(".ser") == false)
-	                	fichierChoisit = new File(fichierChoisit + ".ser");
+			    if(fichierChoisit.getPath().endsWith(".ser") == false)
+			    	fichierChoisit = new File(fichierChoisit + ".ser");
 	                
-	                if (fichierChoisit.exists()){
-                        choix = JOptionPane.showConfirmDialog(carte, "Le fichier " + fichierChoisit + " existe déjà\nVoulez-vous vraiment l'écraser ?", "Fichier déjà existant", JOptionPane.YES_NO_OPTION);
-                        if (choix == JOptionPane.NO_OPTION)  return;
-	                }
+			    if (fichierChoisit.exists()){
+			    	choix = JOptionPane.showConfirmDialog(carte, "Le fichier " + fichierChoisit + " existe déjà\nVoulez-vous vraiment l'écraser ?", "Fichier déjà existant", JOptionPane.YES_NO_OPTION);
+			    	if (choix == JOptionPane.NO_OPTION)  return;
+			    }
 	                
-	                carte.sauvegarde(fichierChoisit.getPath());
+			    carte.sauvegarde(fichierChoisit.getPath());
 			}
 		});
 	    
@@ -628,7 +631,7 @@ public class FenetreJeu extends JFrame
 	            
         /* On joue le son d'arrière plan */
 		sonArriere = new Son();
-		//sonArriere.joueSonArriere();
+		sonArriere.joueSonArriere();
         
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    this.setResizable(false);
