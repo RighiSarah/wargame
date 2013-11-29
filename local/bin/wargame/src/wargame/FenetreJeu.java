@@ -165,21 +165,21 @@ public class FenetreJeu extends JFrame
 		    	int key = e.getKeyCode();
 		    	System.out.println(key);
 		    	
-		    	/*if(key == KeyEvent.VK_F1)
-		    		boutonCharger.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    	if(key == KeyEvent.VK_F1)
+		    		boutonCharger.doClick();
 		    	else if(key == KeyEvent.VK_F2)
-		    		boutonSauvegarder.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    		boutonSauvegarder.doClick();
 		    	else if(key == KeyEvent.VK_F3)
-		    		navigerHistoriquePremier.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    		navigerHistoriquePremier.doClick();
 		    	else if(key == KeyEvent.VK_F4)
-		    		navigerHistoriqueDown.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    		navigerHistoriqueDown.doClick();
 		    	else if(key == KeyEvent.VK_F5)
-		    		navigerHistoriqueUp.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    		navigerHistoriqueUp.doClick();
 		    	else if(key == KeyEvent.VK_F6)
-		    		navigerHistoriqueDernier.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
+		    		navigerHistoriqueDernier.doClick();
 		    	else if(key == KeyEvent.VK_F7)
-		    		exit.getActionListeners()[0].actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
-		    	 */
+		    		exit.doClick();
+		    	
 		    	if(!carte.isGeneree())
 		    		return;
 		    	
