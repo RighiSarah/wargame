@@ -496,7 +496,8 @@ public class FenetreJeu extends JFrame
 	    navigerHistoriquePremier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				information.setText(Historique.getFirst());
+				if(compteurMessageActuel - 1 >= 0)
+					information.setText(Historique.getFirst());
 				compteurMessageActuel = 0;
 			}
 		});
@@ -520,8 +521,10 @@ public class FenetreJeu extends JFrame
 	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				information.setText(Historique.getLast());
-				compteurMessageActuel = Historique.getSize() - 1;
+				if(compteurMessageActuel - 1 >= 0) {
+					information.setText(Historique.getLast());
+					compteurMessageActuel = Historique.getSize() - 1;
+				}
 			}
 		});
 	    
