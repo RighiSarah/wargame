@@ -2,7 +2,6 @@ package wargame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 
 
@@ -13,9 +12,7 @@ public abstract class Soldat extends Charset implements ISoldat
 {
 	private static final long serialVersionUID = 1L;
 
-	protected Point coord = null;
-	
-	/** Informations de base d'un soldat. */
+	/** Vie d'un soldat. */
 	protected int vie;
 	
 	/** Numéro de la case où se situe le soldat. */
@@ -34,28 +31,50 @@ public abstract class Soldat extends Charset implements ISoldat
 	protected int offsetX = 0;
 	protected int offsetY = 0;
 
+	/** 
+	 * Constructeur de base d'un soldat
+	 */
 	Soldat() {}
 	
+	/**
+	 * Permet de récupérer le nombre de points de vie du soldat
+	 * @return Le nombre de points de vie du soldat
+	 */
 	public int getVie() 
 	{
 		return vie;
 	}
 	
+	/**
+	 * Permet de récupérer le pourcentage des points de vie du soldat
+	 * @return Le pourcentage des points de vie du soldat
+	 */
 	public double getPourcentageVie(){
 		return ((double)(vie/(double)this.getVieMax())) * 100.;
 	}
 
+	/**
+	 * Permet de spécifier un nouveau nombre de points de vie d'un soldat
+	 * @param vie Le nombre de points de vie d'un soldat
+	 */
 	public void setVie(int vie) 
 	{
 		this.vie = ((vie > this.getVieMax()) ? this.getVieMax() : (vie < 0 ) ? 0 : vie);
 	}
 	
-		
+	/**
+	 * Permet de dire si le soldat est en train de se déplacer ou non
+	 * @param value Vrai si le soldat est en train de se déplacer, faux sinon
+	 */
 	public void setSeDeplace(boolean value)
 	{
 		this.seDeplace = value;
 	}
 	
+	/**
+	 * Permet de savoir si le soldat est en train de se déplacer
+	 * @return Vrai si le soldat est en train de se déplacer, faux sinon
+	 */
 	public boolean getSeDeplace()
 	{
 		return this.seDeplace;
@@ -99,65 +118,27 @@ public abstract class Soldat extends Charset implements ISoldat
 		tourEffectue = value;
 	}
 	
-	/** Met à jour le statut du soldat.
-	 *  @param e Évènement appellant, le timer.
+	/**
+	 * Permet de récupérer la position courante du soldat
+	 * @return La position courante du soldat
 	 */
-    public void actionPerformed(ActionEvent e)
-    {    
-    	/* Mise à jour du déplacement. */
-    	if(seDeplace) {
-    		if(offsetX > 0)      offsetX += IConfig.VITESSE_DEPLACEMENT;
-    		else if(offsetX < 0) offsetX -= IConfig.VITESSE_DEPLACEMENT;
-    		
-    		if(offsetY > 0)      offsetY += IConfig.VITESSE_DEPLACEMENT;
-    		else if(offsetY < 0) offsetY -= IConfig.VITESSE_DEPLACEMENT;
-    		
-    		if(Math.abs((int)offsetX) >= IConfig.NB_PIX_CASE || Math.abs((int)offsetY) >= IConfig.NB_PIX_CASE)
-    		{
-    			/* Mise à jour de la nouvelle position. */
-    			int x = position.getNumCase() % IConfig.LARGEUR_CARTE;
-    			int y = position.getNumCase() / IConfig.LARGEUR_CARTE;
-
-    			if(offsetX > 0)
-    				x++;
-    			else if(offsetX < 0)
-    				x--;
-
-    			if(offsetY > 0)
-    				y++;
-    			else if(offsetY < 0)
-    				y--;
-    			
-    			position.x = x;
-    			position.y = y;
-    			
-    			/* Remise à zéro du déplacement. */
-    			offsetX = offsetY = 0;
-    			seDeplace = false;
-    			animation = 0;
-    		}
-    	}
-    	
-    	/* Mise à jour de l'animation. */
-        if(estVisible) {
-    		if(this.mort){
-    			/* On fait tourner le perso */
-    			direction = direction.directionSuivante();
-    			
-    			if(direction == Direction.HAUT)
-    				estVisible = false;
-    		}
-    		if(seDeplace){
-    			if(++animation >= N_ANIMATIONS)
-    				animation = 0;
-    		}
-        }
+	public Position getPosition() {
+		return position;
 	}
+
+	/** 
+	 * Permet de changer la position courante du soldat
+	 * @param position La nouvelle position du soldat
+	 */
+	public void setPosition(Position position) {
+		this.position = position;
+	}
+	
     
 	/**
-	 * Fonction permettant de crée un combat entre 2 soldats
+	 * Fonction permettant de créer un combat entre 2 soldats
 	 * @param soldat Instance du soldat à attaquer
-	 * @param distance Distance séparant soldat1 de soldat 2
+	 * @param distance Distance séparant soldat1 de soldat2
 	 * @return -1 si le soldat qui attaque est mort, 1 si le soldat attaqué est mort, 0 sinon
 	 */
 	public int combat(Soldat soldat, int distance)
@@ -214,7 +195,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	
 	/**
 	 * Méthode permettant de mettre en repos le soldat
-	 * @param afficherMessage Si vrai, un message sera affiché
+	 * @param afficher_message Si vrai, un message sera affiché
 	 * @return -1 si vie au max, >= 0 pour la vie récupérée
 	 */
 	public int repos(boolean afficher_message) {
@@ -242,41 +223,14 @@ public abstract class Soldat extends Charset implements ISoldat
 		return regain;
 	}
 
-	public Position getPosition() {
-		return position;
-	}
-
-	public void setPosition(Position position) {
-		this.position = position;
-	}
-
-	@Override
-	public int getPoints() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getTour() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void joueTour(int tour) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	/** Dessine la barre de vie du Héros.
 	 * @param g : Zone de dessin. 
-	 * @param x : Coordonnée X du personnage.
-	 * @param y : Coordonnée Y du personnage.
 	 */
-	protected void dessineVie(Graphics g, int x, int y)
+	protected void dessineVie(Graphics g)
 	{
 		Color color;
 		int pourcentage_vie = (int) getPourcentageVie();
+		
 		if(pourcentage_vie >= 70)
 			color = Color.green;
 		else if(pourcentage_vie >= 40)
@@ -284,8 +238,8 @@ public abstract class Soldat extends Charset implements ISoldat
 		else
 			color = Color.red;
 		
-		int dx = x * IConfig.NB_PIX_CASE + IConfig.NB_PIX_CASE;
-		int dy = y * IConfig.NB_PIX_CASE + 2;
+		int dx = this.position.x * IConfig.NB_PIX_CASE + IConfig.NB_PIX_CASE;
+		int dy = this.position.y * IConfig.NB_PIX_CASE + 2;
 		
 		/* Contenant. */
 		g.setColor(Color.black);
@@ -310,5 +264,64 @@ public abstract class Soldat extends Charset implements ISoldat
 		chaine += "\nPortee: " + this.getPortee();
 		
 		return chaine;
+	}
+	
+	/** Met à jour le statut du soldat.
+	 *  @param e Évènement appellant, le timer.
+	 */
+    public void actionPerformed(ActionEvent e)
+    {    
+    	/* Mise à jour du déplacement. */
+    	if(seDeplace) {
+    		if(offsetX > 0)      
+    			offsetX += IConfig.VITESSE_DEPLACEMENT;
+    		else if(offsetX < 0) 
+    			offsetX -= IConfig.VITESSE_DEPLACEMENT;
+    		
+    		if(offsetY > 0)      
+    			offsetY += IConfig.VITESSE_DEPLACEMENT;
+    		else if(offsetY < 0) 
+    			offsetY -= IConfig.VITESSE_DEPLACEMENT;
+    		
+    		if(Math.abs((int)offsetX) >= IConfig.NB_PIX_CASE || Math.abs((int)offsetY) >= IConfig.NB_PIX_CASE)
+    		{
+    			/* Mise à jour de la nouvelle position. */
+    			int x = position.getNumCase() % IConfig.LARGEUR_CARTE;
+    			int y = position.getNumCase() / IConfig.LARGEUR_CARTE;
+
+    			if(offsetX > 0)
+    				x++;
+    			else if(offsetX < 0)
+    				x--;
+
+    			if(offsetY > 0)
+    				y++;
+    			else if(offsetY < 0)
+    				y--;
+    			
+    			position.x = x;
+    			position.y = y;
+    			
+    			/* Remise à zéro du déplacement. */
+    			offsetX = offsetY = 0;
+    			seDeplace = false;
+    			animation = 0;
+    		}
+    	}
+    	
+    	/* Mise à jour de l'animation. */
+        if(estVisible) {
+    		if(this.mort){
+    			/* On fait tourner le perso */
+    			direction = direction.directionSuivante();
+    			
+    			if(direction == Direction.HAUT)
+    				estVisible = false;
+    		}
+    		if(seDeplace){
+    			if(++animation >= N_ANIMATIONS)
+    				animation = 0;
+    		}
+        }
 	}
 }

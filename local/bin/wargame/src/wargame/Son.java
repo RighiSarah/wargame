@@ -17,7 +17,8 @@ import javax.sound.midi.Sequencer;
 
 
 /**
- * Classe permettant de jouer des sons simples correspondant à différentes actions
+ * Classe permettant de jouer une musique des Seigneurs des anneaux
+ * Implémente aussi des méthodes statiques permettant de jouer des bruitages
  */
 public final class Son {
 	/** Pour charger un fichier midi */
@@ -27,7 +28,7 @@ public final class Son {
 	/** Pour savoir si le son en arrière est stoppé ou non */
 	private boolean sonArriereActive = false;
 	/** Pour jouer un wma quand il se passe un grand événement (partie perdue ou gagnée) */
-	private AudioClip musiqueEven = null;
+	private AudioClip musiqueEvenement = null;
 
 	/* Différents sons de bruitage */
 	private static AudioClip bruitCourir = null;
@@ -90,7 +91,7 @@ public final class Son {
 	
 	/**
 	 * Méthode permettant de savoir si le son est actuellement joué ou non
-	 * @return booléen a vrai si le son est effectivement en train d'être joué, false sinon
+	 * @return Boolean à vrai si le son est effectivement en train d'être joué, false sinon
 	 */
 	public boolean getSonArriereActive(){
 		return sonArriereActive;
@@ -100,9 +101,9 @@ public final class Son {
 	 * Méthode permettant de charger un son arrière aléatoire parmi les musiques du dossier
 	 */
 	public void chargeSonArriere(){
-		if(musiqueEven != null){
-			musiqueEven.stop();
-			musiqueEven = null;
+		if(musiqueEvenement != null){
+			musiqueEvenement.stop();
+			musiqueEvenement = null;
 		}
 		
 		int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
@@ -123,31 +124,31 @@ public final class Son {
 	/** Méthode permettant de jouer un son adapté lorsque le joueur perd le jeu */
 	public void jouePerdu(){
 		stopSonArriere();
-		if(musiqueEven != null)
-			musiqueEven.stop();
+		if(musiqueEvenement != null)
+			musiqueEvenement.stop();
 		
 		try {
-			musiqueEven = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "perdre.wav"));
+			musiqueEvenement = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "perdre.wav"));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 
-		musiqueEven.play();
+		musiqueEvenement.play();
 	}
 	
 	/** Méthode permettant de jouer un son adapté lorsque le joueur gagne le jeu */
 	public void joueGagne(){
 		stopSonArriere();
-		if(musiqueEven != null)
-			musiqueEven.stop();
+		if(musiqueEvenement != null)
+			musiqueEvenement.stop();
 		
 		try {
-			musiqueEven = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "gagner.wav"));
+			musiqueEvenement = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "gagner.wav"));
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
 
-		musiqueEven.play();
+		musiqueEvenement.play();
 	}
 	
 	

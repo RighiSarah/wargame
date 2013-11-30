@@ -722,10 +722,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Affichage des barres de vie. */
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null && !soldat[i].estMort())
-			{
-				Position pos = soldat[i].getPosition();
-				soldat[i].dessineVie(g, pos.x, pos.y);
-			}
+				soldat[i].dessineVie(g);
 
 		/* Affichage du brouillard, que l'on affiche avant l'infobulle */
 		dessinerBrouillard(g, brouillard);

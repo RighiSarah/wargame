@@ -116,16 +116,23 @@ public interface ISoldat extends Serializable
 		}
 	}
 
-	int getPoints();
-	int getTour();
 	int getPortee();
 	int getPuissance();
 	int getTir();
 	int getVieMax();
+	int getVie();
+	double getPourcentageVie();
+	boolean getSeDeplace();
 	String getNom();
+
+	void setSeDeplace(boolean value);	
+	void setMort(boolean mort);
+	void setPosition(Position position);
+	void setAJoue(boolean value);
+	void setVie(int vie);
 	
-	void joueTour(int tour);
-	int combat(Soldat soldat,int distance);
 	
-	public void setSeDeplace(boolean value);	
+	int repos(boolean afficher_message);
+	int combat(Soldat soldat, int distance);
+	
 }
