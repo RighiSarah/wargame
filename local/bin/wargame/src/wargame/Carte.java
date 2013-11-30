@@ -173,7 +173,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 								return;
 							}
 						
-							faisCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
+							faitCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
 							nbToPlay--;
 							/* Si le héros meurt au cours du combat on supprime le brouillard */
 							if(soldat[caseActionnee].estMort()) {
@@ -225,8 +225,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public void deplaceSoldat(Soldat sold,int caseArrivee) {
 		
-		Historique.addMessage(sold.getNom() + " se deplace en " + caseActionnee);
-		//carteListener.information(sold.getNom() + " se deplace en " + caseActionnee );
+		carteListener.historique(sold.getNom() + " se deplace en " + caseActionnee );
 
 		/* On supprime le brouillard du perso */
 		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
@@ -262,8 +261,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		joueMonstres();
 		
 		tour++;
-		Historique.addMessage("Début du tour " + tour);
-		//carteListener.information("Début du tour " + tour);
+
+		carteListener.historique("Début du tour " + tour);
+		carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -516,7 +516,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 				/* Combat avec un héros aux alentours */
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
 					/* Si faisCombattre retourne true, la partie est terminée donc on stoppe tout */
-					if(faisCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
+					if(faitCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
 						return;
 				}
 				/* Sinon déplacement */
@@ -567,7 +567,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 							Thread.currentThread();
 							Thread.sleep(100);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 	    			}
@@ -773,8 +772,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 
-		carteListener.historique(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
-
+		carteListener.information(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
 	}
 
 	public void actionPerformed(ActionEvent e) 
@@ -829,9 +827,8 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
-		Historique.addMessage("Vous avez gagné ! ");
-		//carteListener.information("Vous avez gagné ! ");
-
+		carteListener.historique("Vous avez gagné ! ");
+		
 		Graphics g = this.getGraphics();
 		
 		g.setFont(new Font("calibri", Font.BOLD, 100));
@@ -841,7 +838,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			g.setColor(new Color(0, 0, 0, i));
@@ -858,8 +854,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
-		Historique.addMessage("Vous avez perdu ! ");
-		//carteListener.information("Vous avez perdu ! ");
+		carteListener.historique("Vous avez perdu ! ");
 		
 		Graphics g = this.getGraphics();
 		
@@ -870,7 +865,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			g.setColor(new Color(0, 0, 0, i));
@@ -891,7 +885,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * @param distance La distance qui sépare les deux soldats
 	 * @return Vrai si une des deux armées a gagné, faux sinon
 	 */
-	public boolean faisCombattre(Soldat attaquant, Soldat defenseur, int distance){
+	public boolean faitCombattre(Soldat attaquant, Soldat defenseur, int distance){
 		boolean retour = false;
 		
 		/* On commence à faire tourner l'attaquant dans la direction du defenseur */
@@ -1048,6 +1042,22 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}
 		
 		return obstacle;
+	}
+	
+	/**
+	 * Méthode permettant de faire reposer un soldat avec évènement, ce dernier précisant dans une phrase le regain du joueur
+	 * @param s Le soldat à reposer
+	 * @param afficher_message Afficher un message sur la carte ? (infobulle)
+	 */
+	public void faitReposer(Soldat s, boolean afficher_message){
+		int regain = s.repos(afficher_message);
+		
+		if(regain == -1){
+			carteListener.historique(s.getNom()+ " " + s.getPosition().toString() + " a sa vie au maximum");
+		}
+		else{
+			carteListener.historique(s.getNom() + " se repose et regagne " + regain + " points de vie");
+		}
 	}
 	
 

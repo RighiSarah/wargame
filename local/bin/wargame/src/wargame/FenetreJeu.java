@@ -48,8 +48,8 @@ public class FenetreJeu extends JFrame
 
 	private JPanel barreEtat;
     private JSeparator separator;
-    private JLabel historique;
-    static JLabel information;
+    private Historique historique;
+    private JLabel information;
 
 	/** Menus. */
 	private JMenuBar menu;
@@ -58,7 +58,7 @@ public class FenetreJeu extends JFrame
 	private JMenu charger;
 	private JMenu config;
 		
-	private static JButton finTour;
+	private JButton finTour;
 	
 	/* Options des menus. */
 	
@@ -96,7 +96,7 @@ public class FenetreJeu extends JFrame
 	private int compteurMessageActuel = 0;
 	
 	/** Carte du jeu. */
-    Carte carte;
+    private Carte carte;
 
     /** Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
@@ -137,11 +137,6 @@ public class FenetreJeu extends JFrame
 		return new SimpleDateFormat("dd-MM-yyyy HH-mm-ss").format( new Date(f.lastModified()));
     }
     
-	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
-	{
-		FenetreJeu fenetre = new FenetreJeu();
-		fenetre.setVisible(true);
-	}
 	
 	public void timer() {
 		if(timerOn)
@@ -412,7 +407,7 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(compteurMessageActuel - 1 >= 0)
-					information.setText(Historique.getFirst());
+					historique.setPremier();
 				compteurMessageActuel = 0;
 			}
 		});
@@ -421,24 +416,24 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(compteurMessageActuel - 1 >= 0)
-					information.setText(Historique.getMessage(--compteurMessageActuel));
+					historique.setMessage(--compteurMessageActuel);
 			}
 		});
 	    
 	    navigerHistoriqueUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(compteurMessageActuel + 1 < Historique.getSize())
-					information.setText(Historique.getMessage(++compteurMessageActuel));
+				if(compteurMessageActuel + 1 < historique.getTailleHistorique())
+					historique.setMessage(++compteurMessageActuel);
 			}
 		});
 	    
 	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(compteurMessageActuel + 1 < Historique.getSize()) {
-					information.setText(Historique.getLast());
-					compteurMessageActuel = Historique.getSize() - 1;
+				if(compteurMessageActuel + 1 < historique.getTailleHistorique()) {
+					historique.setDernier();
+					compteurMessageActuel = historique.getTailleHistorique() - 1;
 				}
 			}
 		});
@@ -520,9 +515,9 @@ public class FenetreJeu extends JFrame
 
         barreEtat = new JPanel();
         
-        historique = new JLabel("Pour commencer, crée une nouvelle partie ou charger en une", JLabel.RIGHT);
-        information = new JLabel("Ici s'affichera l'historique des actions", JLabel.LEFT);
-        
+        information = new JLabel("Pour commencer, créez une nouvelle partie ou chargez en une.", JLabel.LEFT);
+        historique = new Historique("Ici s'affichera l'historique des actions.", JLabel.RIGHT);
+
         information.addMouseListener( new MouseListener() {
 			public void mouseReleased(MouseEvent e) { }
 			public void mousePressed(MouseEvent e) { }
@@ -531,8 +526,8 @@ public class FenetreJeu extends JFrame
 
 			public void mouseEntered(MouseEvent e) {
 				String s = "";
-				for(int i = 0; i < Historique.getSize(); i++)
-					s += Historique.getMessage(i) + "\n";
+				for(int i = 0; i < historique.getTailleHistorique(); i++)
+					s += historique.getMessage(i) + "\n";
 				//if(s != "")
 				//	Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
 			}
@@ -541,9 +536,9 @@ public class FenetreJeu extends JFrame
         barreEtat.setSize(new Dimension(carte.getWidth(), 16));
         barreEtat.setLayout(new BoxLayout(barreEtat, BoxLayout.X_AXIS));
         
-        barreEtat.add(historique);
-        barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(information);
+        barreEtat.add(Box.createHorizontalGlue());
+        barreEtat.add(historique);
 
         this.add(barreEtat,BorderLayout.PAGE_END);
 	            
@@ -633,13 +628,13 @@ public class FenetreJeu extends JFrame
 					return;
 				
 	            if (e.getPreciseWheelRotation() < 0) { // Haut 
-	            	if(compteurMessageActuel + 1 < Historique.getSize())
-	            		information.setText(Historique.getMessage(++compteurMessageActuel));
+	            	if(compteurMessageActuel + 1 < historique.getTailleHistorique())
+	            		historique.setMessage(++compteurMessageActuel);
 
 	            }
 	            else {
 	            	if(compteurMessageActuel - 1 >= 0)
-	            		information.setText(Historique.getMessage(--compteurMessageActuel));
+	            		historique.setMessage(--compteurMessageActuel);
 
 
 	            }
@@ -666,7 +661,7 @@ public class FenetreJeu extends JFrame
 			
 			@Override
 			public void historique(String s){
-				historique.setText(s);
+				historique.addMessage(s);
 			}
 			
 			@Override
@@ -675,8 +670,11 @@ public class FenetreJeu extends JFrame
 			}
 		});	    
 	}
-	public static void activableFinTour(boolean b) {
-	   finTour.setEnabled(b);
+	
+	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
+	{
+		FenetreJeu fenetre = new FenetreJeu();
+		fenetre.setVisible(true);
 	}
 }
 

@@ -2,59 +2,75 @@ package wargame;
 
 import java.util.LinkedList;
 
+import javax.swing.JLabel;
+
 /**
  * Classe implémentant une méthode statique permettant de crée la file de message de l'historique 
  */
-final class Historique
+public class Historique extends JLabel implements IConfig
 {
-	private static LinkedList<HistoriqueMessage> FileHistorique = new LinkedList<HistoriqueMessage>();
-	private static int NUM_MESSAGE = 0;
+	private static final long serialVersionUID = 7045910608318694418L;
+	private LinkedList<HistoriqueMessage> fileHistorique = new LinkedList<HistoriqueMessage>();
+	private int numMessage = 0;
 	
-	
-	/**
-	 * Constructeur privé, ce n'est pas une classe faite pour être instanciée
-	 */
-	private Historique(){}
 
-	/**
-	 *  Classe message qui instancie les messages 
-	 */
-	static class HistoriqueMessage{
-		
+	public Historique(){
+		super();
+	}
+	
+	public Historique(String texte, int alignement_horizontal){
+		super(texte, alignement_horizontal);
+	}
+
+
+	private class HistoriqueMessage{
 		private String message;
 		private int numero;
 
 		HistoriqueMessage(String msg) {
 			this.message = msg;
-			this.numero = NUM_MESSAGE;
+			this.numero = numMessage;
 		}	
 	}
 
-	public static void addMessage(String message) {
-		if(getSize() > IConfig.TAILLE_MAX_HISTORIQUE)
-			FileHistorique.removeFirst();
+	public void addMessage(String message) {
+
+		if(this.getTailleHistorique() > IConfig.TAILLE_MAX_HISTORIQUE)
+			fileHistorique.removeFirst();
 		
-		NUM_MESSAGE++;
-		FileHistorique.add(new HistoriqueMessage(message));
-		FenetreJeu.information.setText("[" + NUM_MESSAGE + "] " + message);
+		numMessage++;
+		fileHistorique.add(new HistoriqueMessage(message));
+		this.setText("[" + numMessage + "] " + message);
 	}
 
-	public static String getMessage(int x) {
-		HistoriqueMessage elem = FileHistorique.get(x);
+	public String getMessage(int x) {
+		HistoriqueMessage elem = fileHistorique.get(x);
 		return "[" + elem.numero + "] " + elem.message;
 	}
 	
-	public static String getFirst() {
-		HistoriqueMessage elem = FileHistorique.getFirst();
+	public void setMessage(int x) {
+		this.setText(this.getMessage(x));
+	}
+	
+	public String getPremier() {
+		HistoriqueMessage elem = fileHistorique.getFirst();
 		return "[" + elem.numero + "] " + elem.message;
 	}
 	
-	public static String getLast() {
-		HistoriqueMessage elem = FileHistorique.getLast();
+	public void setPremier(){
+		this.setText(this.getPremier());
+	}
+	
+	public String getDernier() {
+		HistoriqueMessage elem = fileHistorique.getLast();
 		return "[" + elem.numero + "] " + elem.message;
 	}
 	
-	public static int getSize() {
-		return FileHistorique.size();
+	public void setDernier() {
+		this.setText(this.getDernier());
+	}
+	
+	public int getTailleHistorique() {
+		return fileHistorique.size();
 	}	
 }

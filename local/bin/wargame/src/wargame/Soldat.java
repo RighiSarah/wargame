@@ -158,7 +158,7 @@ public abstract class Soldat extends Charset implements ISoldat
 	 * Fonction permettant de crée un combat entre 2 soldats
 	 * @param soldat Instance du soldat à attaquer
 	 * @param distance Distance séparant soldat1 de soldat 2
-	 * @return -1 si le soldat qui attaque est mort, 1 si le soldat attaqué est mort, 2 si les deux soldats sont morts et 0 sinon
+	 * @return -1 si le soldat qui attaque est mort, 1 si le soldat attaqué est mort, 0 sinon
 	 */
 	public int combat(Soldat soldat, int distance)
 	{	
@@ -187,8 +187,7 @@ public abstract class Soldat extends Charset implements ISoldat
 				/* Alors une réplique est crée */
 				degat = (distance == 1) ? soldat.getPuissance() / IConfig.COEFFICIENT_REDUC : soldat.getTir() / IConfig.COEFFICIENT_REDUC;
 				
-				Historique.addMessage("Un " + soldat.getNom() + " vous frappe, vous perdez " + degat + " points de vie");
-//				FenetreJeu.information.setText("Un " + soldat.getNom() + " vous frappe, vous perdez " + degat + " points de vie");
+//				Historique.addMessage("Un " + soldat.getNom() + " vous frappe, vous perdez " + degat + " points de vie");
 				
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
@@ -218,8 +217,9 @@ public abstract class Soldat extends Charset implements ISoldat
 	/**
 	 * Méthode permettant de mettre en repos le soldat
 	 * @param afficherMessage Si vrai, un message sera affiché
+	 * @return -1 si vie au max, >= 0 pour la vie récupérée
 	 */
-	public void repos(boolean afficherMessage) {
+	public int repos(boolean afficher_message) {
 
 		int regain = Aleatoire.nombreAleatoire(0, IConfig.REPOS_MAX);
 		int case_courante = this.getPosition().getNumCase();
@@ -227,25 +227,21 @@ public abstract class Soldat extends Charset implements ISoldat
 		/* Si la vie du soldat est déjà au max on considere pas qu'il a joué. Cependant on lui met un message */
 		if(vie == this.getVieMax()) {
 			
-			if(!afficherMessage)
-				return;
-			
-			Historique.addMessage(this.getNom()+ " " + position.toString() + " a sa vie au maximum");
-//			FenetreJeu.information.setText(this.getNom()+ " " + position.toString() + " a sa vie au maximum");
+			if(!afficher_message)
+				return -1;
 			
 			Infobulle.newMessage(case_courante, "Vie au max", IConfig.MESSAGE_NEUTRE, 2, 0);
-			return;
+			return -1;
 		}
 
 		/* Définition du message et de sa couleur */
 		Infobulle.newMessage(case_courante, "+ " + regain, IConfig.MESSAGE_POSITIF, IConfig.MOUV_INFOBULLE_HAUT, 0);
-		
-		Historique.addMessage(this.getNom() + " se repose et regagne " + regain + " points de vie");
-//		FenetreJeu.information.setText(this.getNom() + " se repose et regagne " + regain + " points de vie");
-		
+
 		/* On met a jour sa vie et on indique qu'il a joué */
 		this.setVie(vie + regain);
 		this.setAJoue(true);
+		
+		return regain;
 	}
 
 	public Position getPosition() {
