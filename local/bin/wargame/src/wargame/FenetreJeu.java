@@ -609,9 +609,7 @@ public class FenetreJeu extends JFrame
 				information.setText(s);
 			}
 		});	    
-	
-	   
-
+	    
 	    /* On ajoute à la fenêtre les différents éléments que l'on a créé */
 	    this.add(sousMenu, BorderLayout.PAGE_START);
         this.add(sep, BorderLayout.NORTH);
@@ -628,6 +626,7 @@ public class FenetreJeu extends JFrame
 	    this.pack();
 	    
 	    this.setVisible(true);
+	    this.requestFocus();
 	}
 	
 	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
