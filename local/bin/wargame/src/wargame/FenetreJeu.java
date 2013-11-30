@@ -341,6 +341,7 @@ public class FenetreJeu extends JFrame
 			{ 
 				if(carte.isGeneree()){
 					carte.reinitAJoue();
+					requestFocus();
 				}
 			}
 		});
@@ -384,24 +385,28 @@ public class FenetreJeu extends JFrame
 	    navigerHistoriquePremier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
 				historique.afficherPremier();
+				requestFocus();
 			}
 		});
 	    
 	    navigerHistoriquePrecedent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
 				historique.afficherMessagePrecedent();
+				requestFocus();
 			}
 		});
 	    
 	    navigerHistoriqueSuivant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
 				historique.afficherMessageSuivant();
+				requestFocus();
 			}
 		});
 	    
 	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { 
 				historique.afficherDernier();
+				requestFocus();
 			}
 		});
 	    
@@ -426,6 +431,7 @@ public class FenetreJeu extends JFrame
                 }
                 	                
                 carte.charge(fichier_choisi.getPath());
+				requestFocus();
 			}
 		});
 	    
@@ -454,12 +460,14 @@ public class FenetreJeu extends JFrame
 			    }
 	                
 			    carte.sauvegarde(fichier_choisi.getPath());
+				requestFocus();
 			}
 		});
 	    
 	    exit.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		System.exit(0);
+				requestFocus();
 	    	}       
 	    });
 	    
