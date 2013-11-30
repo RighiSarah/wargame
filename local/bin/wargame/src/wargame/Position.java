@@ -133,7 +133,11 @@ public class Position extends Point implements IConfig{
 		return direction;
 	}
 	
-	
+	/**
+	 * Méthode vérifiant si deux positions sont égales
+	 * @param pos Position à vérifier
+	 * @return Vrai si les deux positions sont égales, faux sinon
+	 */
 	public boolean equals(Position pos){
 		return ((pos.x == this.x) && (pos.y == this.y));  
 	}
