@@ -407,7 +407,7 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(compteurMessageActuel - 1 >= 0)
-					historique.setPremier();
+					historique.afficherPremier();
 				compteurMessageActuel = 0;
 			}
 		});
@@ -416,7 +416,7 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(compteurMessageActuel - 1 >= 0)
-					historique.setMessage(--compteurMessageActuel);
+					historique.afficherMessage(--compteurMessageActuel);
 			}
 		});
 	    
@@ -424,7 +424,7 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(compteurMessageActuel + 1 < historique.getTailleHistorique())
-					historique.setMessage(++compteurMessageActuel);
+					historique.afficherMessage(++compteurMessageActuel);
 			}
 		});
 	    
@@ -432,7 +432,7 @@ public class FenetreJeu extends JFrame
 			public void actionPerformed(ActionEvent e) 
 			{ 
 				if(compteurMessageActuel + 1 < historique.getTailleHistorique()) {
-					historique.setDernier();
+					historique.afficherDernier();
 					compteurMessageActuel = historique.getTailleHistorique() - 1;
 				}
 			}
@@ -629,12 +629,12 @@ public class FenetreJeu extends JFrame
 				
 	            if (e.getPreciseWheelRotation() < 0) { // Haut 
 	            	if(compteurMessageActuel + 1 < historique.getTailleHistorique())
-	            		historique.setMessage(++compteurMessageActuel);
+	            		historique.afficherMessage(++compteurMessageActuel);
 
 	            }
 	            else {
 	            	if(compteurMessageActuel - 1 >= 0)
-	            		historique.setMessage(--compteurMessageActuel);
+	            		historique.afficherMessage(--compteurMessageActuel);
 
 
 	            }
