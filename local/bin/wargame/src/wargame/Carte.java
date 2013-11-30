@@ -29,10 +29,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
 
-	private int nbHerosRestant = IConfig.NB_HEROS;
-	private int nbMonstresRestant = IConfig.NB_MONSTRES;
-	private int nbToPlay = nbHerosRestant - 1; 
-	private int tour = 0;
+	private int nbHerosRestant;
+	private int nbMonstresRestant;
+	private int nbToPlay; 
+	private int tour;
 	
 	private CarteListener carteListener;
 	
@@ -115,6 +115,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	Carte() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{		
+		nbHerosRestant = IConfig.NB_HEROS;
+		nbMonstresRestant = IConfig.NB_MONSTRES;
+		nbToPlay = nbHerosRestant - 1; 
+		tour = 0;
+		
 		/* Initialisation taux de rafraichissement. */
 		timer = new Timer((int)(1000.0 * 1.0 / IConfig.FPS), this);
 		timer.setInitialDelay(0);
@@ -263,7 +268,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		tour++;
 
 		carteListener.historique("Début du tour " + tour);
-		carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -586,6 +590,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Genere aléatoirement une carte. */
 	public void generer()
 	{
+		nbHerosRestant = IConfig.NB_HEROS;
+		nbMonstresRestant = IConfig.NB_MONSTRES;
+		nbToPlay = nbHerosRestant - 1; 
+		tour = 0;
 		generee = true;
 		tourJoueur = true;
 		genererCarte();
