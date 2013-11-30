@@ -116,7 +116,6 @@ public class FenetreJeu extends JFrame
 	Timer timer = new Timer(IConfig.DELAI_TOUCHE, new ActionListener() {
 		public void actionPerformed (ActionEvent event) {
 			if(timerOn) {
-				//System.out.println("Up : "+tabKey[0] + " Down : "+tabKey[1] +" Left : "+ tabKey[2] +" Right : "+ tabKey[3]);
 				carte.changePos(tabKey);
 				timerOn = false;
 			}
@@ -318,12 +317,6 @@ public class FenetreJeu extends JFrame
 			public void menuSelected(MenuEvent e) 
 			{
 				finTour.setPreferredSize(new Dimension(150,10));
-//				int[] key =
-//					{KeyEvent.VK_0, KeyEvent.VK_1,
-//					 KeyEvent.VK_2, KeyEvent.VK_3,
-//					 KeyEvent.VK_4, KeyEvent.VK_5,
-//					 KeyEvent.VK_6, KeyEvent.VK_7,
-//					 KeyEvent.VK_8, KeyEvent.VK_9};
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
 					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");
@@ -348,6 +341,7 @@ public class FenetreJeu extends JFrame
 			{ 
 				if(carte.isGeneree()){
 					carte.reinitAJoue();
+					requestFocus();
 				}
 			}
 		});
@@ -389,61 +383,60 @@ public class FenetreJeu extends JFrame
 	    
 		/* Événements du sous menu */		
 	    navigerHistoriquePremier.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherPremier();
+				requestFocus();
 			}
 		});
 	    
 	    navigerHistoriquePrecedent.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherMessagePrecedent();
+				requestFocus();
 			}
 		});
 	    
 	    navigerHistoriqueSuivant.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherMessageSuivant();
+				requestFocus();
 			}
 		});
 	    
 	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherDernier();
+				requestFocus();
 			}
 		});
 	    
 	    boutonCharger.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
-			        JFileChooser fichier = new JFileChooser();
-			        fichier.setDialogTitle("Ouvrir fichier");
-			        fichier.setCurrentDirectory(new File("."));
-			        fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
+			public void actionPerformed(ActionEvent e) 	{ 
+				JFileChooser fichier = new JFileChooser();
+		        fichier.setDialogTitle("Ouvrir fichier");
+		        fichier.setCurrentDirectory(new File("."));
+		        fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
 
-			        int choix = fichier.showOpenDialog(carte);
-	                if (choix != JFileChooser.APPROVE_OPTION) {
-                        JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
-                        return;
-	                }
-	                
-	               	File fichier_choisi = fichier.getSelectedFile();
+		        int choix = fichier.showOpenDialog(carte);
+                if (choix != JFileChooser.APPROVE_OPTION) {
+                    JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+               	File fichier_choisi = fichier.getSelectedFile();
 
-	                if(fichier_choisi.getPath().endsWith(".ser") == false) {
-                        JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
-                        return;
-	                }
-	                	                
-	                carte.charge(fichier_choisi.getPath());
+                if(fichier_choisi.getPath().endsWith(".ser") == false) {
+                    JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                	                
+                carte.charge(fichier_choisi.getPath());
+				requestFocus();
 			}
 		});
 	    
 	    boutonSauvegarder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				if(!carte.isGeneree())
 					return;
 				
@@ -467,16 +460,16 @@ public class FenetreJeu extends JFrame
 			    }
 	                
 			    carte.sauvegarde(fichier_choisi.getPath());
+				requestFocus();
 			}
 		});
 	    
 	    exit.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent e) 
-	    	{
+	    	public void actionPerformed(ActionEvent e) {
 	    		System.exit(0);
+				requestFocus();
 	    	}       
 	    });
-	    
 	    
 	    /* Création de la barre d'état avec ses séparateurs */
         separator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -507,8 +500,6 @@ public class FenetreJeu extends JFrame
         barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(historique);
 
-	        
-	    
 	    /** Capture des actions au clavier */
 		/* No Tab key-pressed or key-released events are received by the key event listener.
 		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
@@ -602,23 +593,21 @@ public class FenetreJeu extends JFrame
 			}
 			
 			@Override
-			public void deplaceMonstre(){
+			public void deplaceMonstre() {
 				finTour.setEnabled(!finTour.isEnabled());
 			}
 			
 			@Override
-			public void historique(String s){
+			public void historique(String s) {
 				historique.addMessage(s);
 			}
 			
 			@Override
-			public void information(String s){
+			public void information(String s) {
 				information.setText(s);
 			}
 		});	    
-	
-	   
-
+	    
 	    /* On ajoute à la fenêtre les différents éléments que l'on a créé */
 	    this.add(sousMenu, BorderLayout.PAGE_START);
         this.add(sep, BorderLayout.NORTH);
@@ -635,6 +624,7 @@ public class FenetreJeu extends JFrame
 	    this.pack();
 	    
 	    this.setVisible(true);
+	    this.requestFocus();
 	}
 	
 	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
