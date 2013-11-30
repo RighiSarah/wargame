@@ -478,8 +478,8 @@ public class FenetreJeu extends JFrame
 	    
 	    /* Création de la barre d'état avec ses séparateurs */
         separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.setBackground(Color.DARK_GRAY);
-        separator.setSize(new Dimension(carte.getWidth(), 5));
+        separator.setBackground(Color.red);
+        separator.setSize(new Dimension(100, 100));
         
         JSeparator sep = separator;
 
@@ -620,6 +620,8 @@ public class FenetreJeu extends JFrame
 			}
 		});	    
 	
+	   
+
 	    /* On ajoute à la fenêtre les différents éléments que l'on a créé */
 	    this.add(sousMenu, BorderLayout.PAGE_START);
         this.add(sep, BorderLayout.NORTH);
