@@ -382,61 +382,55 @@ public class FenetreJeu extends JFrame
 	    
 		/* Événements du sous menu */		
 	    navigerHistoriquePremier.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherPremier();
 			}
 		});
 	    
 	    navigerHistoriquePrecedent.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherMessagePrecedent();
 			}
 		});
 	    
 	    navigerHistoriqueSuivant.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherMessageSuivant();
 			}
 		});
 	    
 	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				historique.afficherDernier();
 			}
 		});
 	    
 	    boutonCharger.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
-			        JFileChooser fichier = new JFileChooser();
-			        fichier.setDialogTitle("Ouvrir fichier");
-			        fichier.setCurrentDirectory(new File("."));
-			        fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
+			public void actionPerformed(ActionEvent e) 	{ 
+				JFileChooser fichier = new JFileChooser();
+		        fichier.setDialogTitle("Ouvrir fichier");
+		        fichier.setCurrentDirectory(new File("."));
+		        fichier.setFileFilter(new FileNameExtensionFilter("Sauvegarde wargame (*.ser)", "ser"));
 
-			        int choix = fichier.showOpenDialog(carte);
-	                if (choix != JFileChooser.APPROVE_OPTION) {
-                        JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
-                        return;
-	                }
-	                
-	               	File fichier_choisi = fichier.getSelectedFile();
+		        int choix = fichier.showOpenDialog(carte);
+                if (choix != JFileChooser.APPROVE_OPTION) {
+                    JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+               	File fichier_choisi = fichier.getSelectedFile();
 
-	                if(fichier_choisi.getPath().endsWith(".ser") == false) {
-                        JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
-                        return;
-	                }
-	                	                
-	                carte.charge(fichier_choisi.getPath());
+                if(fichier_choisi.getPath().endsWith(".ser") == false) {
+                    JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                	                
+                carte.charge(fichier_choisi.getPath());
 			}
 		});
 	    
 	    boutonSauvegarder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{ 
+			public void actionPerformed(ActionEvent e) { 
 				if(!carte.isGeneree())
 					return;
 				
@@ -464,12 +458,10 @@ public class FenetreJeu extends JFrame
 		});
 	    
 	    exit.addActionListener(new ActionListener() {
-	    	public void actionPerformed(ActionEvent e) 
-	    	{
+	    	public void actionPerformed(ActionEvent e) {
 	    		System.exit(0);
 	    	}       
 	    });
-	    
 	    
 	    /* Création de la barre d'état avec ses séparateurs */
         separator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -500,8 +492,6 @@ public class FenetreJeu extends JFrame
         barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(historique);
 
-	        
-	    
 	    /** Capture des actions au clavier */
 		/* No Tab key-pressed or key-released events are received by the key event listener.
 		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
@@ -595,17 +585,17 @@ public class FenetreJeu extends JFrame
 			}
 			
 			@Override
-			public void deplaceMonstre(){
+			public void deplaceMonstre() {
 				finTour.setEnabled(!finTour.isEnabled());
 			}
 			
 			@Override
-			public void historique(String s){
+			public void historique(String s) {
 				historique.addMessage(s);
 			}
 			
 			@Override
-			public void information(String s){
+			public void information(String s) {
 				information.setText(s);
 			}
 		});	    
