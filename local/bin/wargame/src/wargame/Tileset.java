@@ -7,9 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-/** Classe de chargement de Tileset.
- *	@author ABHAMON Ronan 
- */
+/** Classe de chargement de Tileset. */
 public class Tileset
 {
 	/** Image du tileset. */
@@ -142,7 +140,7 @@ public class Tileset
 	/** Dessine de la paille sur la carte.
 	 * @param carte Carte où dessiner.
 	 * @param p		Position où ajouter la paille.
-	 * @return      false si x, y ne font pas partis de la carte, true sinon.
+	 * @return      false si p ne fait pas parti de la carte, true sinon.
 	 */
 	protected boolean setPaille(Carte carte, Position p)
 	{
@@ -155,7 +153,7 @@ public class Tileset
 	/** Dessine un arbre sur la carte.
 	 * @param carte Carte où dessiner.
 	 * @param p		Position où ajouter l'arbre.
-	 * @return      false si x, y ne font pas partis de la carte, true sinon.
+	 * @return      false si p ne fait pas parti de la carte, true sinon.
 	 */
 	protected boolean setArbre(Carte carte, Position p)
 	{
@@ -168,7 +166,7 @@ public class Tileset
 	/** Dessine une flaque d'eau sur la carte.
 	 * @param carte Carte où dessiner.
 	 * @param p		Position où ajouter l'eau.
-	 * @return      false si x, y ne font pas partis de la carte, true sinon.
+	 * @return      false si p ne fait pas parti de la carte, true sinon.
 	 */
 	protected boolean setEau(Carte carte, Position p)
 	{

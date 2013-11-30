@@ -1,8 +1,8 @@
 package wargame;
 
-/** Case d'un tileset.
- * @author ABHAMON Ronan 
-*/
+/**
+ * Classe représentant une case d'un Tileset
+ */
 public class Tile
 {
 	/** Praticabilité. Une personne peut-elle marcher dessus ? */
