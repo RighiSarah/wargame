@@ -490,7 +490,7 @@ public class FenetreJeu extends JFrame
         information = new JLabel("Pour commencer, créez une nouvelle partie ou chargez en une.", JLabel.LEFT);
         historique = new Historique("Ici s'affichera l'historique des actions.", JLabel.RIGHT);
 
-        information.addMouseListener( new MouseAdapter() {
+        historique.addMouseListener( new MouseAdapter() {
 			public void mouseEntered(MouseEvent e) {
 				String s = "";
 				for(int i = 0; i < historique.getTailleHistorique(); i++)
@@ -513,7 +513,6 @@ public class FenetreJeu extends JFrame
 		/* No Tab key-pressed or key-released events are received by the key event listener.
 		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
 		 */
-		this.setFocusableWindowState(true);
 		setFocusTraversalKeysEnabled(false);
 	    
 		addKeyListener(new KeyAdapter() {
