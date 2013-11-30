@@ -111,11 +111,11 @@ public interface IConfig
 	
 	/** Couleur du brouillard */
 	Color COULEUR_BROUILLARD = new Color(50, 50, 50, 245);
- 
 	
 	/** Coefficients de réduction pour le combat (dégat fait en temps normal / coefficient réducteur ) */
 	int COEFFICIENT_REDUC = 3; /* Attention ! ne peut être égal à 0 ! */
 	 
+	/** Délai entre l'appui des touches */
 	int DELAI_TOUCHE = 100;
 	 
 	/** Nombre maximum de message dans la file de l'historique */

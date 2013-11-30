@@ -73,7 +73,6 @@ public class Monstre extends Soldat
 		return typeMonstre.getTir();
 	}
 	
-	
 	public String getNom(){
 		return typeMonstre.getNom();
 	}
