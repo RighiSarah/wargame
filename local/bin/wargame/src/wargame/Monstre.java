@@ -60,7 +60,7 @@ public class Monstre extends Soldat
 		setImage();
 	}
 	
-	
+
 	public int getPortee(){
 		return typeMonstre.getPortee();
 	}
