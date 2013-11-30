@@ -259,7 +259,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public void reinitAJoue() {
 		joueMonstres();
-		
+		caseActionnee = -1;
 		tour++;
 
 		carteListener.historique("Début du tour " + tour);
