@@ -1,13 +1,10 @@
 A FAIRE :
 	fin de jeu
-	Amélioration IA.
 	historique (voir Soldat.java méthodes repos et combat) [ affichage plus longtemps des messages quand mouseOver
 	Crée l'uml
 	
 Corriger bug 
 	Affichage des séparator [ FenetreJeu ]
-	Compteur de monstre qui bug
-	
 	
 Idée d'amélioration
 	Code Konami [ fait par nico ] Et [ peut etre petite dance se victoire ?!? ]
