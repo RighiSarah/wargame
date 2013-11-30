@@ -488,8 +488,10 @@ public class FenetreJeu extends JFrame
 				String s = "";
 				for(int i = 0; i < historique.getTailleHistorique(); i++)
 					s += historique.getMessage(i) + "\n";
-				if(s != "")
-					Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
+				carte.setAffichageHistorique(s);
+			}
+			public void mouseExited(MouseEvent e) {
+				carte.setAffichageHistorique("");
 			}
         });
         

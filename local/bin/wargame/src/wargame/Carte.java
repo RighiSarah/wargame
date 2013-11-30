@@ -63,39 +63,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	private int caseActionnee = -1;
 	
-	/* Rappel sur l'ordre du tableau :
-	 * 	HAUT, BAS, GAUCHE, DROITE
-	 */
-	public void changePos(boolean[] tabKey) {
-		if(caseActionnee == -1 || !generee)
-			return;
-		Position pos = soldat[caseActionnee].getPosition();
-		Position caseArrivee = null;
-		
-		if(tabKey[0]) {			// Si on a haut
-			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y - 1); } 	// Si Haut - Gauche
-			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y - 1); } 	// Si Haut - Droite
-			else				  caseArrivee = new Position(pos.x, pos.y - 1);  		// Si Haut
-		}
-		else if(tabKey[1]) {	// Sinon si on a bas
-			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y + 1); } 	// Si Bas - Gauche
-			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y + 1); } 	// Si Bas - Droite
-			else				  caseArrivee = new Position(pos.x, pos.y + 1);			// Si Bas
-		}
-		else if(tabKey[2]) 		  caseArrivee = new Position(pos.x - 1, pos.y);			// Si Gauche
-		else if(tabKey[3]) 		  caseArrivee = new Position(pos.x + 1, pos.y);			// Si Droite	
-		else					  return;
-		
-		if( caseArrivee.estValide() 
-				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
-				&& soldat[caseArrivee.getNumCase()] == null
-				&& !soldat[caseActionnee].getAJoue()) {
-			deplaceSoldat(soldat[caseActionnee], caseArrivee.getNumCase());
-			caseActionnee = -1;
-		}
-		
-	}
-	
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
 	private Soldat soldatPointe = null;
 
@@ -104,6 +71,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 	/** Timer. */
 	private Timer timer;
+	
+	/** Booleen qui controle si ont doit ou non afficher l'historique */
+	private String afficheHistorique = "";
 	
 	/** Est-ce au tour de joueur ? */
 	private boolean tourJoueur;
@@ -760,6 +730,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Affichage du brouillard, que l'on affiche avant l'infobulle */
 		dessinerBrouillard(g, brouillard);
 		
+		if(afficheHistorique != "") {
+			Infobulle.dessinerText(g, IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE, afficheHistorique, Color.BLUE, Color.LIGHT_GRAY );
+		}
 		/* Affichage de l'infobulle si un soldat est pointé */
 		if(soldatPointe != null ){ 
 			Position pos = soldatPointe.getPosition();
@@ -1061,6 +1034,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 	
 
+	public void setAffichageHistorique(String affichage) {
+		this.afficheHistorique = affichage;
+	}
+	
 	/** 
 	 * Retourne la valeur du boolean brouillardActive
 	 *
@@ -1075,5 +1052,40 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	public void setBrouillardActive(boolean active) {
 		brouillardActive = active;
 	}
+	
+	/* Rappel sur l'ordre du tableau :
+	 * 	HAUT, BAS, GAUCHE, DROITE
+	 */
+	/** Change la position d'un soldat en fonction des touches du tableau définit dans FenetreJeu */
+	public void changePos(boolean[] tabKey) {
+		if(caseActionnee == -1 || !generee)
+			return;
+		Position pos = soldat[caseActionnee].getPosition();
+		Position caseArrivee = null;
+		
+		if(tabKey[0]) {			// Si on a haut
+			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y - 1); } 	// Si Haut - Gauche
+			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y - 1); } 	// Si Haut - Droite
+			else				  caseArrivee = new Position(pos.x, pos.y - 1);  		// Si Haut
+		}
+		else if(tabKey[1]) {	// Sinon si on a bas
+			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y + 1); } 	// Si Bas - Gauche
+			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y + 1); } 	// Si Bas - Droite
+			else				  caseArrivee = new Position(pos.x, pos.y + 1);			// Si Bas
+		}
+		else if(tabKey[2]) 		  caseArrivee = new Position(pos.x - 1, pos.y);			// Si Gauche
+		else if(tabKey[3]) 		  caseArrivee = new Position(pos.x + 1, pos.y);			// Si Droite	
+		else					  return;
+		
+		if( caseArrivee.estValide() 
+				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
+				&& soldat[caseArrivee.getNumCase()] == null
+				&& !soldat[caseActionnee].getAJoue()) {
+			deplaceSoldat(soldat[caseActionnee], caseArrivee.getNumCase());
+			caseActionnee = -1;
+		}
+		
+	}
+	
 }
 
