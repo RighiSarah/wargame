@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
@@ -488,15 +490,15 @@ public class FenetreJeu extends JFrame
         information = new JLabel("Pour commencer, créez une nouvelle partie ou chargez en une.", JLabel.LEFT);
         historique = new Historique("Ici s'affichera l'historique des actions.", JLabel.RIGHT);
 
-//        information.addMouseListener( new MouseAdapter() {
-//			public void mouseEntered(MouseEvent e) {
-//				String s = "";
-//				for(int i = 0; i < historique.getTailleHistorique(); i++)
-//					s += historique.getMessage(i) + "\n";
-//				if(s != "")
-//					Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
-//			}
-//        });
+        information.addMouseListener( new MouseAdapter() {
+			public void mouseEntered(MouseEvent e) {
+				String s = "";
+				for(int i = 0; i < historique.getTailleHistorique(); i++)
+					s += historique.getMessage(i) + "\n";
+				if(s != "")
+					Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
+			}
+        });
         
         barreEtat.setSize(new Dimension(carte.getWidth(), 16));
         barreEtat.setLayout(new BoxLayout(barreEtat, BoxLayout.X_AXIS));
@@ -517,7 +519,7 @@ public class FenetreJeu extends JFrame
 		addKeyListener(new KeyAdapter() {
 		    public void keyPressed(KeyEvent e) {
 		    	int key = e.getKeyCode();
-//		    	System.out.println(key);
+		    	System.out.println("Touche actionnée " + key);
 		    	
 		    	if(key == KeyEvent.VK_F1)
 		    		boutonCharger.doClick();
@@ -543,22 +545,18 @@ public class FenetreJeu extends JFrame
 		    	else if(key == KeyEvent.VK_UP) {
 		    		timer();
 		    		tabKey[0] = true;
-		    		//System.out.println("UP");
 		    	}
 		    	else if(key == KeyEvent.VK_DOWN) {
 		    		timer();
 		    		tabKey[1] = true;
-		    		//System.out.println("DOWN");
 		    	}
 		    	else if(key == KeyEvent.VK_LEFT) {
 		    		timer();
 		    		tabKey[2] = true;
-		    		//System.out.println("LEFT");
 		    	}
 		    	else if(key == KeyEvent.VK_RIGHT) {
 		    		timer();
 		    		tabKey[3] = true;
-		    		//System.out.println("RIGHT");
 		    	} 	
 		    }
 
