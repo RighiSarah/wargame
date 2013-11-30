@@ -29,10 +29,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
 
-	private int nbHerosRestant;
-	private int nbMonstresRestant;
-	private int nbToPlay; 
-	private int tour;
+	protected static int nbHerosRestant = IConfig.NB_HEROS;
+	protected static int nbMonstresRestant = IConfig.NB_MONSTRES;
+	protected static int nbToPlay = nbHerosRestant - 1; 
+	protected static int tour = 0;
 	
 	private CarteListener carteListener;
 	
@@ -115,11 +115,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	Carte() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{		
-		nbHerosRestant = IConfig.NB_HEROS;
-		nbMonstresRestant = IConfig.NB_MONSTRES;
-		nbToPlay = nbHerosRestant - 1; 
-		tour = 0;
-		
 		/* Initialisation taux de rafraichissement. */
 		timer = new Timer((int)(1000.0 * 1.0 / IConfig.FPS), this);
 		timer.setInitialDelay(0);
@@ -268,6 +263,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		tour++;
 
 		carteListener.historique("Début du tour " + tour);
+		carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -506,7 +502,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	{
 		carteListener.deplaceMonstre();
 		tourJoueur = false;
-		caseActionnee = -1;
 			
 		for(int i=0; i < monstre.length; i++) 
 		{
@@ -590,10 +585,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Genere aléatoirement une carte. */
 	public void generer()
 	{
-		nbHerosRestant = IConfig.NB_HEROS;
-		nbMonstresRestant = IConfig.NB_MONSTRES;
-		nbToPlay = nbHerosRestant - 1; 
-		tour = 0;
 		generee = true;
 		tourJoueur = true;
 		genererCarte();
@@ -781,13 +772,12 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 
-		carteListener.information(this.nbMonstresRestant + " Monstres restant - " + this.nbHerosRestant + " Heros restant");
+		carteListener.information(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
 	}
 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		if(nbToPlay == 0)	
-			reinitAJoue();
+		if(nbToPlay == 0)	reinitAJoue();
 		repaint();
 	}
 
@@ -910,14 +900,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			else if(v == 1) {
 				nbHerosRestant--;
 				caseActionnee = -1;
-//				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
+				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
 			}
 		}
 		else{
 			if(v == -1) {
 				nbHerosRestant--;
 				caseActionnee = -1;
-//				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
+				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
 			}
 			else if(v == 1){
 				nbMonstresRestant--;
@@ -1019,17 +1009,25 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			double a = (double)(droite.y - gauche.y)/(double)(droite.x - gauche.x);
 			double b = gauche.y - a * gauche.x;
 			
+//			System.out.println("a vaut :" + a + " et b vaut " + b);
+			
 			/* Pour chaque pixel entre les deux positions */
 			for(int x = gauche.x; x < droite.x; x++){
 				/* On calcule le y */
 				int y = (int) (a * x + b);
 				
+//				System.out.println("y  :" + (double) (y / IConfig.NB_PIX_CASE));
 				/* On calcule dans quelle case est le pixel */
 				double x_case = Math.round((double)x / (double)IConfig.NB_PIX_CASE);
 				double y_case = Math.round((double)y / (double)IConfig.NB_PIX_CASE);
-		
+				
+//				System.out.println("J'ai x : " + x_case + " y : " + y_case);
+				
 				Position position_en_cours = new Position((int)x_case, (int)y_case);
-					
+				
+//				System.out.println("La position de la case est " + position_en_cours.toString());
+				
+				
 				int num_tile = carte[position_en_cours.getNumCase()];
 				Tile tile = tileset.getTile(num_tile);
 
