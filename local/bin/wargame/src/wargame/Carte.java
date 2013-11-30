@@ -29,9 +29,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
 
-	private int nbHerosRestant = IConfig.NB_HEROS;
-	private int nbMonstresRestant = IConfig.NB_MONSTRES;
-	private int nbToPlay = nbHerosRestant - 1; 
+	private int nbHerosRestant;
+	private int nbMonstresRestant;
+	private int nbToPlay; 
 	private int tour = 0;
 	
 	private CarteListener carteListener;
@@ -263,7 +263,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		tour++;
 
 		carteListener.historique("Début du tour " + tour);
-		carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -297,6 +296,10 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	private void genererCarte()
 	{
+		nbHerosRestant = IConfig.NB_HEROS;
+		nbMonstresRestant = IConfig.NB_MONSTRES;
+		nbToPlay = nbHerosRestant - 1; 
+		
 		soldat = new Soldat[IConfig.LARGEUR_CARTE * IConfig.HAUTEUR_CARTE];
 		chargerTileset();
 
