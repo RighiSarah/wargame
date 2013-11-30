@@ -2,7 +2,6 @@ package wargame;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 
 
@@ -13,9 +12,7 @@ public abstract class Soldat extends Charset implements ISoldat
 {
 	private static final long serialVersionUID = 1L;
 
-	protected Point coord = null;
-	
-	/** Informations de base d'un soldat. */
+	/** Vie d'un soldat. */
 	protected int vie;
 	
 	/** Numéro de la case où se situe le soldat. */
@@ -34,28 +31,50 @@ public abstract class Soldat extends Charset implements ISoldat
 	protected int offsetX = 0;
 	protected int offsetY = 0;
 
+	/** 
+	 * Constructeur de base d'un soldat
+	 */
 	Soldat() {}
 	
+	/**
+	 * Permet de récupérer le nombre de points de vie du soldat
+	 * @return Le nombre de points de vie du soldat
+	 */
 	public int getVie() 
 	{
 		return vie;
 	}
 	
+	/**
+	 * Permet de récupérer le pourcentage des points de vie du soldat
+	 * @return Le pourcentage des points de vie du soldat
+	 */
 	public double getPourcentageVie(){
 		return ((double)(vie/(double)this.getVieMax())) * 100.;
 	}
 
+	/**
+	 * Permet de spécifier un nouveau nombre de points de vie d'un soldat
+	 * @param vie Le nombre de points de vie d'un soldat
+	 */
 	public void setVie(int vie) 
 	{
 		this.vie = ((vie > this.getVieMax()) ? this.getVieMax() : (vie < 0 ) ? 0 : vie);
 	}
 	
-		
+	/**
+	 * Permet de dire si le soldat est en train de se déplacer ou non
+	 * @param value Vrai si le soldat est en train de se déplacer, faux sinon
+	 */
 	public void setSeDeplace(boolean value)
 	{
 		this.seDeplace = value;
 	}
 	
+	/**
+	 * Permet de savoir si le soldat est en train de se déplacer
+	 * @return Vrai si le soldat est en train de se déplacer, faux sinon
+	 */
 	public boolean getSeDeplace()
 	{
 		return this.seDeplace;
