@@ -28,10 +28,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
@@ -46,99 +44,101 @@ public class FenetreJeu extends JFrame
 {
 	private static final long serialVersionUID = 7794325642011100784L;
 
+	/** Carte du jeu. */
+    private Carte carte;
+	
+	/* Barre d'état située en bas de la fenêtre */
 	private JPanel barreEtat;
     private JSeparator separator;
+    
+    /* Historique et information de la barre d'état */
     private Historique historique;
     private JLabel information;
-
-	/** Menus. */
+    
+	/* Menu */
 	private JMenuBar menu;
 	private JMenu jeu;
 	private JMenu sauvegarder;
 	private JMenu charger;
 	private JMenu config;
 		
-	private JButton finTour;
-	
-	/* Options des menus. */
-	
+	/* Options des menus */
 	/** Nouvelle partie. */
 	private JMenuItem nouveau;
-	
 	/** Quitter. */
 	private JMenuItem quitter;
-	
 	/** Liste des sauvegardes. */
 	private JMenuItem []sauvegarde;
-	
 	/** Liste des slots de chargement. */
 	private JMenuItem []slot;
-
-	/** activer / désactiver son */
+	/** Activer / Désactiver son */
 	private JMenuItem son;
-	
-	/** activer / désactiver le brouillard */
+	/** Activer / Désactiver le brouillard */
 	private JMenuItem brouillard;
 	
+	/* Sous-menu (avec icones) */
 	private JPanel sousMenu;
 	
+	/* Icones de ce sous-menu */
 	private JButton boutonCharger;
 	private JButton boutonSauvegarder;
 	private JButton navigerHistoriquePremier;
-	private JButton navigerHistoriqueDown;
-	private JButton navigerHistoriqueUp;
+	private JButton navigerHistoriquePrecedent;
+	private JButton navigerHistoriqueSuivant;
 	private JButton navigerHistoriqueDernier;
 	private JButton exit;
 	
+	/** Bouton de fin de tour */
+	private JButton finTour;
+	
 	/** Trigger*/
 	private boolean scroll = false;
-	
-	private int compteurMessageActuel = 0;
-	
-	/** Carte du jeu. */
-    private Carte carte;
 
     /** Compteur servant à l'initialisation des évènements de sauvegardes. */
 	private static int k = 0;
 	
-	/** Numéro de la case du héros actionnée */
+	/* Navigation au clavier */
+	/** Numéro de la case du héros actionné */
 	int numHeros = 0;
-	
 	/** 
-	 * Tableau contenant les touches actionnées 
-	 * Dans cette ordre :
-	 * 			HAUT, BAS, GAUCHE, DROITE
+	 * Tableau contenant les touches actionnées. Dans l'ordre : HAUT, BAS, GAUCHE, DROITE
 	 */
-	boolean[] tabKey = {false,false,false,false};
+	boolean[] tabKey = {false, false, false, false};
 	
-	/** Timer. */
-	Timer timer = new Timer(IConfig.DELAI_TOUCHE, 
-													new ActionListener() {
-														public void actionPerformed (ActionEvent event) {
-															if(timerOn) {
-																//System.out.println("Up : "+tabKey[0] + " Down : "+tabKey[1] +" Left : "+ tabKey[2] +" Right : "+ tabKey[3]);
-																carte.changePos(tabKey);
-																timerOn = false;
-															}
-														}
-													});
+	/* Timer */
 	/** 
 	 * Boolean qui indique si le timer est activé ou non
-	 * 				True si le timer est en route
-	 * 				False sinon
 	 */
 	boolean timerOn = false;
+	/** Timer. */
+	Timer timer = new Timer(IConfig.DELAI_TOUCHE, new ActionListener() {
+		public void actionPerformed (ActionEvent event) {
+			if(timerOn) {
+				//System.out.println("Up : "+tabKey[0] + " Down : "+tabKey[1] +" Left : "+ tabKey[2] +" Right : "+ tabKey[3]);
+				carte.changePos(tabKey);
+				timerOn = false;
+			}
+		}
+	});
 	
+	/* Son */
 	/** Objet Son servant à gérer le son d'arrière plan */
 	private Son sonArriere;
 
+	/**
+	 * Méthode privée permettant de récupérer la date de la dernière modification d'un fichier
+	 * @param f Le fichier
+	 * @return La date de la dernière modification
+	 */
     private String getDate(File f)
     {
 		return new SimpleDateFormat("dd-MM-yyyy HH-mm-ss").format( new Date(f.lastModified()));
     }
-    
 	
-	public void timer() {
+    /**
+     * Met en route le timer
+     */
+	private void timer() {
 		if(timerOn)
 			return;
 		
@@ -147,14 +147,22 @@ public class FenetreJeu extends JFrame
 		timerOn = true;
 	}
 	
+	/**
+	 * Constructeur de la fenetre de jeu
+	 * @throws InvalidMidiDataException Son midi invalide
+	 * @throws IOException Problème avec les fichiers 
+	 * @throws MidiUnavailableException Son midi indispoible
+	 */
 	public FenetreJeu() throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
-		
+		/* Création du titre et de l'icone */
 		this.setTitle("Wargame");
         this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
         
 		/* Création d'une carte vide. */
 		carte = new Carte();
+		carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
+				 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
 		
 		/* Création des menus principaux. */
 		menu        = new JMenuBar();
@@ -174,7 +182,7 @@ public class FenetreJeu extends JFrame
 		sauvegarde = new JMenuItem[IConfig.NB_SAUVEGARDES];
 		slot = new JMenuItem[IConfig.NB_SAUVEGARDES];
 
-		for(int i = 0; i < IConfig.NB_SAUVEGARDES; i ++)
+		for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 		{
 			sauvegarde[i] = new JMenuItem("Sauvegarde " + i);
 			slot[i] = new JMenuItem("Sauvegarde " + i);
@@ -232,9 +240,7 @@ public class FenetreJeu extends JFrame
 	    		System.exit(0);
 	    	}       
 	    });
-	    
 	    quitter.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, ActionEvent.CTRL_MASK));
-	    
 	    
 	    /* Nouvelle partie. */
 	    nouveau.addActionListener(new ActionListener() {
@@ -270,7 +276,6 @@ public class FenetreJeu extends JFrame
 				}
 			}
 		});
-	    
 	    son.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, ActionEvent.CTRL_MASK));
 	   
 	    brouillard.addActionListener(new ActionListener() {
@@ -287,7 +292,6 @@ public class FenetreJeu extends JFrame
 						
 			}
 		});
-
 	    brouillard.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, ActionEvent.CTRL_MASK));
 	    
 	    /* Sauvegarder */
@@ -312,12 +316,12 @@ public class FenetreJeu extends JFrame
 			public void menuSelected(MenuEvent e) 
 			{
 				finTour.setPreferredSize(new Dimension(150,10));
-				/*int[] key =
-					{KeyEvent.VK_0, KeyEvent.VK_1,
-					 KeyEvent.VK_2, KeyEvent.VK_3,
-					 KeyEvent.VK_4, KeyEvent.VK_5,
-					 KeyEvent.VK_6, KeyEvent.VK_7,
-					 KeyEvent.VK_8, KeyEvent.VK_9};*/
+//				int[] key =
+//					{KeyEvent.VK_0, KeyEvent.VK_1,
+//					 KeyEvent.VK_2, KeyEvent.VK_3,
+//					 KeyEvent.VK_4, KeyEvent.VK_5,
+//					 KeyEvent.VK_6, KeyEvent.VK_7,
+//					 KeyEvent.VK_8, KeyEvent.VK_9};
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
 					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");
@@ -347,94 +351,66 @@ public class FenetreJeu extends JFrame
 		});
 	    
 	    
-        carte.setPreferredSize(new Dimension(IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE, 
-        									 IConfig.HAUTEUR_CARTE * IConfig.NB_PIX_CASE));
-	    
+	    /* Création du sous menu */
 	    sousMenu = new JPanel();
 	    sousMenu.setPreferredSize(new Dimension(carte.getWidth(), 35));
 	    
-	    boutonCharger 			= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "load.png"));
-	    boutonCharger.setToolTipText("Load"); 
-	    boutonCharger.setBackground(Color.LIGHT_GRAY);
-	    boutonCharger.setOpaque(true);
-	    boutonCharger.setPreferredSize(new Dimension(30,30));
+	    boutonCharger = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "load.png"));
+	    boutonCharger.setToolTipText("Charger"); 
 	    
-		boutonSauvegarder 		= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "save.png"));
+		boutonSauvegarder = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "save.png"));
 		boutonSauvegarder.setToolTipText("Sauvegarder"); 
-		boutonSauvegarder.setBackground(Color.LIGHT_GRAY);
-		boutonSauvegarder.setOpaque(true);
-		boutonSauvegarder.setPreferredSize(new Dimension(30,30));
 		
-		navigerHistoriquePremier 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "first.png"));
-		navigerHistoriquePremier.setToolTipText("First"); 
-		navigerHistoriquePremier.setBackground(Color.LIGHT_GRAY);
-		navigerHistoriquePremier.setOpaque(true);
-		navigerHistoriquePremier.setPreferredSize(new Dimension(30,30));
+		navigerHistoriquePremier = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "first.png"));
+		navigerHistoriquePremier.setToolTipText("Revenir au premier message de l'historique"); 
 		
-		navigerHistoriqueDown 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "previous.png"));
-		navigerHistoriqueDown.setToolTipText("Naviger Down"); 
-		navigerHistoriqueDown.setBackground(Color.LIGHT_GRAY);
-		navigerHistoriqueDown.setOpaque(true);
-		navigerHistoriqueDown.setPreferredSize(new Dimension(30,30));
+		navigerHistoriquePrecedent = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "previous.png"));
+		navigerHistoriquePrecedent.setToolTipText("Message précédent de l'historique"); 
 		
-		navigerHistoriqueUp 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "next.png"));
-		navigerHistoriqueUp.setToolTipText("Naviger Up"); 
-		navigerHistoriqueUp.setBackground(Color.LIGHT_GRAY);
-		navigerHistoriqueUp.setOpaque(true);
-		navigerHistoriqueUp.setPreferredSize(new Dimension(30,30));
+		navigerHistoriqueSuivant = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "next.png"));
+		navigerHistoriqueSuivant.setToolTipText("Message suivant de l'historique"); 
 		
-		navigerHistoriqueDernier 	= new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "last.png"));
-		navigerHistoriqueDernier.setToolTipText("Last"); 
-		navigerHistoriqueDernier.setBackground(Color.LIGHT_GRAY);
-		navigerHistoriqueDernier.setOpaque(true);
-		navigerHistoriqueDernier.setPreferredSize(new Dimension(30,30));
+		navigerHistoriqueDernier = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "last.png"));
+		navigerHistoriqueDernier.setToolTipText("Dernier message de l'historique"); 
 		
 		exit = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "exit.png"));
-		exit.setToolTipText("Quitter"); 
-		exit.setBackground(Color.LIGHT_GRAY);
-		exit.setOpaque(true);
-		exit.setPreferredSize(new Dimension(30,30));
-		
-	    sousMenu.add(boutonCharger);
-	    sousMenu.add(boutonSauvegarder);
-	    sousMenu.add(navigerHistoriquePremier);
-	    sousMenu.add(navigerHistoriqueDown);
-	    sousMenu.add(navigerHistoriqueUp);
-	    sousMenu.add(navigerHistoriqueDernier);
-	    sousMenu.add(exit);
+		exit.setToolTipText("Quitter le jeu"); 
+		 
+		/* Pour économiser les répétitions */
+		JButton liste_boutons[] = {boutonCharger, boutonSauvegarder, navigerHistoriquePremier, navigerHistoriquePrecedent, navigerHistoriqueSuivant, navigerHistoriqueDernier, exit};
+		for(JButton bouton : liste_boutons){
+			bouton.setBackground(Color.LIGHT_GRAY);
+			bouton.setOpaque(true);
+			bouton.setPreferredSize(new Dimension(30,30));
+			sousMenu.add(bouton);
+		}
 	    
+		/* Événements du sous menu */		
 	    navigerHistoriquePremier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(compteurMessageActuel - 1 >= 0)
-					historique.afficherPremier();
-				compteurMessageActuel = 0;
+				historique.afficherPremier();
 			}
 		});
 	    
-	    navigerHistoriqueDown.addActionListener(new ActionListener() {
+	    navigerHistoriquePrecedent.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(compteurMessageActuel - 1 >= 0)
-					historique.afficherMessage(--compteurMessageActuel);
+				historique.afficherMessagePrecedent();
 			}
 		});
 	    
-	    navigerHistoriqueUp.addActionListener(new ActionListener() {
+	    navigerHistoriqueSuivant.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(compteurMessageActuel + 1 < historique.getTailleHistorique())
-					historique.afficherMessage(++compteurMessageActuel);
+				historique.afficherMessageSuivant();
 			}
 		});
 	    
 	    navigerHistoriqueDernier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				if(compteurMessageActuel + 1 < historique.getTailleHistorique()) {
-					historique.afficherDernier();
-					compteurMessageActuel = historique.getTailleHistorique() - 1;
-				}
+				historique.afficherDernier();
 			}
 		});
 	    
@@ -448,18 +424,18 @@ public class FenetreJeu extends JFrame
 
 			        int choix = fichier.showOpenDialog(carte);
 	                if (choix != JFileChooser.APPROVE_OPTION) {
-                        JOptionPane.showMessageDialog(carte, "Erreur : Le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
                         return;
 	                }
 	                
-	               	File fichierChoisit = fichier.getSelectedFile();
+	               	File fichier_choisi = fichier.getSelectedFile();
 
-	                if(fichierChoisit.getPath().endsWith(".ser") == false) {
-                        JOptionPane.showMessageDialog(carte, "Erreur : Le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
+	                if(fichier_choisi.getPath().endsWith(".ser") == false) {
+                        JOptionPane.showMessageDialog(carte, "Erreur : le fichier n'est pas conforme", "Erreur, fichier incorrect", JOptionPane.ERROR_MESSAGE);
                         return;
 	                }
 	                	                
-	                carte.charge(fichierChoisit.getPath());
+	                carte.charge(fichier_choisi.getPath());
 			}
 		});
 	    
@@ -478,17 +454,17 @@ public class FenetreJeu extends JFrame
 			    if (choix != JFileChooser.APPROVE_OPTION)
 			    	return;
 	                
-			    File fichierChoisit = fichier.getSelectedFile();
+			    File fichier_choisi = fichier.getSelectedFile();
 
-			    if(fichierChoisit.getPath().endsWith(".ser") == false)
-			    	fichierChoisit = new File(fichierChoisit + ".ser");
+			    if(fichier_choisi.getPath().endsWith(".ser") == false)
+			    	fichier_choisi = new File(fichier_choisi + ".ser");
 	                
-			    if (fichierChoisit.exists()){
-			    	choix = JOptionPane.showConfirmDialog(carte, "Le fichier " + fichierChoisit + " existe déjà\nVoulez-vous vraiment l'écraser ?", "Fichier déjà existant", JOptionPane.YES_NO_OPTION);
+			    if (fichier_choisi.exists()){
+			    	choix = JOptionPane.showConfirmDialog(carte, "Le fichier " + fichier_choisi + " existe déjà\nVoulez-vous vraiment l'écraser ?", "Fichier déjà existant", JOptionPane.YES_NO_OPTION);
 			    	if (choix == JOptionPane.NO_OPTION)  return;
 			    }
 	                
-			    carte.sauvegarde(fichierChoisit.getPath());
+			    carte.sauvegarde(fichier_choisi.getPath());
 			}
 		});
 	    
@@ -500,38 +476,27 @@ public class FenetreJeu extends JFrame
 	    });
 	    
 	    
-	    this.add(sousMenu,BorderLayout.PAGE_START);
-
+	    /* Création de la barre d'état avec ses séparateurs */
         separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBackground(Color.DARK_GRAY);
         separator.setSize(new Dimension(carte.getWidth(), 5));
         
         JSeparator sep = separator;
-        this.add(sep,BorderLayout.NORTH);
-
-        this.add(carte, BorderLayout.CENTER);
-        
-        this.add(separator, BorderLayout.SOUTH);
 
         barreEtat = new JPanel();
         
         information = new JLabel("Pour commencer, créez une nouvelle partie ou chargez en une.", JLabel.LEFT);
         historique = new Historique("Ici s'affichera l'historique des actions.", JLabel.RIGHT);
 
-        information.addMouseListener( new MouseListener() {
-			public void mouseReleased(MouseEvent e) { }
-			public void mousePressed(MouseEvent e) { }
-			public void mouseExited(MouseEvent e) {	}
-			public void mouseClicked(MouseEvent e) { }	
-
-			public void mouseEntered(MouseEvent e) {
-				String s = "";
-				for(int i = 0; i < historique.getTailleHistorique(); i++)
-					s += historique.getMessage(i) + "\n";
-				//if(s != "")
-				//	Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
-			}
-        });
+//        information.addMouseListener( new MouseAdapter() {
+//			public void mouseEntered(MouseEvent e) {
+//				String s = "";
+//				for(int i = 0; i < historique.getTailleHistorique(); i++)
+//					s += historique.getMessage(i) + "\n";
+//				if(s != "")
+//					Infobulle.dessinerText(carte.getGraphics(), IConfig.LARGEUR_CARTE, IConfig.HAUTEUR_CARTE,s, Color.BLUE, Color.LIGHT_GRAY );
+//			}
+//        });
         
         barreEtat.setSize(new Dimension(carte.getWidth(), 16));
         barreEtat.setLayout(new BoxLayout(barreEtat, BoxLayout.X_AXIS));
@@ -540,17 +505,6 @@ public class FenetreJeu extends JFrame
         barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(historique);
 
-        this.add(barreEtat,BorderLayout.PAGE_END);
-	            
-        /* On joue le son d'arrière plan */
-		sonArriere = new Son();
-		sonArriere.joueSonArriere();
-        
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    this.setResizable(false);
-	    this.pack();
-	    
-	    this.setVisible(true);
 	        
 	    
 	    /** Capture des actions au clavier */
@@ -560,11 +514,10 @@ public class FenetreJeu extends JFrame
 		this.setFocusableWindowState(true);
 		setFocusTraversalKeysEnabled(false);
 	    
-		addKeyListener(new KeyListener() {
-			
+		addKeyListener(new KeyAdapter() {
 		    public void keyPressed(KeyEvent e) {
 		    	int key = e.getKeyCode();
-		    	System.out.println(key);
+//		    	System.out.println(key);
 		    	
 		    	if(key == KeyEvent.VK_F1)
 		    		boutonCharger.doClick();
@@ -573,9 +526,9 @@ public class FenetreJeu extends JFrame
 		    	else if(key == KeyEvent.VK_F3)
 		    		navigerHistoriquePremier.doClick();
 		    	else if(key == KeyEvent.VK_F4)
-		    		navigerHistoriqueDown.doClick();
+		    		navigerHistoriquePrecedent.doClick();
 		    	else if(key == KeyEvent.VK_F5)
-		    		navigerHistoriqueUp.doClick();
+		    		navigerHistoriqueSuivant.doClick();
 		    	else if(key == KeyEvent.VK_F6)
 		    		navigerHistoriqueDernier.doClick();
 		    	else if(key == KeyEvent.VK_F7)
@@ -611,13 +564,16 @@ public class FenetreJeu extends JFrame
 
 			public void keyReleased(KeyEvent e) { 
 				int key = e.getKeyCode();
-		    	if(key == KeyEvent.VK_UP)   		tabKey[0] = false;
-		    	else if(key == KeyEvent.VK_DOWN) 	tabKey[1] = false;
-		    	else if(key == KeyEvent.VK_LEFT)	tabKey[2] = false;
-		    	else if(key == KeyEvent.VK_RIGHT)	tabKey[3] = false;
+				
+		    	if(key == KeyEvent.VK_UP)   		
+		    		tabKey[0] = false;
+		    	else if(key == KeyEvent.VK_DOWN) 	
+		    		tabKey[1] = false;
+		    	else if(key == KeyEvent.VK_LEFT)	
+		    		tabKey[2] = false;
+		    	else if(key == KeyEvent.VK_RIGHT)	
+		    		tabKey[3] = false;
 			}
-
-			public void keyTyped(KeyEvent e) { /* Pas utilisée */	}
 		});
 
 		/** Capture des actions de la molette */
@@ -627,17 +583,11 @@ public class FenetreJeu extends JFrame
 				if(!scroll)
 					return;
 				
-	            if (e.getPreciseWheelRotation() < 0) { // Haut 
-	            	if(compteurMessageActuel + 1 < historique.getTailleHistorique())
-	            		historique.afficherMessage(++compteurMessageActuel);
-
-	            }
-	            else {
-	            	if(compteurMessageActuel - 1 >= 0)
-	            		historique.afficherMessage(--compteurMessageActuel);
-
-
-	            }
+				/* Molette vers le haut */
+	            if (e.getPreciseWheelRotation() < 0) 
+	            	historique.afficherMessagePrecedent();
+	            else
+	            	historique.afficherMessageSuivant();
 			}
 		});
 		
@@ -669,6 +619,23 @@ public class FenetreJeu extends JFrame
 				information.setText(s);
 			}
 		});	    
+	
+	    /* On ajoute à la fenêtre les différents éléments que l'on a créé */
+	    this.add(sousMenu, BorderLayout.PAGE_START);
+        this.add(sep, BorderLayout.NORTH);
+        this.add(carte, BorderLayout.CENTER);
+        this.add(separator, BorderLayout.SOUTH);
+        this.add(barreEtat,BorderLayout.PAGE_END);
+	            
+        /* On joue le son d'arrière plan */
+		sonArriere = new Son();
+		sonArriere.joueSonArriere();
+        
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    this.setResizable(false);
+	    this.pack();
+	    
+	    this.setVisible(true);
 	}
 	
 	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException

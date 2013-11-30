@@ -11,6 +11,7 @@ public class Historique extends JLabel implements IConfig
 {
 	private static final long serialVersionUID = 7045910608318694418L;
 	private LinkedList<HistoriqueMessage> fileHistorique;
+	private int nbMessage;
 	private int numMessage;
 	
 	/**
@@ -19,7 +20,7 @@ public class Historique extends JLabel implements IConfig
 	public Historique(){
 		super();
 		fileHistorique = new LinkedList<HistoriqueMessage>();
-		numMessage = 0;
+		nbMessage = 0;
 	}
 	
 	/**
@@ -30,7 +31,7 @@ public class Historique extends JLabel implements IConfig
 	public Historique(String texte, int alignement_horizontal){
 		super(texte, alignement_horizontal);
 		fileHistorique = new LinkedList<HistoriqueMessage>();
-		numMessage = 0;
+		nbMessage = 0;
 	}
 
 
@@ -44,8 +45,15 @@ public class Historique extends JLabel implements IConfig
 		/** Constructeur par défaut, avec comme paramètre le texte du message */
 		HistoriqueMessage(String msg) {
 			this.message = msg;
-			this.numero = numMessage;
+			this.numero = nbMessage;
 		}	
+		
+		/**
+		 * Méthode permettant d'afficher un message
+		 */
+		public String toString(){
+			return("[" + this.numero + "] " + this.message);
+		}
 	}
 
 	/**
@@ -53,13 +61,15 @@ public class Historique extends JLabel implements IConfig
 	 * @param message Le message à ajouter
 	 */
 	public void addMessage(String message) {
-
-		if(this.getTailleHistorique() > IConfig.TAILLE_MAX_HISTORIQUE)
+		if(this.getTailleHistorique() > IConfig.TAILLE_MAX_HISTORIQUE){
 			fileHistorique.removeFirst();
+			nbMessage--;
+		}
 		
-		numMessage++;
-		fileHistorique.add(new HistoriqueMessage(message));
-		this.setText("[" + numMessage + "] " + message);
+		HistoriqueMessage m = new HistoriqueMessage(message);
+		numMessage = nbMessage++;
+		fileHistorique.add(m);
+		this.setText(m.toString());
 	}
 
 	/**
@@ -68,8 +78,7 @@ public class Historique extends JLabel implements IConfig
 	 * @return Le texte du message
 	 */
 	public String getMessage(int x) {
-		HistoriqueMessage elem = fileHistorique.get(x);
-		return "[" + elem.numero + "] " + elem.message;
+		return fileHistorique.get(x).toString();
 	}
 	
 	/**
@@ -77,7 +86,8 @@ public class Historique extends JLabel implements IConfig
 	 * @param x Le numéro du message
 	 */
 	public void afficherMessage(int x) {
-		this.setText(this.getMessage(x));
+		this.setText(this.getMessage(x).toString());
+		numMessage = x;
 	}
 	
 	/**
@@ -85,8 +95,7 @@ public class Historique extends JLabel implements IConfig
 	 * @return Le texte du premier message de l'historique
 	 */
 	public String getPremier() {
-		HistoriqueMessage elem = fileHistorique.getFirst();
-		return "[" + elem.numero + "] " + elem.message;
+		return fileHistorique.getFirst().toString();
 	}
 	
 	/**
@@ -94,6 +103,7 @@ public class Historique extends JLabel implements IConfig
 	 */
 	public void afficherPremier(){
 		this.setText(this.getPremier());
+		numMessage = 0;
 	}
 	
 	/**
@@ -101,8 +111,7 @@ public class Historique extends JLabel implements IConfig
 	 * @return Le dernier message de l'historique
 	 */
 	public String getDernier() {
-		HistoriqueMessage elem = fileHistorique.getLast();
-		return "[" + elem.numero + "] " + elem.message;
+		return (fileHistorique.getLast().toString());
 	}
 	
 	/**
@@ -110,6 +119,27 @@ public class Historique extends JLabel implements IConfig
 	 */
 	public void afficherDernier() {
 		this.setText(this.getDernier());
+		numMessage = this.getTailleHistorique();
+	}
+	
+	/**
+	 * Méthode permettant d'afficher le message précédent 
+	 */
+	public void afficherMessagePrecedent() {
+		if(numMessage > 0){
+			numMessage--;
+			this.afficherMessage(numMessage);
+		}
+	}
+	
+	/**
+	 * Méthode permettant d'afficher le message suivant
+	 */
+	public void afficherMessageSuivant(){
+		if(numMessage < nbMessage - 1){
+			numMessage++;
+			this.afficherMessage(numMessage);
+		}
 	}
 	
 	/**
@@ -117,6 +147,6 @@ public class Historique extends JLabel implements IConfig
 	 * @return La taille de l'historique
 	 */
 	public int getTailleHistorique() {
-		return fileHistorique.size();
+		return nbMessage;
 	}	
 }
