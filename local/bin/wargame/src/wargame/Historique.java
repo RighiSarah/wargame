@@ -149,4 +149,13 @@ public class Historique extends JLabel implements IConfig
 	public int getTailleHistorique() {
 		return nbMessage;
 	}	
+	
+	/**
+	 * Méthode permettant de remettre à zéro l'historique
+	 */
+	public void reset(){
+		nbMessage = numMessage = 0;
+		fileHistorique.clear();
+		this.setText(""); 
+	}
 }

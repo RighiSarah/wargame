@@ -8,7 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
- * Classe représenant un héros
+ * Classe représentant un héros
  */
 public class Heros extends Soldat
 {	

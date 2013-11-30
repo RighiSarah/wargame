@@ -248,8 +248,8 @@ public class FenetreJeu extends JFrame
 			{ 
 				carte.generer();							
 				sauvegarder.setEnabled(true);
+				historique.reset();
 				
-				System.out.println(finTour.getSize());
 			    menu.add(Box.createHorizontalGlue()); 
 			    finTour.setPreferredSize(new Dimension(150,10));
 			    menu.add(finTour);
