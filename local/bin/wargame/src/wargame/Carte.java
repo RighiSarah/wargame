@@ -902,14 +902,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			else if(v == 1) {
 				nbHerosRestant--;
 				caseActionnee = -1;
-				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
+//				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
 			}
 		}
 		else{
 			if(v == -1) {
 				nbHerosRestant--;
 				caseActionnee = -1;
-				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
+//				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
 			}
 			else if(v == 1){
 				nbMonstresRestant--;

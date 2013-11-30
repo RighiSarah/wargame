@@ -187,17 +187,14 @@ public abstract class Soldat extends Charset implements ISoldat
 				/* Alors une réplique est crée */
 				degat = (distance == 1) ? soldat.getPuissance() / IConfig.COEFFICIENT_REDUC : soldat.getTir() / IConfig.COEFFICIENT_REDUC;
 				
-//				Historique.addMessage("Un " + soldat.getNom() + " vous frappe, vous perdez " + degat + " points de vie");
-				
 				vie = this.getVie() - degat;
 				numCase = this.position.getNumCase();
-				
 				
 				Infobulle.newMessage(numCase, "-" + degat, IConfig.MESSAGE_NEGATIF, IConfig.MOUV_INFOBULLE_BAS, 0);
 				this.setVie(vie);
 				
 				/* Si la réplique est fatale, le soldat qui a attaqué meurt */
-				if(vie <= 0) {
+				if(this.getVie() <= 0) {
 					Son.joueMourir(this);
 					this.setMort(true);
 					valeur_retour = -1;
@@ -207,6 +204,7 @@ public abstract class Soldat extends Charset implements ISoldat
 		else {
 			Son.joueMourir(soldat);
 			soldat.setMort(true);	
+			valeur_retour = 1;
 		}
 		
 		this.setAJoue(true);
