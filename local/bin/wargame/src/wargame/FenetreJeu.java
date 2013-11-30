@@ -116,7 +116,6 @@ public class FenetreJeu extends JFrame
 	Timer timer = new Timer(IConfig.DELAI_TOUCHE, new ActionListener() {
 		public void actionPerformed (ActionEvent event) {
 			if(timerOn) {
-				//System.out.println("Up : "+tabKey[0] + " Down : "+tabKey[1] +" Left : "+ tabKey[2] +" Right : "+ tabKey[3]);
 				carte.changePos(tabKey);
 				timerOn = false;
 			}
@@ -318,12 +317,6 @@ public class FenetreJeu extends JFrame
 			public void menuSelected(MenuEvent e) 
 			{
 				finTour.setPreferredSize(new Dimension(150,10));
-//				int[] key =
-//					{KeyEvent.VK_0, KeyEvent.VK_1,
-//					 KeyEvent.VK_2, KeyEvent.VK_3,
-//					 KeyEvent.VK_4, KeyEvent.VK_5,
-//					 KeyEvent.VK_6, KeyEvent.VK_7,
-//					 KeyEvent.VK_8, KeyEvent.VK_9};
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
 					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");
