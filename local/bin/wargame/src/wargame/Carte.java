@@ -592,7 +592,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 
 	/** Sauvegarde une carte.
-	 * @param num Numéro de la sauvegarde.
+	 * @param chemin Chemin vers le fichier de sauvegarde.
 	 */
 	public void sauvegarde(String chemin)
 	{
@@ -618,7 +618,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	}
 
 	/** Charge une carte.
-	 * @param num Numéro de la sauvegarde.
+	 * @param chemin Chemin vers la sauvegarde a charger.
 	 */
 	void charge(String chemin)
 	{

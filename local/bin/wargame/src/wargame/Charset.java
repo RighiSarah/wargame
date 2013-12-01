@@ -116,8 +116,8 @@ public class Charset implements ActionListener
 	 * @param g Zone de dessin.
 	 * @param x Destination sur la carte.
 	 * @param y Destination sur la carte.
-	 * @param dx Offset x
-	 * @param dy Offset dy
+	 * @param offsetX Offset x
+	 * @param offsetY Offset dy
 	 */ 
 	protected void dessinerAvecOffset(Graphics g, int x, int y, int offsetX, int offsetY)
 	{
