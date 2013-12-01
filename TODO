@@ -1,12 +1,10 @@
 A FAIRE :
-	fin de jeu [ Carte ]
+	fin de jeu [ améliorer le texte ]
 	Crée l'uml
 	
 Corriger bug 
 	Affichage des séparator [ FenetreJeu ]
-	Quand on gagne / perds le nombre de monstre / héros n'est pas mis a 0
 	l'historique se met pas a jours quand un héros gagne de la vie / a sa vie au max
-	Quand on gagne on peut plus fermer la fenetre
 	
 Idée d'amélioration
 	Code Konami [ fait par nico ] Et [ peut etre petite dance se victoire ?!? ]
