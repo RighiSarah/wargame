@@ -72,11 +72,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Timer. */
 	private Timer timer;
 	
-	/** Booleen qui controle si ont doit ou non afficher l'historique */
+	/** Controle si on doit ou non afficher l'historique */
 	private String afficheHistorique = "";
 	
 	/** Est-ce au tour de joueur ? */
 	private boolean tourJoueur;
+	
+	/** Controle l'affichage ou non du message de victoire */
+	private String winOrLoose = ""; 
 
 	/** Constructeur par défaut. 
 	 * @throws MidiUnavailableException 
@@ -145,14 +148,9 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						
 							faitCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
 							nbToPlay--;
-							/* Si le héros meurt au cours du combat on supprime le brouillard */
-							if(soldat[caseActionnee].estMort()) {
-								changeBrouillard(soldat[caseActionnee].getPosition(), soldat[caseActionnee].getPortee() , -1);
-								caseActionnee = -1;
-							}
+
 							return;
 						}
-
 
 						/* On a un soldat selectionné et on clique sur une case autour (à une distance de 1 autour du soldat)
 						 * -> On veut se déplacer sur la nouvelle case.
@@ -195,7 +193,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 */
 	public void deplaceSoldat(Soldat sold,int caseArrivee) {
 		
-		carteListener.historique(sold.getNom() + " se deplace en " + caseActionnee );
+		carteListener.historique(sold.getNom() + " se deplace en " + new Position(caseActionnee) );
 
 		/* On supprime le brouillard du perso */
 		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
@@ -557,6 +555,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	{
 		generee = true;
 		tourJoueur = true;
+		winOrLoose = "";
 		genererCarte();
 		genererSoldats();
 		genererBrouillard();
@@ -701,7 +700,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 						int dyc = dy + j;
 						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 
-						if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && !(soldat[caseVoisine] instanceof Heros))
+						if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && soldat[caseVoisine] == null)
 							dessineRectangle(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
 					}
 				}
@@ -741,7 +740,11 @@ public class Carte extends JPanel implements ActionListener, Serializable
 
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
+		if(winOrLoose != "") {
+			g.setFont(new Font("calibri", Font.BOLD, 100));
+			g.drawString(winOrLoose, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE ) - (int)( g.getFontMetrics().stringWidth(winOrLoose) * 1.25) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
 
+		}
 		carteListener.information(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
 	}
 
@@ -792,58 +795,22 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	
 	
 	public void joueurGagne(){
-		timer.stop();
 		this.carteListener.joueurGagne();
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
-		carteListener.historique("Vous avez gagné ! ");
-		
-		Graphics g = this.getGraphics();
-		
-		g.setFont(new Font("calibri", Font.BOLD, 100));
-		
-		for(int i=0; i<256; i++){
-			Thread.currentThread();
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			g.setColor(new Color(0, 0, 0, i));
-			g.drawString("You win !", 100, 100);
-			repaint();
-		}
-	
+		carteListener.historique("Vous avez gagné !");
+		winOrLoose = "You win !";
 		System.out.println("Vous avez gagné !");
 	}
 	
 	public void joueurPerd(){
-		timer.stop();
 		this.carteListener.joueurPerd();
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
-		carteListener.historique("Vous avez perdu ! ");
-		
-		Graphics g = this.getGraphics();
-		
-		g.setFont(new Font("calibri", Font.BOLD, 100));
-		
-		for(int i=0; i<256; i++){
-			Thread.currentThread();
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			g.setColor(new Color(0, 0, 0, i));
-
-			g.drawString("Game Over", 100, 100);
-
-			repaint();
-		}
-
+		carteListener.historique("Vous avez perdu !");
+		winOrLoose = "Game Over";
 		System.out.println("Vous avez perdu !");
 	}
 	
@@ -885,8 +852,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}
 		
 		if(nbMonstresRestant <= 0){
-			joueurGagne();
-			
+			joueurGagne();	
 			retour = true;
 		}
 		else if(nbHerosRestant <= 0){

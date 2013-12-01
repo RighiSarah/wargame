@@ -250,7 +250,6 @@ public class FenetreJeu extends JFrame
 				carte.generer();							
 				sauvegarder.setEnabled(true);
 				
-				System.out.println(finTour.getSize());
 			    menu.add(Box.createHorizontalGlue()); 
 			    finTour.setPreferredSize(new Dimension(150,10));
 			    menu.add(finTour);
@@ -511,7 +510,8 @@ public class FenetreJeu extends JFrame
 		addKeyListener(new KeyAdapter() {
 		    public void keyPressed(KeyEvent e) {
 		    	int key = e.getKeyCode();
-		    	System.out.println("Touche actionnée " + key);
+		    	/** JE MET CA EN COMMENTAIRE JAVADOC POUR PAS QUE l'ON OUBLI DE LE SUPPRIMER */
+		    	//System.out.println("Touche actionnée " + key);
 		    	
 		    	if(key == KeyEvent.VK_F1)
 		    		boutonCharger.doClick();
