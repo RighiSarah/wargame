@@ -226,12 +226,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * Méthode permettant de reinitialiser le tour de tous les soldats
 	 */
 	public void reinitAJoue() {
+		if(isGeneree() != true)
+			return;
+		
 		joueMonstres();
 		caseActionnee = -1;
 		tour++;
 
 		carteListener.historique("Début du tour " + tour);
-		carteListener.information("Début du tour " + tour);
 
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
@@ -483,7 +485,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 					m.repos(true);
 				/* Combat avec un héros aux alentours */
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
-					/* Si faisCombattre retourne true, la partie est terminée donc on stoppe tout */
 					if(faitCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
 						return;
 				}
@@ -745,12 +746,14 @@ public class Carte extends JPanel implements ActionListener, Serializable
 			g.drawString(winOrLoose, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE ) - (int)( g.getFontMetrics().stringWidth(winOrLoose) * 1.25) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
 
 		}
-		carteListener.information(Carte.nbMonstresRestant+" Monstres restant - " + Carte.nbHerosRestant + " Heros restant");
+		carteListener.information(nbMonstresRestant + " Monstres restant - " + nbHerosRestant + " Heros restant");
 	}
 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		if(nbToPlay == 0)	reinitAJoue();
+		if(nbToPlay == 0)	
+			reinitAJoue();
+		
 		repaint();
 	}
 
@@ -781,9 +784,6 @@ public class Carte extends JPanel implements ActionListener, Serializable
 		}
 	}
 
-	public void setSoldat(int i, Soldat s) {
-		soldat[i] = s;
-	}
 	
 	/**
 	 * Méthode permettant de savoir si la carte a été générée ou non
