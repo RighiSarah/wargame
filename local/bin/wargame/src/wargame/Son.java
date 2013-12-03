@@ -58,7 +58,11 @@ public final class Son {
 					/* On stoppe le sequencer puis on le ferme, et on charge puis joue une autre musique */
 					stopSonArriere();
 					
-					chargeSonArriere();
+					try {
+						chargeSonArriere();
+					} catch (InvalidMidiDataException e1) {
+						e1.printStackTrace();
+					}
 					
 					try {
 						joueSonArriere();
@@ -99,8 +103,9 @@ public final class Son {
 	
 	/**
 	 * Méthode permettant de charger un son arrière aléatoire parmi les musiques du dossier
+	 * @throws InvalidMidiDataException 
 	 */
-	public void chargeSonArriere(){
+	public void chargeSonArriere() throws InvalidMidiDataException{
 		if(musiqueEvenement != null){
 			musiqueEvenement.stop();
 			musiqueEvenement = null;
@@ -116,7 +121,7 @@ public final class Son {
 			} catch (InvalidMidiDataException e) {
 				e.printStackTrace();
 			}
-		} catch (InvalidMidiDataException | IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}	
 	}

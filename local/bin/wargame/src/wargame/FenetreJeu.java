@@ -574,7 +574,7 @@ public class FenetreJeu extends JFrame
 					return;
 				
 				/* Molette vers le haut */
-	            if (e.getPreciseWheelRotation() < 0) 
+	            if (e.getWheelRotation() < 0) 
 	            	historique.afficherMessagePrecedent();
 	            else
 	            	historique.afficherMessageSuivant();

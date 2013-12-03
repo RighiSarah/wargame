@@ -691,7 +691,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			Position coord = new Position(caseActionnee);
 			int dx = coord.x;
 			int dy = coord.y;
-
+			
 			if(soldat[caseActionnee].getAJoue())
 				dessineRectangle(g, dx, dy, IConfig.SOLDAT_UTILISE);
 			else {
@@ -751,7 +751,8 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 	public void actionPerformed(ActionEvent e) 
 	{	
-		if(nbToPlay == 0)	
+
+		if(nbToPlay == 0 && nbHerosRestant > 0)	
 			reinitAJoue();
 		
 		repaint();
@@ -809,8 +810,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
+		caseActionnee = -1;
+		brouillardActive = false;
 		carteListener.historique("Vous avez perdu !");
-		winOrLoose = "Game Over";
+		winOrLoose = "You win !";
 		System.out.println("Vous avez perdu !");
 	}
 	
@@ -1021,7 +1024,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	 */
 	/** Change la position d'un soldat en fonction des touches du tableau définit dans FenetreJeu */
 	public void changePos(boolean[] tabKey) {
-		if(caseActionnee == -1 || !generee)
+		if(caseActionnee == -1 || !generee )
 			return;
 		Position pos = soldat[caseActionnee].getPosition();
 		Position caseArrivee = null;
