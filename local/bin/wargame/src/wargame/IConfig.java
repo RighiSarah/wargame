@@ -33,6 +33,7 @@ public interface IConfig
 	
 	/** Liste des images des soldats. */
 	String IMAGE_HUMAIN    = "archer.png";
+	String IMAGE_HOBBIT    = "hobbit.png";
 	String IMAGE_ELFE      = "elfe.png";
 	String IMAGE_SOLDAT    = "soldat.png";
 	String IMAGE_GOBELIN   = "gobelin.png";
