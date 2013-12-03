@@ -6,25 +6,15 @@ import java.awt.Point;
  * Interface comprenant les méthodes et attributs d'une classe carte
  */
 public interface ICarte {
-
-	/** Déplace un soldat sur la carte.
-	 * @param soldat    Soldat à deplacer.
-	 * @param direction Direction du soldat.
-	 * @param x         Offset X d'origine.
-	 * @param y         Offset Y d'origine.
+	/** 
+	 * Regenere le brouillard du au déplacement et deplace le soldat
+	 * @param sold Soldat a deplacer
+	 * @param caseArrivee Case sur laquel finira le soldat
 	 */
-	void deplaceSoldat(Soldat soldat, char direction, int x, int y);
-
+	public void deplaceSoldat(Soldat sold,int caseArrivee);
+	
 	/** Genere aléatoirement une carte. */
 	void generer();
-	
-	/** Teste l'existence d'une case sur la carte.
-	 * 
-	 * @param x Coordonnée en X d'une case.
-	 * @param y Coordonnée en Y d'une case.
-	 * @return  true si la case existe, false sinon.
-	 */
-	boolean existe(int x, int y);
 	
 	/** Trouve une position vide aléatoirement sur la carte. 
 	 * Utilisable pour placer des Soldats.
@@ -34,12 +24,12 @@ public interface ICarte {
 	Point trouvePositionVide(char type);
 	
 	/** Sauvegarde une carte.
-	 * @param num Numéro de la sauvegarde.
+	 * @param num Chemin de la sauvegarde.
 	 */
-	void sauvegarde(int num);
-	
+	void sauvegarde(String chemin);
+
 	/** Charge une carte.
-	 * @param num Numéro de la sauvegarde.
+	 * @param num Chemin de la sauvegarde.
 	 */
-	void charge(int num);
+	void charge(String chemin);
 }

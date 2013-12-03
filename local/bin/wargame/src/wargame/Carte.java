@@ -25,7 +25,7 @@ import javax.swing.Timer;
 import wargame.Charset.Direction;
 
 /** Classe de la Carte du jeu. */
-public class Carte extends JPanel implements ActionListener, Serializable
+public class Carte extends JPanel implements ICarte, ActionListener, Serializable
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
 
@@ -217,7 +217,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	 * Méthode permettant d'associer un listener
 	 * @param l Le listener
 	 */
-	public void onStateRealized(CarteListener l)
+	protected void onStateRealized(CarteListener l)
 	{
 	 this.carteListener = l;
 	}
@@ -621,7 +621,7 @@ public class Carte extends JPanel implements ActionListener, Serializable
 	/** Charge une carte.
 	 * @param chemin Chemin vers la sauvegarde a charger.
 	 */
-	void charge(String chemin)
+	public void charge(String chemin)
 	{
 
 		if(imagePresentation != null){

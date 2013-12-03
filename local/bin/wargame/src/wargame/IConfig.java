@@ -110,7 +110,7 @@ public interface IConfig
 	int ATTENDRE_MONSTRE_COMBAT = 1000;
 	
 	/** Couleur du brouillard */
-	Color COULEUR_BROUILLARD = new Color(50, 50, 50, 245);
+	Color COULEUR_BROUILLARD = new Color(50, 50, 50, 255);
 	
 	/** Coefficients de réduction pour le combat (dégat fait en temps normal / coefficient réducteur ) */
 	int COEFFICIENT_REDUC = 3; /* Attention ! ne peut être égal à 0 ! */
