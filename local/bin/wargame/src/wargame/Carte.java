@@ -813,7 +813,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		caseActionnee = -1;
 		brouillardActive = false;
 		carteListener.historique("Vous avez perdu !");
-		winOrLoose = "You win !";
+		winOrLoose = "Game Over !";
 		System.out.println("Vous avez perdu !");
 	}
 	
