@@ -125,7 +125,20 @@ public class FenetreJeu extends JFrame
 	/* Son */
 	/** Objet Son servant à gérer le son d'arrière plan */
 	private Son sonArriere;
-
+	
+	/* Ajout des trucs stupides */
+	/* Code Konami , Menu triche */
+	int[] sequence = { KeyEvent.VK_UP, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_DOWN, 
+		       KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 
+		       KeyEvent.VK_B, KeyEvent.VK_A, KeyEvent.VK_ENTER };
+	int currentButton = 0;
+	boolean Konami = false;
+	
+	private JMenu cheat;
+	private JMenuItem gagner;
+	private JMenuItem perdre;
+	private JMenuItem armagedon;
+	
 	/**
 	 * Méthode privée permettant de récupérer la date de la dernière modification d'un fichier
 	 * @param f Le fichier
@@ -466,7 +479,6 @@ public class FenetreJeu extends JFrame
 	    exit.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		System.exit(0);
-				requestFocus();
 	    	}       
 	    });
 	    
@@ -501,6 +513,33 @@ public class FenetreJeu extends JFrame
         barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(historique);
 
+		cheat = new JMenu("Cheat");
+		gagner = new JMenuItem("Gagner la partie");
+	    
+	    gagner.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		carte.joueurGagne();
+	    	}       
+	    });
+		
+		perdre = new JMenuItem("Perdre la partie");
+	    
+	    perdre.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		carte.joueurPerd();
+	    	}       
+	    });
+	    
+		armagedon = new JMenuItem("Armagedon");
+
+		cheat.add(gagner);
+		cheat.add(perdre);
+		cheat.addSeparator();
+		cheat.add(armagedon);
+		cheat.setVisible(Konami);
+        
+		menu.add(cheat);
+		
 	    /** Capture des actions au clavier */
 		/* No Tab key-pressed or key-released events are received by the key event listener.
 		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
@@ -512,7 +551,7 @@ public class FenetreJeu extends JFrame
 		    	int key = e.getKeyCode();
 		    	/** JE MET CA EN COMMENTAIRE JAVADOC POUR PAS QUE l'ON OUBLI DE LE SUPPRIMER */
 		    	//System.out.println("Touche actionnée " + key);
-		    	
+		    	System.out.println(checkKonami(key));
 		    	if(key == KeyEvent.VK_F1)
 		    		boutonCharger.doClick();
 		    	else if(key == KeyEvent.VK_F2)
@@ -565,7 +604,7 @@ public class FenetreJeu extends JFrame
 		    		tabKey[3] = false;
 			}
 		});
-
+		
 		/** Capture des actions de la molette */
 		addMouseWheelListener(new MouseWheelListener() {
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -633,6 +672,22 @@ public class FenetreJeu extends JFrame
 	{
 		FenetreJeu fenetre = new FenetreJeu();
 		fenetre.setVisible(true);
+	}
+
+	private boolean checkKonami(int keyPressed) {
+		if(keyPressed == sequence[currentButton]) {
+			currentButton++;
+			if(currentButton == sequence.length) {
+				Konami = !Konami;
+				cheat.setVisible(Konami);
+				currentButton = 0;
+				return true;
+			}
+		}
+		else
+			currentButton = 0;	 
+
+		return false;
 	}
 }
 

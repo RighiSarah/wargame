@@ -1052,6 +1052,5 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		}
 		
 	}
-	
 }
 
