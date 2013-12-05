@@ -1,6 +1,5 @@
 package wargame;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -51,7 +50,7 @@ public class FenetreJeu extends JFrame
 	
 	/* Barre d'état située en bas de la fenêtre */
 	private JPanel barreEtat;
-    private JSeparator separator;
+    private JSeparator separateurHaut, separateurBas;
     
     /* Historique et information de la barre d'état */
     private Historique historique;
@@ -481,13 +480,6 @@ public class FenetreJeu extends JFrame
 	    		System.exit(0);
 	    	}       
 	    });
-	    
-	    /* Création de la barre d'état avec ses séparateurs */
-        separator = new JSeparator(SwingConstants.HORIZONTAL);
-        separator.setBackground(Color.red);
-        separator.setSize(new Dimension(100, 100));
-        
-        JSeparator sep = separator;
 
         barreEtat = new JPanel();
         
@@ -658,12 +650,22 @@ public class FenetreJeu extends JFrame
 			}
 		});	    
 	    
+	    /* Création de la barre d'état avec ses séparateurs */
+        separateurHaut = new JSeparator(SwingConstants.HORIZONTAL);
+        separateurHaut.setBackground(Color.red);
+       
+        separateurBas = new JSeparator(SwingConstants.HORIZONTAL);
+        separateurBas.setBackground(Color.black);
+	    
 	    /* On ajoute à la fenêtre les différents éléments que l'on a créé */
-	    this.add(sousMenu, BorderLayout.PAGE_START);
-        this.add(sep, BorderLayout.NORTH);
-        this.add(carte, BorderLayout.CENTER);
-        this.add(separator, BorderLayout.SOUTH);
-        this.add(barreEtat,BorderLayout.PAGE_END);
+	    Box box = Box.createVerticalBox();
+	    
+	    box.add(sousMenu);
+        box.add(separateurHaut);
+	    box.add(carte);
+        box.add(separateurBas);
+	    box.add(barreEtat);
+	    this.add(box);
 	            
         /* On joue le son d'arrière plan */
 		sonArriere = new Son();
