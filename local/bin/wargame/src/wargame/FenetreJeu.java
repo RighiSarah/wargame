@@ -518,7 +518,8 @@ public class FenetreJeu extends JFrame
 	    
 	    gagner.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		carte.joueurGagne();
+	    		if(carte.isGeneree())
+	    			carte.joueurGagne();
 	    	}       
 	    });
 		
@@ -526,7 +527,8 @@ public class FenetreJeu extends JFrame
 	    
 	    perdre.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		carte.joueurPerd();
+	    		if(carte.isGeneree())
+	    			carte.joueurPerd();
 	    	}       
 	    });
 	    
