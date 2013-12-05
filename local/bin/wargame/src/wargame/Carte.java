@@ -128,7 +128,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				}
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
-					soldat[case_cliquee].repos(true);
+					faitReposer(soldat[case_cliquee], true);
 					nbToPlay--;
 				}
 
@@ -249,7 +249,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		for(int i = 0; i < IConfig.HAUTEUR_CARTE * IConfig.LARGEUR_CARTE; i++){
 			if(soldat[i] != null) {
 				if(soldat[i] instanceof Heros && !soldat[i].getAJoue() && soldat[i].estVisible && soldat[i].estMort() == false ) {
-					soldat[i].repos(false);
+					faitReposer(soldat[i], false);
 				}
 				soldat[i].setAJoue(false);	
 			}
