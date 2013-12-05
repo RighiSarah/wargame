@@ -55,7 +55,7 @@ public interface IConfig
 	int POSITION_Y = 50;
 
 	/** Nombre de Héros. */
-	int NB_HEROS = 15; 
+	int NB_HEROS = 1; 
 	
 	/** Nombre de Monstres. */
 	int NB_MONSTRES = 15; 

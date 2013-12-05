@@ -29,9 +29,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
 
-	protected static int nbHerosRestant = IConfig.NB_HEROS;
-	protected static int nbMonstresRestant = IConfig.NB_MONSTRES;
-	protected static int nbToPlay = nbHerosRestant - 1; 
+	protected static int nbHerosRestant;
+	protected static int nbMonstresRestant;
+	protected static int nbToPlay; 
 	protected static int tour = 0;
 	
 	private CarteListener carteListener;
@@ -82,6 +82,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	private String winOrLoose = ""; 
 
 	private boolean armagedon = false;
+	private boolean ajoutMonstre = false;
+	private boolean ajoutHeros = false;
+	
 	/** Constructeur par défaut. 
 	 * @throws MidiUnavailableException 
 	 * @throws IOException 
@@ -115,7 +118,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				Position pos = new Position(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
 				
 				int case_cliquee = pos.getNumCase();
+				
+				/* Pour le mode armagedon */
 				if(armagedon && soldat[case_cliquee] != null) {
+					if(soldat[case_cliquee].estMort())
+						return;
 					
 					if(soldat[case_cliquee] instanceof Heros) nbHerosRestant--;
 					else nbMonstresRestant--;
@@ -126,6 +133,25 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 					
 					return;
 				}
+				
+//				/* Pour le cheat d'ajout de monstre */
+//				if( (ajoutMonstre || ajoutHeros) && soldat[case_cliquee] == null && tileset.getTile(carte[case_cliquee]).estPraticable() ) {
+//					System.out.println("lol");
+//					try {
+//						if(ajoutMonstre) {
+//							nbMonstresRestant++;
+//							monstre[IConfig.NB_MONSTRES + 1] = new Monstre(ISoldat.TypesM.getTypeMAlea());
+//							soldat[case_cliquee] = monstre[IConfig.NB_MONSTRES + 1] ;
+//						}
+//						else {
+//							nbHerosRestant++;
+//							soldat[case_cliquee] = new Heros(ISoldat.TypesH.getTypeHAlea());
+//						}
+//					} catch (IOException e1) {
+//						e1.printStackTrace();
+//					}	
+//				}
+				
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
 					soldat[case_cliquee].repos(true);
@@ -561,12 +587,15 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 	}
 
-
 	/** Genere aléatoirement une carte. */
 	public void generer()
 	{
 		generee = true;
 		tourJoueur = true;
+		nbMonstresRestant = IConfig.NB_MONSTRES;
+		nbHerosRestant = IConfig.NB_HEROS;
+		nbToPlay = nbHerosRestant - 1;
+		
 		winOrLoose = "";
 		genererCarte();
 		genererSoldats();
@@ -828,7 +857,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		System.out.println("Vous avez perdu !");
 	}
 	
-	
 	/**
 	 * Méthode permettant de faire combattre 2 soldats et vérifie ensuite si une armée a gagné
 	 * @param attaquant Le soldat qui attaque
@@ -958,25 +986,17 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			/* On construit l'équation de notre fonction, rappelons que y = ax + b */
 			double a = (double)(droite.y - gauche.y)/(double)(droite.x - gauche.x);
 			double b = gauche.y - a * gauche.x;
-			
-//			System.out.println("a vaut :" + a + " et b vaut " + b);
-			
+						
 			/* Pour chaque pixel entre les deux positions */
 			for(int x = gauche.x; x < droite.x; x++){
 				/* On calcule le y */
 				int y = (int) (a * x + b);
 				
-//				System.out.println("y  :" + (double) (y / IConfig.NB_PIX_CASE));
 				/* On calcule dans quelle case est le pixel */
 				double x_case = Math.round((double)x / (double)IConfig.NB_PIX_CASE);
 				double y_case = Math.round((double)y / (double)IConfig.NB_PIX_CASE);
-				
-//				System.out.println("J'ai x : " + x_case + " y : " + y_case);
-				
-				Position position_en_cours = new Position((int)x_case, (int)y_case);
-				
-//				System.out.println("La position de la case est " + position_en_cours.toString());
-				
+								
+				Position position_en_cours = new Position((int)x_case, (int)y_case);	
 				
 				int num_tile = carte[position_en_cours.getNumCase()];
 				Tile tile = tileset.getTile(num_tile);
@@ -1010,29 +1030,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		}
 	}
 	
-
-	public void setAffichageHistorique(String affichage) {
-		this.afficheHistorique = affichage;
-	}
-	
-	/** 
-	 * Retourne la valeur du boolean brouillardActive
-	 *
-	 * @return true si brouillard est actif
-	 * 		   false sinon
-	 */
-	public boolean getBrouillardActive() {
-		return brouillardActive;
-	}
-	
-	public void setArmagedon(boolean active) {
-		this.armagedon = active;
-	}
-	
-	public void setBrouillardActive(boolean active) {
-		brouillardActive = active;
-	}
-	
 	/* Rappel sur l'ordre du tableau :
 	 * 	HAUT, BAS, GAUCHE, DROITE
 	 */
@@ -1064,7 +1061,43 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			deplaceSoldat(soldat[caseActionnee], caseArrivee.getNumCase());
 			caseActionnee = -1;
 		}
+	}
+	
+
+	public void setAffichageHistorique(String affichage) {
+		afficheHistorique = affichage;
+	}
 		
+	public void setBrouillardActive(boolean active) {
+		brouillardActive = active;
+	}
+	
+	public boolean getBrouillardActive() {
+		return brouillardActive;
+	}
+
+	public void setArmagedon(boolean active) {
+		armagedon = active;
+	}
+	
+	public boolean getArmagedon() {
+		return armagedon;
+	}
+	
+	public void setAjoutMonstre(boolean active) {
+		ajoutMonstre = active;
+	}
+	
+	public boolean getAjoutMonstre() {
+		return ajoutMonstre;
+	}
+	
+	public void setAjoutHeros(boolean active) {
+		ajoutHeros = active;
+	}
+	
+	public boolean getAjoutHeros() {
+		return ajoutHeros;
 	}
 }
 

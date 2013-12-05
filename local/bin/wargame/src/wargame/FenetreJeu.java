@@ -93,7 +93,7 @@ public class FenetreJeu extends JFrame
 	/** Bouton de fin de tour */
 	private JButton finTour;
 	
-	/** Trigger*/
+	/** Boolean qui considere un seul scroll a la souris sur 2 */
 	private boolean scroll = false;
 
     /** Compteur servant à l'initialisation des évènements de sauvegardes. */
@@ -128,16 +128,18 @@ public class FenetreJeu extends JFrame
 	
 	/* Ajout des trucs stupides */
 	/* Code Konami , Menu triche */
-	int[] sequence = { KeyEvent.VK_UP, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_DOWN, 
+	int[] toucheKonami = { KeyEvent.VK_UP, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_DOWN, 
 		       KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 
 		       KeyEvent.VK_B, KeyEvent.VK_A, KeyEvent.VK_ENTER };
-	int currentButton = 0;
+	int caseActuel = 0;
 	boolean Konami = false;
 	
 	private JMenu cheat;
 	private JMenuItem gagner;
 	private JMenuItem perdre;
 	private JMenuItem armagedon;
+	private JMenuItem ajoutMonstre;
+	private JMenuItem ajoutHeros;
 	
 	/**
 	 * Méthode privée permettant de récupérer la date de la dernière modification d'un fichier
@@ -514,17 +516,20 @@ public class FenetreJeu extends JFrame
         barreEtat.add(historique);
 
 		cheat = new JMenu("Cheat");
+		
 		gagner = new JMenuItem("Gagner la partie");
-	    
+		perdre = new JMenuItem("Perdre la partie");
+		armagedon = new JMenuItem("Armagedon : Off");
+		ajoutHeros = new JMenuItem("Ajout Heros : Off");
+		ajoutMonstre = new JMenuItem("Ajout Monstre : Off");
+		
 	    gagner.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree())
 	    			carte.joueurGagne();
 	    	}       
 	    });
-		
-		perdre = new JMenuItem("Perdre la partie");
-	    
+
 	    perdre.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree())
@@ -532,84 +537,104 @@ public class FenetreJeu extends JFrame
 	    	}       
 	    });
 	    
-		armagedon = new JMenuItem("Armagedon");
-
 	    armagedon.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-	    		if(carte.isGeneree())
-	    			carte.setArmagedon(true);
+	    		if(carte.isGeneree()) {
+	    			armagedon.setText("Armagedon : " + ((carte.getArmagedon()) ? "Off" : "On") );
+	    			carte.setArmagedon(!carte.getArmagedon());
+	    		}
 	    	}       
 	    });
+	    
+//	    ajoutHeros.addActionListener(new ActionListener() {
+//	    	public void actionPerformed(ActionEvent e) {
+//	    		if(carte.isGeneree()) {
+//	    			ajoutHeros.setText("Ajout Heros : " + ((carte.getAjoutHeros()) ? "Off" : "On") );
+//	    			carte.setAjoutHeros(!carte.getAjoutHeros());
+//	    		}
+//	    	}       
+//	    });
+//	    
+//	    ajoutMonstre.addActionListener(new ActionListener() {
+//	    	public void actionPerformed(ActionEvent e) {
+//	    		if(carte.isGeneree()) {
+//	    			ajoutMonstre.setText("Ajout Monstre : " + ((carte.getAjoutMonstre()) ? "Off" : "On") );
+//	    			carte.setAjoutMonstre(!carte.getAjoutMonstre());
+//	    		}
+//	    	}       
+//	    });
 		
 		cheat.add(gagner);
 		cheat.add(perdre);
 		cheat.addSeparator();
 		cheat.add(armagedon);
+		cheat.addSeparator();
+		cheat.add(ajoutHeros);
+		cheat.add(ajoutMonstre);
 		cheat.setVisible(Konami);
         
 		menu.add(cheat);
 		
 	    /** Capture des actions au clavier */
-		/* No Tab key-pressed or key-released events are received by the key event listener.
-		 * This is because the focus subsystem consumes focus traversal keys, such as Tab and Shift Tab.
+		/* Aucun evenement n'est recu par le listener.
+		 * car le sous systeme utilise les consideres comme des touches de déplacement dans la fenetre.
 		 */
 		setFocusTraversalKeysEnabled(false);
 	    
 		addKeyListener(new KeyAdapter() {
 		    public void keyPressed(KeyEvent e) {
-		    	int key = e.getKeyCode();
-		    	/** JE MET CA EN COMMENTAIRE JAVADOC POUR PAS QUE l'ON OUBLI DE LE SUPPRIMER */
-		    	//System.out.println("Touche actionnée " + key);
-		    	System.out.println(checkKonami(key));
-		    	if(key == KeyEvent.VK_F1)
+		    	int touche = e.getKeyCode();
+		    	
+		    	verifiKonami(touche);
+		    	if(touche == KeyEvent.VK_F1)
 		    		boutonCharger.doClick();
-		    	else if(key == KeyEvent.VK_F2)
+		    	else if(touche == KeyEvent.VK_F2)
 		    		boutonSauvegarder.doClick();
-		    	else if(key == KeyEvent.VK_F3)
+		    	else if(touche == KeyEvent.VK_F3)
 		    		navigerHistoriquePremier.doClick();
-		    	else if(key == KeyEvent.VK_F4)
+		    	else if(touche == KeyEvent.VK_F4)
 		    		navigerHistoriquePrecedent.doClick();
-		    	else if(key == KeyEvent.VK_F5)
+		    	else if(touche == KeyEvent.VK_F5)
 		    		navigerHistoriqueSuivant.doClick();
-		    	else if(key == KeyEvent.VK_F6)
+		    	else if(touche == KeyEvent.VK_F6)
 		    		navigerHistoriqueDernier.doClick();
-		    	else if(key == KeyEvent.VK_F7)
+		    	else if(touche == KeyEvent.VK_F7)
 		    		exit.doClick();
 		    	
 		    	if(!carte.isGeneree())
 		    		return;
 		    	
-		    	if (key == KeyEvent.VK_TAB) { 
+		    	if (touche == KeyEvent.VK_TAB) { 
 		    		numHeros = carte.trouverProchainHeros(numHeros);
 		    	}
-		    	else if(key == KeyEvent.VK_UP) {
+		    	else if(touche == KeyEvent.VK_UP) {
 		    		timer();
 		    		tabKey[0] = true;
 		    	}
-		    	else if(key == KeyEvent.VK_DOWN) {
+		    	else if(touche == KeyEvent.VK_DOWN) {
 		    		timer();
 		    		tabKey[1] = true;
 		    	}
-		    	else if(key == KeyEvent.VK_LEFT) {
+		    	else if(touche == KeyEvent.VK_LEFT) {
 		    		timer();
 		    		tabKey[2] = true;
 		    	}
-		    	else if(key == KeyEvent.VK_RIGHT) {
+		    	else if(touche == KeyEvent.VK_RIGHT) {
 		    		timer();
 		    		tabKey[3] = true;
 		    	} 	
 		    }
 
 			public void keyReleased(KeyEvent e) { 
-				int key = e.getKeyCode();
+				int touche = e.getKeyCode();
 				
-		    	if(key == KeyEvent.VK_UP)   		
+		    	if(touche == KeyEvent.VK_UP)   		
 		    		tabKey[0] = false;
-		    	else if(key == KeyEvent.VK_DOWN) 	
+		    	else if(touche == KeyEvent.VK_DOWN) 	
 		    		tabKey[1] = false;
-		    	else if(key == KeyEvent.VK_LEFT)	
+		    	else if(touche == KeyEvent.VK_LEFT)	
 		    		tabKey[2] = false;
-		    	else if(key == KeyEvent.VK_RIGHT)	
+		    	else if(touche == KeyEvent.VK_RIGHT)	
 		    		tabKey[3] = false;
 			}
 		});
@@ -683,18 +708,18 @@ public class FenetreJeu extends JFrame
 		fenetre.setVisible(true);
 	}
 
-	private boolean checkKonami(int keyPressed) {
-		if(keyPressed == sequence[currentButton]) {
-			currentButton++;
-			if(currentButton == sequence.length) {
+	private boolean verifiKonami(int touchePressee) {
+		if(touchePressee == toucheKonami[caseActuel]) {
+			caseActuel++;
+			if(caseActuel == toucheKonami.length) {
 				Konami = !Konami;
 				cheat.setVisible(Konami);
-				currentButton = 0;
+				caseActuel = 0;
 				return true;
 			}
 		}
 		else
-			currentButton = 0;	 
+			caseActuel = 0;	 
 
 		return false;
 	}
