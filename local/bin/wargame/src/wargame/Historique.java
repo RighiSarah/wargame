@@ -93,8 +93,12 @@ public class Historique extends JLabel implements IConfig
 	/**
 	 * Méthode permettant de récupérer le premier message de l'historique
 	 * @return Le texte du premier message de l'historique
+	 * @throws Exception Levée si la file est vide ! (On ne peut pas afficher le dernier d'une file vide)
 	 */
-	public String getPremier() {
+	public String getPremier() throws Exception {
+		if(fileHistorique.isEmpty())
+			throw new Exception();
+		
 		return fileHistorique.getFirst().toString();
 	}
 	
@@ -102,15 +106,26 @@ public class Historique extends JLabel implements IConfig
 	 * Méthode permettant d'afficher le premier message de l'historique
 	 */
 	public void afficherPremier(){
-		this.setText(this.getPremier());
+		if(fileHistorique.isEmpty())
+			return;
+		
+		try {
+			this.setText(this.getPremier());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		numMessage = 0;
 	}
 	
 	/**
 	 * Méthode permettant de récupérer le dernier message de l'historique
 	 * @return Le dernier message de l'historique
+	 * @throws Exception Levée si la file est vide ! (On ne peut pas afficher le dernier d'une file vide)
 	 */
-	public String getDernier() {
+	public String getDernier() throws Exception {
+		if(fileHistorique.isEmpty())
+			throw new Exception();
+		
 		return (fileHistorique.getLast().toString());
 	}
 	
@@ -118,7 +133,14 @@ public class Historique extends JLabel implements IConfig
 	 * Méthode permettant d'afficher le dernier message de l'historique
 	 */
 	public void afficherDernier() {
-		this.setText(this.getDernier());
+		if(fileHistorique.isEmpty())
+			return;
+		
+		try {
+			this.setText(this.getDernier());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		numMessage = this.getTailleHistorique();
 	}
 	
