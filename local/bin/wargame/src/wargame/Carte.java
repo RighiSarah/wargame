@@ -81,6 +81,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	/** Controle l'affichage ou non du message de victoire */
 	private String winOrLoose = ""; 
 
+	private boolean armagedon = false;
 	/** Constructeur par défaut. 
 	 * @throws MidiUnavailableException 
 	 * @throws IOException 
@@ -114,7 +115,17 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				Position pos = new Position(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
 				
 				int case_cliquee = pos.getNumCase();
-
+				if(armagedon && soldat[case_cliquee] != null) {
+					
+					if(soldat[case_cliquee] instanceof Heros) nbHerosRestant--;
+					else nbMonstresRestant--;
+					
+					if(nbMonstresRestant == 0) joueurGagne();
+					else if(nbHerosRestant == 0) joueurPerd();
+					soldat[case_cliquee].setMort(true);
+					
+					return;
+				}
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
 					soldat[case_cliquee].repos(true);
@@ -1014,6 +1025,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		return brouillardActive;
 	}
 	
+	public void setArmagedon(boolean active) {
+		this.armagedon = active;
+	}
 	
 	public void setBrouillardActive(boolean active) {
 		brouillardActive = active;

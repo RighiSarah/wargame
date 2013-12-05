@@ -534,6 +534,13 @@ public class FenetreJeu extends JFrame
 	    
 		armagedon = new JMenuItem("Armagedon");
 
+	    armagedon.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if(carte.isGeneree())
+	    			carte.setArmagedon(true);
+	    	}       
+	    });
+		
 		cheat.add(gagner);
 		cheat.add(perdre);
 		cheat.addSeparator();
