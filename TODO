@@ -1,12 +1,10 @@
 A FAIRE :
 	fin de jeu [ améliorer le texte ]
-	Crée l'uml
-	
+    Rapport (exception, clavier, uml)
+
 Corriger bug 
-	Affichage des séparator [ FenetreJeu ]
 
 Idée d'amélioration
-	Code Konami [ fait par nico ] Et [ peut etre petite dance se victoire ?!? ]
 
 Codes vérifiées et corrigés :
  - Aleatoire
@@ -16,7 +14,7 @@ Codes vérifiées et corrigés :
  - FenetreJeu
  - Heros
  - Historique
- - ICarte ?
+ - ICarte
  - IConfig
  - Infobulle ?
  - ISoldat
