@@ -129,9 +129,10 @@ public class FenetreJeu extends JFrame
 	private int[] touchesKonami = { KeyEvent.VK_UP, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_DOWN, 
 		       KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 
 		       KeyEvent.VK_B, KeyEvent.VK_A, KeyEvent.VK_ENTER };
-	private int caseActuelle = 0;
-	private boolean Konami = false;
 	
+	
+	private int caseActuelle = 0;
+	private boolean Konami = true;
 	
 	private JMenu menuTriche;
 	private JMenuItem itemGagner;
@@ -538,23 +539,23 @@ public class FenetreJeu extends JFrame
 	    	}       
 	    });
 	    
-//	    ajoutHeros.addActionListener(new ActionListener() {
-//	    	public void actionPerformed(ActionEvent e) {
-//	    		if(carte.isGeneree()) {
-//	    			ajoutHeros.setText("Ajout Heros : " + ((carte.getAjoutHeros()) ? "Off" : "On") );
-//	    			carte.setAjoutHeros(!carte.getAjoutHeros());
-//	    		}
-//	    	}       
-//	    });
-//	    
-//	    ajoutMonstre.addActionListener(new ActionListener() {
-//	    	public void actionPerformed(ActionEvent e) {
-//	    		if(carte.isGeneree()) {
-//	    			ajoutMonstre.setText("Ajout Monstre : " + ((carte.getAjoutMonstre()) ? "Off" : "On") );
-//	    			carte.setAjoutMonstre(!carte.getAjoutMonstre());
-//	    		}
-//	    	}       
-//	    });
+	    itemAjoutHeros.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if(carte.isGeneree()) {
+	    			itemAjoutHeros.setText("Ajout Heros : " + ((carte.getAjoutHeros()) ? "Off" : "On") );
+	    			carte.setAjoutHeros(!carte.getAjoutHeros());
+	    		}
+	    	}       
+	    });
+	    
+	    itemAjoutMonstre.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if(carte.isGeneree()) {
+	    			itemAjoutMonstre.setText("Ajout Monstre : " + ((carte.getAjoutMonstre()) ? "Off" : "On") );
+	    			carte.setAjoutMonstre(!carte.getAjoutMonstre());
+	    		}
+	    	}       
+	    });
 		
 		menuTriche.add(itemGagner);
 		menuTriche.add(itemPerdre);
