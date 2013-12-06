@@ -127,8 +127,16 @@ Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant
   Il nous a alors aussi fallu utiliser la classe principale AudioClip.
 
   \subsection{Héritage}
-  Nous avons décidé de faire hériter Monstre et Heros de Soldat car c'est objets sont des soldats ; ils implémentaient beaucoup de méthodes et attributs communes.
-
+  Nous avons décidé de faire hériter Monstre et Heros de Soldat car ces objets sont des soldats ; ils implémentaient beaucoup de méthodes et attributs communes.
+  La classe Soldat hérite elle-même de l'interface ISoldat qui définit les méthodes que doit avoir un soldat. Soldat hérite aussi de Charset pour fixer son apparence.
+  
+  Aussi, la plupart des classes héritent de IConfig car elles avaient besoin d'un élément de configuration. 
+  
+  Nous pouvons aussi citer Carte qui hérite d'un JPanel et la fenêtre principale qui hérite de JFrame.
+  
+  Nous joignons avec le rapport le schéma UML de notre projet, intégrant les méthodes publiques et représetant les différents héritages.
+  Nous n'avons malheureusment pas pu incorporer le schéma dans le rapport car la taille de celui-ci est trop importante 
+  
   \subsection{Polymorphisme}
   Soldat implémente les principales méthodes de Monstre et Heros.
   Les objets Soldats instanciés sont issus de l'une ou l'autre classe.
@@ -175,6 +183,7 @@ Il peut aussi couper le son via le menu ou un raccourci clavier.
 
 Lorsqu'il est dans une partie, il possède l'historique des actions sur la partie bas-droite de la fenêtre. 
 Cette partie n'affiche qu'une ligne de l'historique. Il est possible de remonter ou de descendre dans en "scrollant" avec la souris.
+Le joueur peut aussi défiler dans l'historique via les boutons situés en haut de la fenêtre.
 Nous pouvons aussi avoir toutes les dernières actions effectuées en mettant la souris sur cette partie bas-droite.
 Une popup s'affichera alors sur la carte présentant l'historique complet.
 
@@ -186,7 +195,7 @@ Les héros sont sur la partie droite et les monstres sur la partie gauche. Ils s
 
 Le joueur peut déplacer, reposer ou faire combattre chacun de ses heros.
 Pour cela, il doit cliquer sur son héros. Nous avons aussi ajouté la possibilité pour le joueur de diriger ses héros au clavier.
-Pour celà, il peut utiliser la touche TAB pour changer de héros sélectionné, puis les touches directionnelles pour déplacer son héros.
+Il peut alors utiliser la touche TAB pour changer de héros sélectionné, puis les touches directionnelles pour déplacer son héros.
 Les cases où le joueur peut déplacer son héros sont en surbrillance.
 Lorsqu'il passe sa souris sur un soldat, une infobulle apparaît pour donner ses caractéristiques.
 Il est possible de reposer son heros en cliquant sur lui-même après l'avoir sélectionné, ou bien en ne déclenchant aucune action sur ce dernier à la fin du tour.
@@ -204,6 +213,8 @@ Sinon il se déplace aléatoirement.
 
 Enfin, lorsque le joueur perd ou gagne, un son est joué et un message apparaît à l'écran. Il ne peut alors plus exécuter d'actions.
 Il faut logiquement qu'il recommence un partie, ou qu'il quitte le jeu.
+
+% Enfin nous avons rajouté un menu triche...
 
 \section{Organisation}
 Au commencement du projet Ronan a décidé de créer la base de l'interface de la carte.

@@ -32,7 +32,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 	protected static int nbHerosRestant;
 	protected static int nbMonstresRestant;
-	protected static int nbToPlay; 
+	protected static int nbSoldatAJouer; 
 	protected static int tour = 0;
 	
 	private CarteListener carteListener;
@@ -48,12 +48,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	protected char []carte;
 
 	/** Monstres. */
-	private Monstre []monstre;
-	private ArrayList<Monstre> Monstre;
+	private ArrayList<Monstre> monstre;
 
 	/** Héros. */
-	private Heros []heros;
-	private ArrayList<Heros> Heros;
+	private ArrayList<Heros> heros;
 
 	/** Table de jeu de la carte. */
 	private Soldat []soldat;
@@ -82,7 +80,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	private boolean tourJoueur;
 	
 	/** Controle l'affichage ou non du message de victoire */
-	private String winOrLoose = ""; 
+	private String stringFinJeu = ""; 
 
 	private boolean armagedon = false;
 	private boolean ajoutMonstre = false;
@@ -107,13 +105,14 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		brouillard = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];
 		
 		/* Image de présentation, avant donc que la carte ne soit générée */
-		imagePresentation = new JLabel( new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
+		imagePresentation = new JLabel(new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
 		this.add(imagePresentation);
 
-		/* Capture de la souris. */
+		/* Capture d'évènements de la souris. */
 		addMouseListener(new MouseAdapter() {
 			/* Au clic */
 			public void mouseClicked(MouseEvent e) { 
+				/* Si la carte n'est pas générée ou que ce n'est pas au tour du joueur alors il n'y a rien à faire donc on quitte */
 				if(!generee || tourJoueur == false)
 					return;
 				
@@ -127,11 +126,16 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 					if(soldat[case_cliquee].estMort())
 						return;
 					
-					if(soldat[case_cliquee] instanceof Heros) nbHerosRestant--;
-					else nbMonstresRestant--;
+					if(soldat[case_cliquee] instanceof Heros) 
+						nbHerosRestant--;
+					else 
+						nbMonstresRestant--;
 					
-					if(nbMonstresRestant == 0) joueurGagne();
-					else if(nbHerosRestant == 0) joueurPerd();
+					if(nbMonstresRestant == 0) 
+						joueurGagne();
+					else if(nbHerosRestant == 0) 
+						joueurPerd();
+					
 					soldat[case_cliquee].setMort(true);
 					
 					return;
@@ -139,21 +143,19 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				
 				/* Pour le cheat d'ajout de monstre */
 				if( (ajoutMonstre || ajoutHeros) && soldat[case_cliquee] == null && tileset.getTile(carte[case_cliquee]).estPraticable() ) {
-					System.out.println("lol");
 					try {
 						if(ajoutMonstre) {
-
 							nbMonstresRestant++;						
-							Monstre.add(Heros.size(), new Monstre(ISoldat.TypesM.getTypeMAlea()));
-							Monstre.get(Heros.size() - 1).setDirection(Direction.DROITE);
-							soldat[case_cliquee] = Monstre.get(Monstre.size() - 1) ;
+							monstre.add(heros.size(), new Monstre(ISoldat.TypesM.getTypeMAlea()));
+							monstre.get(heros.size() - 1).setDirection(Direction.DROITE);
+							soldat[case_cliquee] = monstre.get(monstre.size() - 1) ;
 						}
 						else {
 							nbHerosRestant++;
-							Heros.add(Heros.size(), new Heros(ISoldat.TypesH.getTypeHAlea()));
-							Heros.get(Heros.size() - 1 ).setDirection(Direction.GAUCHE);
+							heros.add(heros.size(), new Heros(ISoldat.TypesH.getTypeHAlea()));
+							heros.get(heros.size() - 1 ).setDirection(Direction.GAUCHE);
 							//soldat[case_cliquee] = Heros.get(Heros.size()) ;
-							soldat[case_cliquee] = Heros.get(Heros.size() - 1) ;
+							soldat[case_cliquee] = heros.get(heros.size() - 1) ;
 						}
 					} catch (IOException e1) {
 						e1.printStackTrace();
@@ -163,7 +165,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
 					faitReposer(soldat[case_cliquee], true);
-					nbToPlay--;
+					nbSoldatAJouer--;
 				}
 
 				/* On change de héros si la case n'est pas vide, qu'il s'agit bien d'un soldat et que le soldat est affiché. */
@@ -192,7 +194,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							}
 						
 							faitCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
-							nbToPlay--;
+							nbSoldatAJouer--;
 
 							return;
 						}
@@ -289,7 +291,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			}
 		}
 		
-		nbToPlay = nbHerosRestant;
+		nbSoldatAJouer = nbHerosRestant;
 	}
 
 	/**
@@ -366,23 +368,23 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		/* Tableaux de soldats. */
 		//heros = new Heros[IConfig.NB_HEROS];
 		//monstre = new Monstre[IConfig.NB_MONSTRES];
-		Heros = new ArrayList<Heros>(); 
-		Monstre = new ArrayList<Monstre>(); 
+		heros = new ArrayList<Heros>(); 
+		monstre = new ArrayList<Monstre>(); 
 
 		/* Chargement des soldats de base. */
 		try {
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
 			{
-				Heros.add(i, new Heros(ISoldat.TypesH.getTypeHAlea()));
-				Heros.get(i).setDirection(Direction.GAUCHE);
+				heros.add(i, new Heros(ISoldat.TypesH.getTypeHAlea()));
+				heros.get(i).setDirection(Direction.GAUCHE);
 
 //				heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea());
 //				heros[i].setDirection(Direction.GAUCHE);
 			}
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
 			{
-				Monstre.add(i, new Monstre(ISoldat.TypesM.getTypeMAlea()));
-				Monstre.get(i).setDirection(Direction.GAUCHE);
+				monstre.add(i, new Monstre(ISoldat.TypesM.getTypeMAlea()));
+				monstre.get(i).setDirection(Direction.GAUCHE);
 //				monstre[i] = new Monstre(ISoldat.TypesM.getTypeMAlea());
 //				monstre[i].setDirection(Direction.DROITE);
 			}
@@ -395,14 +397,14 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		/* Positionnement des soldats. */
 		for(int i = 0; i < IConfig.NB_HEROS; i++) {
 			Position pos = new Position(this.trouvePositionVide(Soldat.HEROS));
-			soldat[pos.getNumCase()] = Heros.get(i);
+			soldat[pos.getNumCase()] = heros.get(i);
 //			soldat[pos.getNumCase()] = heros[i];
 			soldat[pos.getNumCase()].setPosition(pos);
 		}
 
 		for(int i = 0; i < IConfig.NB_MONSTRES; i++) {
 			Position pos = new Position(this.trouvePositionVide(Soldat.MONSTRE));
-			soldat[pos.getNumCase()] = Monstre.get(i);
+			soldat[pos.getNumCase()] = monstre.get(i);
 //			soldat[pos.getNumCase()] = monstre[i];
 			soldat[pos.getNumCase()].setPosition(pos);
 		}
@@ -419,7 +421,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		
 		/* Ensuite pour chaque héros [ présent dans le tableau héros on crée le brouillard associé */
 		for(int i = 0; i < IConfig.NB_HEROS; i++) {
-			Heros h = Heros.get(i);
+			Heros h = heros.get(i);
 			if(h.estVisible())
 				changeBrouillard(h.getPosition(), h.getPortee(), 1);
 		}
@@ -460,7 +462,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	{
 		Son.joueCourir();
 		soldat.setAJoue(true);
-		nbToPlay--;
+		nbSoldatAJouer--;
 		int sx = soldat.getPosition().x;
 		int sy = soldat.getPosition().y;
 		int dx = nouvelle_position.x;
@@ -530,9 +532,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		tourJoueur = false;
 			
 //		for(int i=0; i < monstre.length; i++) 
-		for(int i=0; i < Monstre.size(); i++) 
+		for(int i=0; i < monstre.size(); i++) 
 		{
-			Monstre m = Monstre.get(i);
+			Monstre m = monstre.get(i);
 //			Monstre m = monstre[i];
 					
 			if(m != null && !m.estMort() && m.estVisible())
@@ -589,8 +591,8 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	          public void run() {
 //	      		for(int i = 0; i < monstre.length; i++)
 //	    			while(monstre[i].getSeDeplace() || Infobulle.aTermine() == false)
-		        for(int i = 0; i < Monstre.size() ; i++)
-		        	while(Monstre.get(i).getSeDeplace() || Infobulle.aTermine() == false)
+		        for(int i = 0; i < monstre.size() ; i++)
+		        	while(monstre.get(i).getSeDeplace() || Infobulle.aTermine() == false)
 	    			{
 	    				try {
 							Thread.currentThread();
@@ -617,9 +619,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		tourJoueur = true;
 		nbMonstresRestant = IConfig.NB_MONSTRES;
 		nbHerosRestant = IConfig.NB_HEROS;
-		nbToPlay = nbHerosRestant - 1;
+		nbSoldatAJouer = nbHerosRestant - 1;
 		
-		winOrLoose = "";
+		stringFinJeu = "";
 		genererCarte();
 		genererSoldats();
 		genererBrouillard();
@@ -684,6 +686,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	/** Charge une carte.
 	 * @param chemin Chemin vers la sauvegarde a charger.
 	 */
+	@SuppressWarnings("unchecked")
 	public void charge(String chemin)
 	{
 
@@ -700,22 +703,22 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			nbHerosRestant = (int)ois.read();
 			nbMonstresRestant = (int)ois.read();
 			carte   = (char[])ois.readObject();
-			monstre = (Monstre[])ois.readObject();
-			heros   = (Heros[])ois.readObject();
+			monstre = (ArrayList<Monstre>)ois.readObject();
+			heros   = (ArrayList<Heros>)ois.readObject();
 			soldat  = (Soldat[])ois.readObject();
 			brouillard = (char[])ois.readObject();
 
 			/* Les images ne sont pas sérializées... */
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
 			{
-				heros[i].setImage();
-				heros[i].setDirection(Direction.GAUCHE);
+				heros.get(i).setImage();
+				heros.get(i).setDirection(Direction.GAUCHE);
 			}
 
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
 			{
-				monstre[i].setImage();
-				monstre[i].setDirection(Direction.DROITE);
+				monstre.get(i).setImage();
+				monstre.get(i).setDirection(Direction.DROITE);
 			}
 			chargerTileset(); // Charge uniquement si tileset null.
 			generee = true;   // Au cas où aucune partie lancée depuis le lancement de l'application.
@@ -806,9 +809,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
-		if(winOrLoose != "") {
+		if(!stringFinJeu.isEmpty()) {
 			g.setFont(new Font("calibri", Font.BOLD, 100));
-			g.drawString(winOrLoose, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE ) - (int)( g.getFontMetrics().stringWidth(winOrLoose) * 1.25) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
+			g.drawString(stringFinJeu, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE ) - (int)( g.getFontMetrics().stringWidth(stringFinJeu) * 1.25) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
 
 		}
 		carteListener.information(nbMonstresRestant + " Monstres restant - " + nbHerosRestant + " Heros restant");
@@ -817,7 +820,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	public void actionPerformed(ActionEvent e) 
 	{	
 
-		if(nbToPlay == 0 && nbHerosRestant > 0)	
+		if(nbSoldatAJouer == 0 && nbHerosRestant > 0)	
 			reinitAJoue();
 		
 		repaint();
@@ -866,7 +869,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
 		carteListener.historique("Vous avez gagné !");
-		winOrLoose = "You win !";
+		stringFinJeu = "You win !";
 		System.out.println("Vous avez gagné !");
 	}
 	
@@ -878,7 +881,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		caseActionnee = -1;
 		brouillardActive = false;
 		carteListener.historique("Vous avez perdu !");
-		winOrLoose = "Game Over !";
+		stringFinJeu = "Game Over !";
 		System.out.println("Vous avez perdu !");
 	}
 	
@@ -935,19 +938,19 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	 * @param numHeros Case Actuel du héros séléctionnée
 	 * @return numéro de la case du nouveau héros
 	 */
-	public int trouverProchainHeros(int numHeros) {
-		if(++numHeros >= nbHerosRestant)
-			numHeros = 0;
+	public int trouverProchainHeros(int num_heros) {
+		if(++num_heros >= nbHerosRestant)
+			num_heros = 0;
 		
 		// La boucle s'arretera car , si on a plus de héros qui peuvent jouer, le tour s'arrete
 		// si jamais on veut avoir tout les perso, retirer entierement la boucle si dessous
-		while(heros[numHeros].getAJoue())
-			if(++numHeros >= nbHerosRestant)
-				numHeros = 0;
+		while(heros.get(num_heros).getAJoue())
+			if(++num_heros >= nbHerosRestant)
+				num_heros = 0;
 		
-		caseActionnee = heros[numHeros].getPosition().getNumCase();
+		caseActionnee = heros.get(num_heros).getPosition().getNumCase();
 		
-		return numHeros;
+		return num_heros;
 	}
 	
 

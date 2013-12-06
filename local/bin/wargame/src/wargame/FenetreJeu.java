@@ -508,7 +508,7 @@ public class FenetreJeu extends JFrame
         barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(historique);
 
-        menuTriche = new JMenu("Cheat");
+        menuTriche = new JMenu("Triche");
 		
 		itemGagner = new JMenuItem("Gagner la partie");
 		itemPerdre = new JMenuItem("Perdre la partie");
