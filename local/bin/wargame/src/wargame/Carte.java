@@ -33,7 +33,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	protected static int nbHerosRestant;
 	protected static int nbMonstresRestant;
 	protected static int nbSoldatAJouer; 
-	protected static int tour = 0;
+	protected static int tour;
 	
 	private CarteListener carteListener;
 	
@@ -146,6 +146,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							nbMonstresRestant++;
 							Monstre monstre_cree = new Monstre(ISoldat.TypesM.getTypeMAlea());
 							monstre_cree.setDirection(Direction.DROITE);
+							
 							monstre.add(monstre_cree);
 							soldat[case_cliquee] = monstre_cree;
 						}
@@ -157,9 +158,13 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							heros.add(heros_cree);
 							soldat[case_cliquee] = heros_cree;
 						}
+						
+						soldat[case_cliquee].setPosition(new Position(case_cliquee));
 					} catch (IOException e1) {
 						e1.printStackTrace();
-					}	
+					}
+					
+					return;
 				}
 				
 				/* On vient de cliquer sur la même case : on veut se reposer */
@@ -189,7 +194,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							&& !soldat[case_cliquee].estMort() 
 						) {
 							if(obstacleEntreCase(soldat[caseActionnee].getPosition(), soldat[case_cliquee].getPosition())){
-								System.out.println("Impossible d'attaque ce soldat, un élément bloque la flêche");
 								return;
 							}
 						
@@ -209,6 +213,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							 deplaceSoldat(soldat[caseActionnee],case_cliquee);
 						}
 					}
+					
 					/* Fin deplacement on re-initialise la case */
 					caseActionnee = -1;
 				}
@@ -249,10 +254,8 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 		/* On déplace le soldat à la nouvelle position */
 		deplaceSoldat(soldat[caseArrivee], new Position(caseArrivee));
-		
-		/* on recré le brouillard associé au perso */
-		
-		 /* Étant donné que le mouvement n'est pas encore fini, la position n'est pas mise à jour, cependant on sait qu'il sera à la position case_cliquee */
+	
+		/* Étant donné que le mouvement n'est pas encore fini, la position n'est pas mise à jour, cependant on sait qu'il sera à la position case_cliquee */
 		changeBrouillard(new Position(caseArrivee), soldat[caseArrivee].getPortee(), 1);
 	}
 	
@@ -295,14 +298,15 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	 */
 	private void chargerTileset()
 	{
-		if(tileset == null)
+		if(tileset == null){
 			try {
 				tileset = new Tileset(IConfig.NOM_TILESET);
 			} 
-		catch(IOException e) {
-			System.out.println(e);
-			return;
-		}		
+			catch(IOException e) {
+				System.out.println(e);
+				return;
+			}		
+		}
 	}
 
 	/**
@@ -602,6 +606,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		nbMonstresRestant = IConfig.NB_MONSTRES;
 		nbHerosRestant = IConfig.NB_HEROS;
 		nbSoldatAJouer = nbHerosRestant;
+		tour = 0;
 		
 		stringFinJeu = "";
 		genererCarte();
