@@ -26,9 +26,11 @@ public final class Son {
 	/** Pour charger un lecteur */
 	private Sequencer sequencer; 
 	/** Pour savoir si le son en arrière est stoppé ou non */
-	private boolean sonArriereActive = false;
+	private boolean sonArriereActive = true;
 	/** Pour jouer un wma quand il se passe un grand événement (partie perdue ou gagnée) */
 	private AudioClip musiqueEvenement = null;
+	/** Pour savoir si le son des bruitages est activé */
+	public static boolean sonBruitageActive = true;
 
 	/* Différents sons de bruitage */
 	private static AudioClip bruitCourir = null;
@@ -166,6 +168,9 @@ public final class Son {
 	 * Méthode statique permettant de jouer le son d'un arc
 	 */
 	public static void joueArc(){
+		if(!Son.sonBruitageActive)
+			return;
+		
 		/* Si le bruit n'a pas été déjà chargé, alors on le charge */
 		if(bruitArc == null)
 			try {
@@ -181,6 +186,9 @@ public final class Son {
 	 * Méthode statique permettant de jouer le son d'une épée
 	 */
 	public static void joueEpee(){
+		if(!Son.sonBruitageActive)
+			return;
+		
 		if(bruitEpee == null)
 			try {
 				bruitEpee = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "epee.wav"));
@@ -195,6 +203,9 @@ public final class Son {
 	 * Méthode statique permettant de jouer le son d'un personnage courant sur l'herbe
 	 */
 	public static void joueCourir(){
+		if(!Son.sonBruitageActive)
+			return;
+		
 		if(bruitCourir == null)
 			try {
 				bruitCourir = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "courir.wav"));
@@ -209,6 +220,9 @@ public final class Son {
 	 * Méthode statique permettant de jouer le son d'un personnage marchant sur l'herbe
 	 */
 	public static void joueMarcher(){
+		if(!Son.sonBruitageActive)
+			return;
+		
 		if(bruitMarcher == null)
 			try {
 				bruitMarcher = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "marcher.wav"));
@@ -223,6 +237,9 @@ public final class Son {
 	 * Méthode statique permettant de jouer le son d'un héros qui meurt
 	 */
 	private static void joueMourirHeros(){
+		if(!Son.sonBruitageActive)
+			return;
+		
 		if(bruitMortHeros == null)
 			try {
 				bruitMortHeros = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort_heros.wav"));
@@ -237,6 +254,9 @@ public final class Son {
 	 * Méthode statique permettant de jouer le son d'un monstre qui meurt
 	 */
 	private static void joueMourirMonstre(){
+		if(!Son.sonBruitageActive)
+			return;
+		
 		if(bruitMortMonstre == null)
 			try {
 				bruitMortMonstre = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort_monstre.wav"));

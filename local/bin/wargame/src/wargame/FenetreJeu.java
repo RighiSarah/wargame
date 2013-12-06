@@ -121,7 +121,6 @@ public class FenetreJeu extends JFrame
 		}
 	});
 	
-	/* Son */
 	/** Objet Son servant à gérer le son d'arrière plan */
 	private Son sonArriere;
 	
@@ -280,10 +279,12 @@ public class FenetreJeu extends JFrame
 			{ 
 				if(sonArriere.getSonArriereActive()){
 					sonArriere.stopSonArriere();
+					Son.sonBruitageActive = false;
 					son.setText("Activer le son");
 				}
 				else{
 					try {
+						Son.sonBruitageActive = true;
 						sonArriere.joueSonArriere();
 					} catch (MidiUnavailableException e1) {
 						e1.printStackTrace();

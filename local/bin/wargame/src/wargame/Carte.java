@@ -30,10 +30,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 {	
 	private static final long serialVersionUID = 1845646587235566472L;
 
-	protected static int nbHerosRestant;
-	protected static int nbMonstresRestant;
-	protected static int nbSoldatAJouer; 
-	protected static int tour;
+	private int nbHerosRestant;
+	private int nbMonstresRestant;
+	private int nbSoldatAJouer; 
+	private int tour;
 	
 	private CarteListener carteListener;
 	
@@ -41,7 +41,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	private Tileset tileset;
 
 	/** Brouillard. */
-	protected char []brouillard;
+	private char []brouillard;
 	private boolean brouillardActive = true;
 	
 	/** Carte. */
@@ -82,8 +82,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	/** Controle l'affichage ou non du message de victoire ou défaite */
 	private String stringFinJeu = ""; 
 
+	/** Booleen permettant de savoir si on est dans le mode armagedon (tue n'importe quel soldat) */
 	private boolean armagedon = false;
+	/** Booleen permettant de savoir si on est dans le mode qui permet de savoir si on est dans le mode où on peut créer des Monstres au clic */
 	private boolean ajoutMonstre = false;
+	/** Booleen permettant de savoir si on est dans le mode qui permet de savoir si on est dans le mode où on peut créer des Heros au clic */
 	private boolean ajoutHeros = false;
 	
 	/** Constructeur par défaut. 
@@ -110,7 +113,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 		/* Capture d'évènements de la souris. */
 		addMouseListener(new MouseAdapter() {
-			/* Au clic */
+			/* Capture du clic sur la carte */
 			public void mouseClicked(MouseEvent e) { 
 				/* Si la carte n'est pas générée ou que ce n'est pas au tour du joueur alors il n'y a rien à faire donc on quitte */
 				if(!generee || tourJoueur == false)
@@ -118,11 +121,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				
 				/* On crée une position aux coordonnées du clic de la souris pour connaitre la coordonnée de la case (et non pas du pixel) */
 				Position pos = new Position(e.getX() / IConfig.NB_PIX_CASE , e.getY() / IConfig.NB_PIX_CASE);
-				
 				int case_cliquee = pos.getNumCase();
 				
 				/* Pour le mode armagedon */
 				if(armagedon && soldat[case_cliquee] != null && !soldat[case_cliquee].estMort()) {
+					soldat[case_cliquee].setMort(true);
 					
 					if(soldat[case_cliquee] instanceof Heros) 
 						nbHerosRestant--;
@@ -134,12 +137,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 					else if(nbHerosRestant == 0) 
 						joueurPerd();
 					
-					soldat[case_cliquee].setMort(true);
-					
 					return;
 				}
 				
-				/* Pour le cheat d'ajout de monstre */
+				/* Pour le cheat d'ajout de monstre/heros */
 				if( (ajoutMonstre || ajoutHeros) && soldat[case_cliquee] == null && tileset.getTile(carte[case_cliquee]).estPraticable() ) {
 					try {
 						if(ajoutMonstre) {
@@ -171,6 +172,8 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
 					faitReposer(soldat[case_cliquee], true);
 					nbSoldatAJouer--;
+					caseActionnee = -1;
+					return;
 				}
 
 				/* On change de héros si la case n'est pas vide, qu'il s'agit bien d'un soldat et que le soldat est affiché. */

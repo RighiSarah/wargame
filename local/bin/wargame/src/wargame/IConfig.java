@@ -27,9 +27,6 @@ public interface IConfig
 	
 	/** Nom du tileset. */
 	String NOM_TILESET = "tileset.png";
-
-	/** Nom de la fenêtre. */
-	String NOM_FENETRE = "The JAVA War";
 	
 	/** Liste des images des soldats. */
 	String IMAGE_HUMAIN    = "archer.png";
