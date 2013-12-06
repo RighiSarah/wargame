@@ -173,8 +173,15 @@ Lorsque le joueur lance le jeu, nous jouons une musique d'arrière plan choisie 
 Le joueur peut alors lancer une nouvelle partie, ou charger une de ses parties sauvegardées.
 Il peut aussi couper le son via le menu ou un raccourci clavier.
 
-Lorsqu'il est dans une partie, il possède l'historique des actions sur la partie droite de la fenêtre.
-Il peut sauvegarder une partie parmi 10 slots proposés.
+Lorsqu'il est dans une partie, il possède l'historique des actions sur la partie bas-droite de la fenêtre. 
+Cette partie n'affiche qu'une ligne de l'historique. Il est possible de remonter ou de descendre dans en "scrollant" avec la souris.
+Nous pouvons aussi avoir toutes les dernières actions effectuées en mettant la souris sur cette partie bas-droite.
+Une popup s'affichera alors sur la carte présentant l'historique complet.
+
+Le joueur peut aussi sauvegarder une partie parmi 10 slots proposés via la sauvegarde rapide.
+Sinon, il peut choisir un endroit où sauvegarder sa partie via le bouton situé en haut de la fenêtre.
+Il en est de même avec le chargement.
+
 Les héros sont sur la partie droite et les monstres sur la partie gauche. Ils sont tous placés aléatoirement sur la carte.
 
 Le joueur peut déplacer, reposer ou faire combattre chacun de ses heros.
@@ -196,22 +203,19 @@ Sinon il se déplace aléatoirement.
 
 Enfin, lorsque le joueur perd ou gagne, un son est joué et un message apparaît à l'écran. Il ne peut alors plus exécuter d'actions.
 Il faut logiquement qu'il recommence un partie, ou qu'il quitte le jeu.
-%Nous avions réfléchi à implémenter une IA plus évoluée, reposant sur l'algorithme Min-Max couplé à un arbre.
-%Mais pour cela il aurait fallu créer autant d'arbre que de monstres, chaque noeud de l'arbre ayant au minimum 9 fils (car 9 déplacements possibles).
-%Ajoutons à ceci une profondeur minimum de 3 pour avoir une IA qui fasse des actions logiques. Celà fait donc $9^{3}$ * NB_MONSTRES
 
 \section{Organisation}
 Au commencement du projet Ronan a décidé de créer la base de l'interface de la carte.
-En effet, il avait déjà des experiences en 2D et animations.
+En effet, il avait déjà des expériences en 2D et animations.
 Il s'est donc occupé de chercher les images adaptées et de créer les classes correspondantes.
 
 Florian s'est alors chargé de créer la classe Son et de chercher les bruitages et musiques ainsi que de l'implémentation de la classe Position.
 
 La carte créée, Nicolas pouvait créer une classe permettant d'afficher une sorte d'infobulle lorsque la souris passe sur un soldat.
-Via cette classe, des sortes d'infobulles qui montaient ou descendraient pour à la fin disparaitre afin d'afficher l'augmentation des points de vies lors d'un repos ou la diminition de ces derniers après un combat par exemple.
+Via cette classe, des sortes d'infobulles qui montaient ou descendraient pour à la fin disparaître afin d'afficher l'augmentation des points de vies lors d'un repos ou la diminution de ces derniers après un combat par exemple.
 
 En ce qui concerne le reste du projet, tout le monde modifiait tous les fichiers après que l'on se soit convenu des taches de chacun.
-C'est ici que nous nous somes encore rendu compte de l'avantage d'utiliser Git, dans le sens où Carte était un peu le "noyau" du projet et tout le monde devait au moins légèrement modifier cette classe afin d'incorporer les nouvelles fonctionnalités.
+C'est ici que nous nous sommes encore rendu compte de l'avantage d'utiliser Git, dans le sens où Carte était un peu le "noyau" du projet et tout le monde devait au moins légèrement modifier cette classe afin d'incorporer les nouvelles fonctionnalités.
 
 \section{Ressources}
 Nous avons cherché toute documentation et informations concernant le Java sur le cours bien évidemment, mais aussi sur Internet.
@@ -235,9 +239,16 @@ Malheureusement nous nous n'avions pas le temps libre pour implémenter cette fo
 
 \subsection{Analyses personnelles}
   \subsubsection{Abhamon Ronan}
-  Projet sympathique. Cependant très insatisfait d'eclipse, beaucoup d'instabilité sur de nombreux systèmes Unix. Soit je suis maudit, soit c'est réellement le cas. Mise à part ces problèmes, j'ai trouvé une très grande productivité avec swing. Même si je vois Java ainsi que Swing comme une grande usine à gaz, je peux dire qu'en temps de développement, c'est assez rentable. 
+  Projet sympathique. Cependant très insatisfait d'Eclipse, beaucoup d'instabilité sur de nombreux systèmes Unix.
+  Soit je suis maudit, soit c'est réellement le cas.
+  Mise à part ces problèmes, j'ai trouvé une très grande productivité avec Swing.
+  Même si je vois Java ainsi que Swing comme une grande usine à gaz, je peux dire qu'en temps de développement c'est assez rentable. 
 
-  Concernant la POO, je possède des notions par le C++ et Ruby. Java instaure cependant, des concepts que je ne connaissais pas vraiment, j'ai donc pu comprendre plusieurs nouvelles choses par ce projet. Enfin, un grand avantage de la POO dans la conception de ce jeu est de facilement pouvoir décomposer le travail entre chaque personne du groupe. C'est un bon point sachant qu'un développement en C ou en d'autres langages plus bas niveau, il n'est pas évident de s'organiser correctement. Ici il n'est pas necessaire d'être très rigoureux pour avancer.
+  Concernant la POO, je possède des notions par le C++ et Ruby.
+  Java instaure cependant des concepts que je ne connaissais pas vraiment, j'ai donc pu comprendre plusieurs nouvelles choses par ce projet. 
+  Enfin, un grand avantage de la POO dans la conception de ce jeu est de facilement pouvoir décomposer le travail entre chaque personne du groupe.
+  C'est un bon point sachant qu'un développement en C ou en d'autres langages plus bas niveau, il n'est pas évident de s'organiser correctement.
+  Ici il n'est pas nécessaire d'être très rigoureux pour avancer.
 
   \subsubsection{Bigard Florian}
   J'ai trouvé ce projet très intéressant.

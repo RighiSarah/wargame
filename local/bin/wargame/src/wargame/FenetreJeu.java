@@ -125,20 +125,20 @@ public class FenetreJeu extends JFrame
 	/** Objet Son servant à gérer le son d'arrière plan */
 	private Son sonArriere;
 	
-	/* Ajout des trucs stupides */
-	/* Code Konami , Menu triche */
-	int[] toucheKonami = { KeyEvent.VK_UP, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_DOWN, 
+	/** Code Konami, menu triche */
+	private int[] touchesKonami = { KeyEvent.VK_UP, KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_DOWN, 
 		       KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 
 		       KeyEvent.VK_B, KeyEvent.VK_A, KeyEvent.VK_ENTER };
-	int caseActuel = 0;
-	boolean Konami = false;
+	private int caseActuelle = 0;
+	private boolean Konami = false;
 	
-	private JMenu cheat;
-	private JMenuItem gagner;
-	private JMenuItem perdre;
-	private JMenuItem armagedon;
-	private JMenuItem ajoutMonstre;
-	private JMenuItem ajoutHeros;
+	
+	private JMenu menuTriche;
+	private JMenuItem itemGagner;
+	private JMenuItem itemPerdre;
+	private JMenuItem itemArmagedon;
+	private JMenuItem itemAjoutMonstre;
+	private JMenuItem itemAjoutHeros;
 	
 	/**
 	 * Méthode privée permettant de récupérer la date de la dernière modification d'un fichier
@@ -191,8 +191,8 @@ public class FenetreJeu extends JFrame
 		nouveau = new JMenuItem("Nouvelle partie");
 		quitter = new JMenuItem("Quitter");
 		
-		son = new JMenuItem("Désactiver Son");
-		brouillard = new JMenuItem("Désactiver brouillard");
+		son = new JMenuItem("Désactiver le son");
+		brouillard = new JMenuItem("Désactiver le brouillard");
 		
 		sauvegarde = new JMenuItem[IConfig.NB_SAUVEGARDES];
 		slot = new JMenuItem[IConfig.NB_SAUVEGARDES];
@@ -385,7 +385,7 @@ public class FenetreJeu extends JFrame
 		exit = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "exit.png"));
 		exit.setToolTipText("Quitter le jeu"); 
 		 
-		/* Pour économiser les répétitions */
+		/* Pour éviter les répétitions */
 		JButton liste_boutons[] = {boutonCharger, boutonSauvegarder, navigerHistoriquePremier, navigerHistoriquePrecedent, navigerHistoriqueSuivant, navigerHistoriqueDernier, exit};
 		for(JButton bouton : liste_boutons){
 			bouton.setBackground(Color.LIGHT_GRAY);
@@ -507,32 +507,32 @@ public class FenetreJeu extends JFrame
         barreEtat.add(Box.createHorizontalGlue());
         barreEtat.add(historique);
 
-		cheat = new JMenu("Cheat");
+        menuTriche = new JMenu("Cheat");
 		
-		gagner = new JMenuItem("Gagner la partie");
-		perdre = new JMenuItem("Perdre la partie");
-		armagedon = new JMenuItem("Armagedon : Off");
-		ajoutHeros = new JMenuItem("Ajout Heros : Off");
-		ajoutMonstre = new JMenuItem("Ajout Monstre : Off");
+		itemGagner = new JMenuItem("Gagner la partie");
+		itemPerdre = new JMenuItem("Perdre la partie");
+		itemArmagedon = new JMenuItem("Armagedon : Off");
+		itemAjoutHeros = new JMenuItem("Ajout Heros : Off");
+		itemAjoutMonstre = new JMenuItem("Ajout Monstre : Off");
 		
-	    gagner.addActionListener(new ActionListener() {
+		itemGagner.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree())
 	    			carte.joueurGagne();
 	    	}       
 	    });
 
-	    perdre.addActionListener(new ActionListener() {
+	    itemPerdre.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree())
 	    			carte.joueurPerd();
 	    	}       
 	    });
 	    
-	    armagedon.addActionListener(new ActionListener() {
+	    itemArmagedon.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree()) {
-	    			armagedon.setText("Armagedon : " + ((carte.getArmagedon()) ? "Off" : "On") );
+	    			itemArmagedon.setText("Armagedon : " + ((carte.getArmagedon()) ? "Off" : "On") );
 	    			carte.setArmagedon(!carte.getArmagedon());
 	    		}
 	    	}       
@@ -556,16 +556,16 @@ public class FenetreJeu extends JFrame
 //	    	}       
 //	    });
 		
-		cheat.add(gagner);
-		cheat.add(perdre);
-		cheat.addSeparator();
-		cheat.add(armagedon);
-		cheat.addSeparator();
-		cheat.add(ajoutHeros);
-		cheat.add(ajoutMonstre);
-		cheat.setVisible(Konami);
+		menuTriche.add(itemGagner);
+		menuTriche.add(itemPerdre);
+		menuTriche.addSeparator();
+		menuTriche.add(itemArmagedon);
+		menuTriche.addSeparator();
+		menuTriche.add(itemAjoutHeros);
+		menuTriche.add(itemAjoutMonstre);
+		menuTriche.setVisible(Konami);
         
-		menu.add(cheat);
+		menu.add(menuTriche);
 		
 	    /** Capture des actions au clavier */
 		/* Aucun evenement n'est recu par le listener.
@@ -577,7 +577,7 @@ public class FenetreJeu extends JFrame
 		    public void keyPressed(KeyEvent e) {
 		    	int touche = e.getKeyCode();
 		    	
-		    	verifiKonami(touche);
+		    	verifieKonami(touche);
 		    	if(touche == KeyEvent.VK_F1)
 		    		boutonCharger.doClick();
 		    	else if(touche == KeyEvent.VK_F2)
@@ -710,18 +710,19 @@ public class FenetreJeu extends JFrame
 		fenetre.setVisible(true);
 	}
 
-	private boolean verifiKonami(int touchePressee) {
-		if(touchePressee == toucheKonami[caseActuel]) {
-			caseActuel++;
-			if(caseActuel == toucheKonami.length) {
+	private boolean verifieKonami(int touche_pressee) {
+		if(touche_pressee == touchesKonami[caseActuelle]) {
+			caseActuelle++;
+			
+			if(caseActuelle == touchesKonami.length) {
 				Konami = !Konami;
-				cheat.setVisible(Konami);
-				caseActuel = 0;
+				menuTriche.setVisible(Konami);
+				caseActuelle = 0;
 				return true;
 			}
 		}
 		else
-			caseActuel = 0;	 
+			caseActuelle = 0;	 
 
 		return false;
 	}
