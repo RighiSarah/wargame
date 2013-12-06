@@ -578,8 +578,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		
 	   Thread t = new Thread() {
 	          public void run() {
-//	      		for(int i = 0; i < monstre.length; i++)
-//	    			while(monstre[i].getSeDeplace() || Infobulle.aTermine() == false)
 		        for(int i = 0; i < monstre.size() ; i++)
 		        	while(monstre.get(i).getSeDeplace() || Infobulle.aTermine() == false)
 	    			{
@@ -810,7 +808,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 	public void actionPerformed(ActionEvent e) 
 	{	
-
 		if(nbSoldatAJouer == 0 && nbHerosRestant > 0)
 			reinitAJoue();
 		
@@ -853,7 +850,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		return this.generee;
 	}
 	
-	
+	/**
+	 * Méthode à appeler lorsque le joueur à gagné. Déclenche les évènements et affice un message
+	 */
 	public void joueurGagne(){
 		this.carteListener.joueurGagne();
 		
@@ -864,6 +863,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		System.out.println("Vous avez gagné !");
 	}
 	
+	/**
+	 * Méthode à appeler quand le joueur perd. Déclenche les évènements et affice un message
+	 */
 	public void joueurPerd(){
 		this.carteListener.joueurPerd();
 		
@@ -1063,19 +1065,29 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		Position pos = soldat[caseActionnee].getPosition();
 		Position caseArrivee = null;
 		
-		if(tabKey[0]) {			// Si on a haut
-			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y - 1); } 	// Si Haut - Gauche
-			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y - 1); } 	// Si Haut - Droite
-			else				  caseArrivee = new Position(pos.x, pos.y - 1);  		// Si Haut
+		/* Si on a haut */
+		if(tabKey[0]) {	
+			if(tabKey[2]) /* haut gauche */	
+				caseArrivee = new Position(pos.x - 1, pos.y - 1);
+			else if(tabKey[3]) /* haut droite */
+				caseArrivee = new Position(pos.x + 1, pos.y - 1);
+			else /* haut */			  
+				caseArrivee = new Position(pos.x, pos.y - 1);
 		}
-		else if(tabKey[1]) {	// Sinon si on a bas
-			if(tabKey[2]) 		{ caseArrivee = new Position(pos.x - 1, pos.y + 1); } 	// Si Bas - Gauche
-			else if(tabKey[3]) 	{ caseArrivee = new Position(pos.x + 1, pos.y + 1); } 	// Si Bas - Droite
-			else				  caseArrivee = new Position(pos.x, pos.y + 1);			// Si Bas
+		else if(tabKey[1]) { /* Sinon si on a bas */
+			if(tabKey[2]) /* bas gauche */
+				caseArrivee = new Position(pos.x - 1, pos.y + 1);
+			else if(tabKey[3]) /* bas droite */
+				caseArrivee = new Position(pos.x + 1, pos.y + 1);
+			else /* bas */
+				caseArrivee = new Position(pos.x, pos.y + 1);
 		}
-		else if(tabKey[2]) 		  caseArrivee = new Position(pos.x - 1, pos.y);			// Si Gauche
-		else if(tabKey[3]) 		  caseArrivee = new Position(pos.x + 1, pos.y);			// Si Droite	
-		else					  return;
+		else if(tabKey[2]) /* Gauche */	  
+			caseArrivee = new Position(pos.x - 1, pos.y);
+		else if(tabKey[3]) /* Droite */
+			caseArrivee = new Position(pos.x + 1, pos.y);	
+		else					  
+			return;
 		
 		if( caseArrivee.estValide() 
 				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
