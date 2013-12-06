@@ -262,7 +262,8 @@ public class FenetreJeu extends JFrame
 	    nouveau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
-				carte.generer();							
+				carte.generer();	
+				historique.reset();
 				sauvegarder.setEnabled(true);
 				
 			    menu.add(Box.createHorizontalGlue()); 
@@ -678,7 +679,7 @@ public class FenetreJeu extends JFrame
 	    
 	    /* Création de la barre d'état avec ses séparateurs */
         separateurHaut = new JSeparator(SwingConstants.HORIZONTAL);
-        separateurHaut.setBackground(Color.red);
+        separateurHaut.setBackground(Color.black);
        
         separateurBas = new JSeparator(SwingConstants.HORIZONTAL);
         separateurBas.setBackground(Color.black);
@@ -705,12 +706,11 @@ public class FenetreJeu extends JFrame
 	    this.requestFocus();
 	}
 	
-	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
-	{
-		FenetreJeu fenetre = new FenetreJeu();
-		fenetre.setVisible(true);
-	}
-
+	/**
+	 * Méthode privée permettant de vérifier si on actionne le code konami
+	 * @param touche_pressee
+	 * @return False sauf si le code Konami est actionné
+	 */
 	private boolean verifieKonami(int touche_pressee) {
 		if(touche_pressee == touchesKonami[caseActuelle]) {
 			caseActuelle++;
@@ -727,5 +727,11 @@ public class FenetreJeu extends JFrame
 
 		return false;
 	}
+	
+	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
+	{
+		FenetreJeu fenetre = new FenetreJeu();
+		fenetre.setVisible(true);
+	}	
 }
 

@@ -238,12 +238,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	 * @param sold Soldat a deplacer
 	 * @param caseArrivee Case sur laquel finira le soldat
 	 */
-	public void deplaceSoldat(Soldat sold,int caseArrivee) {
-		
-		carteListener.historique(sold.getNom() + " se deplace en " + new Position(caseActionnee) );
+	public void deplaceSoldat(Soldat sold, int caseArrivee) {
+		carteListener.historique(sold.getNom() + " se déplace en " + new Position(caseActionnee) );
 
 		/* On supprime le brouillard du perso */
-		changeBrouillard(sold.getPosition(), sold.getPortee() , -1);		
+		changeBrouillard(sold.getPosition(), sold.getPortee(), -1);		
 		
 		soldat[caseArrivee] = soldat[sold.getPosition().getNumCase()];
 		soldat[sold.getPosition().getNumCase()] = null;
@@ -253,11 +252,8 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		
 		/* on recré le brouillard associé au perso */
 		
-		/* Petit cheat sur new Position(case_cliquee) ;
-		 * étant donné que le mouvement n'est pas encore finis , 
-		 * la position n'est pas mis a jours, cependant ont sait qu'il sera a la position case_cliquee
-		 */
-		changeBrouillard(new Position(caseArrivee), soldat[caseArrivee].getPortee() , 1);
+		 /* Étant donné que le mouvement n'est pas encore fini, la position n'est pas mise à jour, cependant on sait qu'il sera à la position case_cliquee */
+		changeBrouillard(new Position(caseArrivee), soldat[caseArrivee].getPortee(), 1);
 	}
 	
 	/**
@@ -266,7 +262,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	 */
 	protected void onStateRealized(CarteListener l)
 	{
-	 this.carteListener = l;
+		this.carteListener = l;
 	}
 
 	/** 
@@ -366,8 +362,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			soldat[i] = null;
 
 		/* Tableaux de soldats. */
-		//heros = new Heros[IConfig.NB_HEROS];
-		//monstre = new Monstre[IConfig.NB_MONSTRES];
 		heros = new ArrayList<Heros>(); 
 		monstre = new ArrayList<Monstre>(); 
 
@@ -375,83 +369,72 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		try {
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
 			{
-				heros.add(i, new Heros(ISoldat.TypesH.getTypeHAlea()));
-				heros.get(i).setDirection(Direction.GAUCHE);
-
-//				heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea());
-//				heros[i].setDirection(Direction.GAUCHE);
+				/* On trouve une position vide, on créé un héros et on le place */
+				Position pos = new Position(this.trouvePositionVide(Soldat.HEROS));
+				
+				Heros h = new Heros(ISoldat.TypesH.getTypeHAlea());
+				h.setPosition(pos);
+				h.setDirection(Direction.GAUCHE);
+				
+				heros.add(h);
+				soldat[pos.getNumCase()] = h;
 			}
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
 			{
-				monstre.add(i, new Monstre(ISoldat.TypesM.getTypeMAlea()));
-				monstre.get(i).setDirection(Direction.GAUCHE);
-//				monstre[i] = new Monstre(ISoldat.TypesM.getTypeMAlea());
-//				monstre[i].setDirection(Direction.DROITE);
+				/* Idem que pour Heros */
+				Position pos = new Position(this.trouvePositionVide(Soldat.MONSTRE));
+				
+				Monstre m = new Monstre(ISoldat.TypesM.getTypeMAlea());
+				m.setPosition(pos);
+				m.setDirection(Direction.DROITE);
+				
+				monstre.add(m);
+				soldat[pos.getNumCase()] = m;
 			}
 		} 
 		catch(IOException e) {
 			System.out.println(e);
 			return;
 		}	
-
-		/* Positionnement des soldats. */
-		for(int i = 0; i < IConfig.NB_HEROS; i++) {
-			Position pos = new Position(this.trouvePositionVide(Soldat.HEROS));
-			soldat[pos.getNumCase()] = heros.get(i);
-//			soldat[pos.getNumCase()] = heros[i];
-			soldat[pos.getNumCase()].setPosition(pos);
-		}
-
-		for(int i = 0; i < IConfig.NB_MONSTRES; i++) {
-			Position pos = new Position(this.trouvePositionVide(Soldat.MONSTRE));
-			soldat[pos.getNumCase()] = monstre.get(i);
-//			soldat[pos.getNumCase()] = monstre[i];
-			soldat[pos.getNumCase()].setPosition(pos);
-		}
 	}
 
 	/**
 	 *  Méthode générant et initialisant le brouillard 
 	 */
 	private void genererBrouillard() {
-
-		/*initialisation du brouillard [ toutes les cases sont a 0 */
+		/* Initialisation du brouillard (toutes les cases sont à 0) */
 		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE; i++)
 			brouillard[i] = 0;
 		
-		/* Ensuite pour chaque héros [ présent dans le tableau héros on crée le brouillard associé */
+		/* Ensuite pour chaque héros présent dans le tableau héros, on crée le brouillard associé */
 		for(int i = 0; i < IConfig.NB_HEROS; i++) {
 			Heros h = heros.get(i);
 			if(h.estVisible())
 				changeBrouillard(h.getPosition(), h.getPortee(), 1);
 		}
-//			if(heros[i].estVisible()) /* seulement si il est visible */
-//				changeBrouillard(heros[i].getPosition(), heros[i].getPortee(), 1);
-
 	}
 	
 	/** Méthode permetant de crée ( ou retirer ) le brouillard autour d'un soldat
 	 * 
 	 * @param numCase Position du soldat
 	 * @param distance Distance a laquel le soldat peut voir
-	 * @param inc Ici plusieurs cas :
-	 * 					- Si inc = 1, alors on crée du brouillard
-	 * 					- sinon si inc = -1, on retire du brouillard
+	 * @param inc Si inc = 1 alors on crée du brouillard, sinon si inc = -1, on retire du brouillard
 	 */
 	private void changeBrouillard(Position pos, int distance, int inc) {
-		int i = 0;
-		int j = 0;
+		int x = 0, y = 0;
 		
 		Position tmp = null;
 		brouillard[pos.getNumCase()] += inc;
-		for(j = distance; j >= - distance ; j--) 
-			for(i = distance ; i >= -distance ; i--) {
-				tmp = new Position(pos.x + i ,pos.y + j);
+		for(y = distance; y >= - distance; y--) {
+			for(x = distance; x >= -distance; x--) {
+				tmp = new Position(pos.x + x ,pos.y + y);
+				
 				if(tmp.estValide())
 					brouillard[tmp.getNumCase()] += inc;
 			}
-		
+		}
 	}
+	
 	/** Déplace un soldat sur la carte.
 	 * @param soldat    Soldat à deplacer.
 	 * @param direction Direction du soldat.
@@ -463,6 +446,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		Son.joueCourir();
 		soldat.setAJoue(true);
 		nbSoldatAJouer--;
+		
 		int sx = soldat.getPosition().x;
 		int sy = soldat.getPosition().y;
 		int dx = nouvelle_position.x;
@@ -531,11 +515,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		carteListener.deplaceMonstre();
 		tourJoueur = false;
 			
-//		for(int i=0; i < monstre.length; i++) 
 		for(int i=0; i < monstre.size(); i++) 
 		{
 			Monstre m = monstre.get(i);
-//			Monstre m = monstre[i];
 					
 			if(m != null && !m.estMort() && m.estVisible())
 			{					
@@ -619,7 +601,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		tourJoueur = true;
 		nbMonstresRestant = IConfig.NB_MONSTRES;
 		nbHerosRestant = IConfig.NB_HEROS;
-		nbSoldatAJouer = nbHerosRestant - 1;
+		nbSoldatAJouer = nbHerosRestant;
 		
 		stringFinJeu = "";
 		genererCarte();
@@ -814,13 +796,14 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			g.drawString(stringFinJeu, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE ) - (int)( g.getFontMetrics().stringWidth(stringFinJeu) * 1.25) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
 
 		}
+		
 		carteListener.information(nbMonstresRestant + " Monstres restant - " + nbHerosRestant + " Heros restant");
 	}
 
 	public void actionPerformed(ActionEvent e) 
 	{	
 
-		if(nbSoldatAJouer == 0 && nbHerosRestant > 0)	
+		if(nbSoldatAJouer == 0 && nbHerosRestant > 0)
 			reinitAJoue();
 		
 		repaint();
