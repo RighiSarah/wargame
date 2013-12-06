@@ -79,7 +79,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	/** Est-ce au tour de joueur ? */
 	private boolean tourJoueur;
 	
-	/** Controle l'affichage ou non du message de victoire */
+	/** Controle l'affichage ou non du message de victoire ou défaite */
 	private String stringFinJeu = ""; 
 
 	private boolean armagedon = false;
@@ -122,9 +122,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				int case_cliquee = pos.getNumCase();
 				
 				/* Pour le mode armagedon */
-				if(armagedon && soldat[case_cliquee] != null) {
-					if(soldat[case_cliquee].estMort())
-						return;
+				if(armagedon && soldat[case_cliquee] != null && !soldat[case_cliquee].estMort()) {
 					
 					if(soldat[case_cliquee] instanceof Heros) 
 						nbHerosRestant--;
@@ -145,17 +143,19 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				if( (ajoutMonstre || ajoutHeros) && soldat[case_cliquee] == null && tileset.getTile(carte[case_cliquee]).estPraticable() ) {
 					try {
 						if(ajoutMonstre) {
-							nbMonstresRestant++;						
-							monstre.add(heros.size(), new Monstre(ISoldat.TypesM.getTypeMAlea()));
-							monstre.get(heros.size() - 1).setDirection(Direction.DROITE);
-							soldat[case_cliquee] = monstre.get(monstre.size() - 1) ;
+							nbMonstresRestant++;
+							Monstre monstre_cree = new Monstre(ISoldat.TypesM.getTypeMAlea());
+							monstre_cree.setDirection(Direction.DROITE);
+							monstre.add(monstre_cree);
+							soldat[case_cliquee] = monstre_cree;
 						}
 						else {
 							nbHerosRestant++;
-							heros.add(heros.size(), new Heros(ISoldat.TypesH.getTypeHAlea()));
-							heros.get(heros.size() - 1 ).setDirection(Direction.GAUCHE);
-							//soldat[case_cliquee] = Heros.get(Heros.size()) ;
-							soldat[case_cliquee] = heros.get(heros.size() - 1) ;
+							Heros heros_cree = new Heros(ISoldat.TypesH.getTypeHAlea());
+							heros_cree.setDirection(Direction.GAUCHE);
+							
+							heros.add(heros_cree);
+							soldat[case_cliquee] = heros_cree;
 						}
 					} catch (IOException e1) {
 						e1.printStackTrace();
