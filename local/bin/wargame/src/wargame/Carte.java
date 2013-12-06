@@ -928,7 +928,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		
 	/** 
 	 * Change la valeur de la caseActionnée en fonction du numéro d'un héros
-	 * @param numHeros Case Actuel du héros séléctionnée
+	 * @param num_heros Case Actuel du héros séléctionnée
 	 * @return numéro de la case du nouveau héros
 	 */
 	public int trouverProchainHeros(int num_heros) {

@@ -24,12 +24,12 @@ public interface ICarte {
 	Point trouvePositionVide(char type);
 	
 	/** Sauvegarde une carte.
-	 * @param num Chemin de la sauvegarde.
+	 * @param chemin Chemin de la sauvegarde.
 	 */
 	void sauvegarde(String chemin);
 
 	/** Charge une carte.
-	 * @param num Chemin de la sauvegarde.
+	 * @param chemin Chemin de la sauvegarde.
 	 */
 	void charge(String chemin);
 }
