@@ -732,6 +732,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			int dx = coord.x;
 			int dy = coord.y;
 			
+			if(!(soldat[caseActionnee] instanceof Heros))
+				return;
+				
 			if(soldat[caseActionnee].getAJoue())
 				dessineRectangle(g, dx, dy, IConfig.SOLDAT_UTILISE);
 			else {
@@ -1037,6 +1040,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	public void changePos(boolean[] tabKey) {
 		if(caseActionnee == -1 || !generee )
 			return;
+			
+		if(!(soldat[caseActionnee] instanceof Heros))
+			return;
+			
 		Position pos = soldat[caseActionnee].getPosition();
 		Position caseArrivee = null;
 		
