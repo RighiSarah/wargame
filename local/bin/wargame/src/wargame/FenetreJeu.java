@@ -131,7 +131,7 @@ public class FenetreJeu extends JFrame
 		       KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, 
 		       KeyEvent.VK_B, KeyEvent.VK_A, KeyEvent.VK_ENTER };
 	int caseActuel = 0;
-	boolean Konami = false;
+	boolean Konami = true;
 	
 	private JMenu cheat;
 	private JMenuItem gagner;
@@ -538,23 +538,23 @@ public class FenetreJeu extends JFrame
 	    	}       
 	    });
 	    
-//	    ajoutHeros.addActionListener(new ActionListener() {
-//	    	public void actionPerformed(ActionEvent e) {
-//	    		if(carte.isGeneree()) {
-//	    			ajoutHeros.setText("Ajout Heros : " + ((carte.getAjoutHeros()) ? "Off" : "On") );
-//	    			carte.setAjoutHeros(!carte.getAjoutHeros());
-//	    		}
-//	    	}       
-//	    });
-//	    
-//	    ajoutMonstre.addActionListener(new ActionListener() {
-//	    	public void actionPerformed(ActionEvent e) {
-//	    		if(carte.isGeneree()) {
-//	    			ajoutMonstre.setText("Ajout Monstre : " + ((carte.getAjoutMonstre()) ? "Off" : "On") );
-//	    			carte.setAjoutMonstre(!carte.getAjoutMonstre());
-//	    		}
-//	    	}       
-//	    });
+	    ajoutHeros.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if(carte.isGeneree()) {
+	    			ajoutHeros.setText("Ajout Heros : " + ((carte.getAjoutHeros()) ? "Off" : "On") );
+	    			carte.setAjoutHeros(!carte.getAjoutHeros());
+	    		}
+	    	}       
+	    });
+	    
+	    ajoutMonstre.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if(carte.isGeneree()) {
+	    			ajoutMonstre.setText("Ajout Monstre : " + ((carte.getAjoutMonstre()) ? "Off" : "On") );
+	    			carte.setAjoutMonstre(!carte.getAjoutMonstre());
+	    		}
+	    	}       
+	    });
 		
 		cheat.add(gagner);
 		cheat.add(perdre);

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
@@ -48,9 +49,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 	/** Monstres. */
 	private Monstre []monstre;
+	private ArrayList<Monstre> Monstre;
 
 	/** Héros. */
 	private Heros []heros;
+	private ArrayList<Heros> Heros;
 
 	/** Table de jeu de la carte. */
 	private Soldat []soldat;
@@ -134,23 +137,28 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 					return;
 				}
 				
-//				/* Pour le cheat d'ajout de monstre */
-//				if( (ajoutMonstre || ajoutHeros) && soldat[case_cliquee] == null && tileset.getTile(carte[case_cliquee]).estPraticable() ) {
-//					System.out.println("lol");
-//					try {
-//						if(ajoutMonstre) {
-//							nbMonstresRestant++;
-//							monstre[IConfig.NB_MONSTRES + 1] = new Monstre(ISoldat.TypesM.getTypeMAlea());
-//							soldat[case_cliquee] = monstre[IConfig.NB_MONSTRES + 1] ;
-//						}
-//						else {
-//							nbHerosRestant++;
-//							soldat[case_cliquee] = new Heros(ISoldat.TypesH.getTypeHAlea());
-//						}
-//					} catch (IOException e1) {
-//						e1.printStackTrace();
-//					}	
-//				}
+				/* Pour le cheat d'ajout de monstre */
+				if( (ajoutMonstre || ajoutHeros) && soldat[case_cliquee] == null && tileset.getTile(carte[case_cliquee]).estPraticable() ) {
+					System.out.println("lol");
+					try {
+						if(ajoutMonstre) {
+
+							nbMonstresRestant++;						
+							Monstre.add(Heros.size(), new Monstre(ISoldat.TypesM.getTypeMAlea()));
+							Monstre.get(Heros.size() - 1).setDirection(Direction.DROITE);
+							soldat[case_cliquee] = Monstre.get(Monstre.size() - 1) ;
+						}
+						else {
+							nbHerosRestant++;
+							Heros.add(Heros.size(), new Heros(ISoldat.TypesH.getTypeHAlea()));
+							Heros.get(Heros.size() - 1 ).setDirection(Direction.GAUCHE);
+							//soldat[case_cliquee] = Heros.get(Heros.size()) ;
+							soldat[case_cliquee] = Heros.get(Heros.size() - 1) ;
+						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}	
+				}
 				
 				/* On vient de cliquer sur la même case : on veut se reposer */
 				if(case_cliquee == caseActionnee && !soldat[case_cliquee].getAJoue()) {
@@ -356,20 +364,27 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			soldat[i] = null;
 
 		/* Tableaux de soldats. */
-		heros = new Heros[IConfig.NB_HEROS];
-		monstre = new Monstre[IConfig.NB_MONSTRES];
+		//heros = new Heros[IConfig.NB_HEROS];
+		//monstre = new Monstre[IConfig.NB_MONSTRES];
+		Heros = new ArrayList<Heros>(); 
+		Monstre = new ArrayList<Monstre>(); 
 
 		/* Chargement des soldats de base. */
 		try {
 			for(int i = 0; i < IConfig.NB_HEROS; i++)
 			{
-				heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea());
-				heros[i].setDirection(Direction.GAUCHE);
+				Heros.add(i, new Heros(ISoldat.TypesH.getTypeHAlea()));
+				Heros.get(i).setDirection(Direction.GAUCHE);
+
+//				heros[i] = new Heros(ISoldat.TypesH.getTypeHAlea());
+//				heros[i].setDirection(Direction.GAUCHE);
 			}
 			for(int i = 0; i < IConfig.NB_MONSTRES; i++)
 			{
-				monstre[i] = new Monstre(ISoldat.TypesM.getTypeMAlea());
-				monstre[i].setDirection(Direction.DROITE);
+				Monstre.add(i, new Monstre(ISoldat.TypesM.getTypeMAlea()));
+				Monstre.get(i).setDirection(Direction.GAUCHE);
+//				monstre[i] = new Monstre(ISoldat.TypesM.getTypeMAlea());
+//				monstre[i].setDirection(Direction.DROITE);
 			}
 		} 
 		catch(IOException e) {
@@ -380,15 +395,15 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		/* Positionnement des soldats. */
 		for(int i = 0; i < IConfig.NB_HEROS; i++) {
 			Position pos = new Position(this.trouvePositionVide(Soldat.HEROS));
-
-			soldat[pos.getNumCase()] = heros[i];
+			soldat[pos.getNumCase()] = Heros.get(i);
+//			soldat[pos.getNumCase()] = heros[i];
 			soldat[pos.getNumCase()].setPosition(pos);
 		}
 
 		for(int i = 0; i < IConfig.NB_MONSTRES; i++) {
 			Position pos = new Position(this.trouvePositionVide(Soldat.MONSTRE));
-
-			soldat[pos.getNumCase()] = monstre[i];
+			soldat[pos.getNumCase()] = Monstre.get(i);
+//			soldat[pos.getNumCase()] = monstre[i];
 			soldat[pos.getNumCase()].setPosition(pos);
 		}
 	}
@@ -403,9 +418,13 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			brouillard[i] = 0;
 		
 		/* Ensuite pour chaque héros [ présent dans le tableau héros on crée le brouillard associé */
-		for(int i = 0; i < IConfig.NB_HEROS; i++) 
-			if(heros[i].estVisible()) /* seulement si il est visible */
-				changeBrouillard(heros[i].getPosition(), heros[i].getPortee(), 1);
+		for(int i = 0; i < IConfig.NB_HEROS; i++) {
+			Heros h = Heros.get(i);
+			if(h.estVisible())
+				changeBrouillard(h.getPosition(), h.getPortee(), 1);
+		}
+//			if(heros[i].estVisible()) /* seulement si il est visible */
+//				changeBrouillard(heros[i].getPosition(), heros[i].getPortee(), 1);
 
 	}
 	
@@ -510,9 +529,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		carteListener.deplaceMonstre();
 		tourJoueur = false;
 			
-		for(int i=0; i < monstre.length; i++) 
+//		for(int i=0; i < monstre.length; i++) 
+		for(int i=0; i < Monstre.size(); i++) 
 		{
-			Monstre m = monstre[i];
+			Monstre m = Monstre.get(i);
+//			Monstre m = monstre[i];
 					
 			if(m != null && !m.estMort() && m.estVisible())
 			{					
@@ -566,8 +587,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		
 	   Thread t = new Thread() {
 	          public void run() {
-	      		for(int i = 0; i < monstre.length; i++)
-	    			while(monstre[i].getSeDeplace() || Infobulle.aTermine() == false)
+//	      		for(int i = 0; i < monstre.length; i++)
+//	    			while(monstre[i].getSeDeplace() || Infobulle.aTermine() == false)
+		        for(int i = 0; i < Monstre.size() ; i++)
+		        	while(Monstre.get(i).getSeDeplace() || Infobulle.aTermine() == false)
 	    			{
 	    				try {
 							Thread.currentThread();
@@ -755,7 +778,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			if(soldat[i] != null && soldat[i].estVisible())
 			{
 				Position pos = soldat[i].getPosition();
-
 				soldat[i].dessinerAvecOffset(g, pos.x, pos.y, soldat[i].offsetX, soldat[i].offsetY);
 			}
 
