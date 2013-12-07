@@ -836,10 +836,15 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 		/* Affichage des personnages. */
 		for(int i = 0; i < soldat.length; i++)
-			if(soldat[i] != null && soldat[i].estVisible())
+			if(soldat[i] != null)
 			{
-				Position pos = soldat[i].getPosition();
-				soldat[i].dessinerAvecOffset(g, pos.x, pos.y, soldat[i].offsetX, soldat[i].offsetY);
+				if(soldat[i].estMort() && !soldat[i].estVisible()){
+					soldat[i] = null;
+				}
+				else{
+					Position pos = soldat[i].getPosition();
+					soldat[i].dessinerAvecOffset(g, pos.x, pos.y, soldat[i].offsetX, soldat[i].offsetY);
+				}
 			}
 
 		/* Affichage des barres de vie. */
