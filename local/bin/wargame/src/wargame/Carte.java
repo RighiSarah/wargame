@@ -865,9 +865,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		/* Auto gestion de l'affichage de la file de message */
 		Infobulle.dessiner(g);
 		if(!stringFinJeu.isEmpty()) {
+			Color ancienne_couleur = g.getColor();
+			g.setColor(Color.BLACK);
 			g.setFont(new Font("calibri", Font.BOLD, 100));
 			g.drawString(stringFinJeu, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE / 2) - (int)( g.getFontMetrics().stringWidth(stringFinJeu) / 2) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
-
+			g.setColor(ancienne_couleur);
 		}
 		
 		carteListener.information(nbMonstresRestant + " Monstres restant - " + nbHerosRestant + " Heros restant");
@@ -925,9 +927,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		
 		/* Le joueur ne peut plus jouer */
 		tourJoueur = false;
+		caseActionnee = -1;
+		brouillardActive = false;
 		carteListener.historique("Vous avez gagné !");
 		stringFinJeu = "You win !";
-		System.out.println("Vous avez gagné !");
 	}
 	
 	/**
@@ -942,7 +945,6 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		brouillardActive = false;
 		carteListener.historique("Vous avez perdu !");
 		stringFinJeu = "Game Over !";
-		System.out.println("Vous avez perdu !");
 	}
 	
 	/**
