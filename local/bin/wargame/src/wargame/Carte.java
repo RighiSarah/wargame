@@ -131,7 +131,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 						nbHerosRestant--;
 					else 
 						nbMonstresRestant--;
-					
+					caseActionnee = -1;
 					if(nbMonstresRestant == 0) 
 						joueurGagne();
 					else if(nbHerosRestant == 0) 
@@ -741,29 +741,28 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			}
 
 		/* Case sélectionnée. */
-		if(caseActionnee != -1){
+		if(caseActionnee != -1) {
 			Position coord = new Position(caseActionnee);
 			int dx = coord.x;
 			int dy = coord.y;
 			
-			if(!(soldat[caseActionnee] instanceof Heros))
-				return;
-				
-			if(soldat[caseActionnee].getAJoue())
-				dessineRectangle(g, dx, dy, IConfig.SOLDAT_UTILISE);
-			else {
-				for(int i = -1; i <= 1; i++) {
-					for(int j = -1; j <= 1; j++) {
-						int dxc = dx + i;
-						int dyc = dy + j;
-						int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
-
-						if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && soldat[caseVoisine] == null)
-							dessineRectangle(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
+			if(soldat[caseActionnee] instanceof Heros) {		
+				if(soldat[caseActionnee].getAJoue())
+					dessineRectangle(g, dx, dy, IConfig.SOLDAT_UTILISE);
+				else {
+					for(int i = -1; i <= 1; i++) {
+						for(int j = -1; j <= 1; j++) {
+							int dxc = dx + i;
+							int dyc = dy + j;
+							int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
+		
+							if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && soldat[caseVoisine] == null)
+								dessineRectangle(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
+						}
 					}
+		
+					dessineRectangle(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
 				}
-
-				dessineRectangle(g, dx, dy, IConfig.SOLDAT_SELECTIONNEE);
 			}
 		}
 
@@ -799,7 +798,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		Infobulle.dessiner(g);
 		if(!stringFinJeu.isEmpty()) {
 			g.setFont(new Font("calibri", Font.BOLD, 100));
-			g.drawString(stringFinJeu, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE ) - (int)( g.getFontMetrics().stringWidth(stringFinJeu) * 1.25) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
+			g.drawString(stringFinJeu, (IConfig.LARGEUR_CARTE * IConfig.NB_PIX_CASE / 2) - (int)( g.getFontMetrics().stringWidth(stringFinJeu) / 2) , (IConfig.HAUTEUR_CARTE  * IConfig.NB_PIX_CASE )/ 2);
 
 		}
 		
@@ -899,21 +898,19 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			}
 			else if(v == 1) {
 				nbHerosRestant--;
-				caseActionnee = -1;
 				changeBrouillard(defenseur.getPosition(), defenseur.getPortee() , -1);
 			}
 		}
 		else{
 			if(v == -1) {
 				nbHerosRestant--;
-				caseActionnee = -1;
 				changeBrouillard(attaquant.getPosition(), attaquant.getPortee() , -1);
 			}
 			else if(v == 1){
 				nbMonstresRestant--;
 			}
 		}
-		
+		caseActionnee = -1;
 		if(nbMonstresRestant <= 0){
 			joueurGagne();	
 			retour = true;
@@ -981,7 +978,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			}
 			
 			/* On se place sur la case juste au dessus de la position du dessous */
-			for(int y=dessous.y + 1; y<dessus.y && obstacle == false; y++){
+			for(int y = dessous.y + 1; y < dessus.y && obstacle == false; y++){
 				/* Et on vérifie que chaque case entre les deux positions est traversable */
 				Position position_en_cours = new Position(dessus.x, y);
 				int num_tile = carte[position_en_cours.getNumCase()];
@@ -1097,7 +1094,14 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			caseActionnee = -1;
 		}
 	}
-	
+	/** 
+	 * Met la vie de tout les soldats a 1 Point de vie 
+	 */
+	public void mortSubite() {
+		for(int i = 0; i < IConfig.LARGEUR_CARTE * IConfig.HAUTEUR_CARTE; i++)
+				if(soldat[i] != null) 
+					soldat[i].setVie(1);
+	}
 
 	public void setAffichageHistorique(String affichage) {
 		afficheHistorique = affichage;

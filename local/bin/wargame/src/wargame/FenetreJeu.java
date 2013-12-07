@@ -131,7 +131,7 @@ public class FenetreJeu extends JFrame
 	
 	
 	private int caseActuelle = 0;
-	private boolean Konami = true;
+	private boolean Konami = false;
 	
 	private JMenu menuTriche;
 	private JMenuItem itemGagner;
@@ -139,6 +139,7 @@ public class FenetreJeu extends JFrame
 	private JMenuItem itemArmagedon;
 	private JMenuItem itemAjoutMonstre;
 	private JMenuItem itemAjoutHeros;
+	private JMenuItem itemMortSubite;
 	
 	/**
 	 * Méthode privée permettant de récupérer la date de la dernière modification d'un fichier
@@ -517,7 +518,8 @@ public class FenetreJeu extends JFrame
 		itemArmagedon = new JMenuItem("Armagedon : Off");
 		itemAjoutHeros = new JMenuItem("Ajout Heros : Off");
 		itemAjoutMonstre = new JMenuItem("Ajout Monstre : Off");
-		
+		itemMortSubite = new JMenuItem("Mort Subite");
+			
 		itemGagner.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree())
@@ -535,6 +537,9 @@ public class FenetreJeu extends JFrame
 	    itemArmagedon.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree()) {
+	    			if(carte.getAjoutHeros()) itemAjoutHeros.doClick();
+	    			if(carte.getAjoutMonstre()) itemAjoutMonstre.doClick();
+	    			
 	    			itemArmagedon.setText("Armagedon : " + ((carte.getArmagedon()) ? "Off" : "On") );
 	    			carte.setArmagedon(!carte.getArmagedon());
 	    		}
@@ -544,6 +549,9 @@ public class FenetreJeu extends JFrame
 	    itemAjoutHeros.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree()) {
+	    			if(carte.getArmagedon()) itemArmagedon.doClick();
+	    			if(carte.getAjoutMonstre()) itemAjoutMonstre.doClick();
+	    			
 	    			itemAjoutHeros.setText("Ajout Heros : " + ((carte.getAjoutHeros()) ? "Off" : "On") );
 	    			carte.setAjoutHeros(!carte.getAjoutHeros());
 	    		}
@@ -553,9 +561,19 @@ public class FenetreJeu extends JFrame
 	    itemAjoutMonstre.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
 	    		if(carte.isGeneree()) {
+	    			if(carte.getArmagedon()) itemArmagedon.doClick();
+	    			if(carte.getAjoutHeros()) itemAjoutHeros.doClick();
+	    			
 	    			itemAjoutMonstre.setText("Ajout Monstre : " + ((carte.getAjoutMonstre()) ? "Off" : "On") );
 	    			carte.setAjoutMonstre(!carte.getAjoutMonstre());
 	    		}
+	    	}       
+	    });
+	    
+		itemMortSubite.addActionListener(new ActionListener() {
+	    	public void actionPerformed(ActionEvent e) {
+	    		if(carte.isGeneree())
+	    			carte.mortSubite();
 	    	}       
 	    });
 		
@@ -566,6 +584,9 @@ public class FenetreJeu extends JFrame
 		menuTriche.addSeparator();
 		menuTriche.add(itemAjoutHeros);
 		menuTriche.add(itemAjoutMonstre);
+		menuTriche.addSeparator();
+		menuTriche.add(itemMortSubite);
+		
 		menuTriche.setVisible(Konami);
         
 		menu.add(menuTriche);
