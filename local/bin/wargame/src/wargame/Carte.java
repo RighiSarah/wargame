@@ -35,6 +35,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	private int nbSoldatAJouer; 
 	private int tour;
 	
+	/** Listener de la carte */
 	private CarteListener carteListener;
 	
 	/** Tileset de la carte. */
@@ -62,9 +63,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	/** La carte est-elle générée ? */
 	private boolean generee = false;
 
-	/** Indique la case courante sélectionnée.
-	 * Correspond également au soldat selectionné dans le combat.
-	 */
+	/** Indique la case courante sélectionnée. Correspond également au soldat selectionné dans le combat. */
 	private int caseActionnee = -1;
 	
 	/** Indique le soldat actuellement pointé par le curseur de la souris */
@@ -111,7 +110,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		brouillard = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];
 		
 		/* Image de présentation, avant donc que la carte ne soit générée */
-		imagePresentation = new JLabel(new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation.png"));
+		imagePresentation = new JLabel(new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation2.png"));
 		this.add(imagePresentation);
 
 		/* Capture d'évènements de la souris. */
@@ -134,7 +133,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 						nbHerosRestant--;
 					else 
 						nbMonstresRestant--;
+					
 					caseActionnee = -1;
+					
 					if(nbMonstresRestant == 0) 
 						joueurGagne();
 					else if(nbHerosRestant == 0) 
@@ -199,14 +200,12 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							&& soldat[case_cliquee].estVisible()
 							&& !soldat[case_cliquee].estMort() 
 						) {
-							if(obstacleEntreCase(soldat[caseActionnee].getPosition(), soldat[case_cliquee].getPosition())){
+							if(!obstacleEntreCase(soldat[caseActionnee].getPosition(), soldat[case_cliquee].getPosition())){			
+								faitCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
+								nbSoldatAJouer--;
+	
 								return;
 							}
-						
-							faitCombattre(soldat[caseActionnee], soldat[case_cliquee], distance);
-							nbSoldatAJouer--;
-
-							return;
 						}
 
 						/* On a un soldat selectionné et on clique sur une case autour (à une distance de 1 autour du soldat)
@@ -297,7 +296,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	}
 
 	/**
-	 *  Méthode générant la carte 
+	 *  Méthode générant les éléments de la carte 
 	 */
 	private void genererCarte()
 	{
@@ -499,7 +498,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 	/**
 	 *  Retourne la position du premier héros trouvé aux alentours de p. Null si il n'y en as pas 
-	 *  @param pos Position du soldat où chercher aux alentours
+	 *  @param p Position du soldat où chercher aux alentours
 	 *  @param portee Nombre de cases du rayon où on cherche
 	 */
 	private Position herosAlentour(Position p, int portee){
@@ -605,6 +604,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			}
 		}
 		
+	   /* On déclenche un évènement pour prévenir losque tous les monstres ont joué et que toutes les infobulles sont apparues */
 	   Thread t = new Thread() {
 	          public void run() {
 		        for(int i = 0; i < monstre.size() ; i++)
@@ -1157,7 +1157,8 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		if( caseArrivee.estValide() 
 				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
 				&& soldat[caseArrivee.getNumCase()] == null
-				&& !soldat[caseActionnee].getAJoue()) {
+				&& !soldat[caseActionnee].getAJoue()) 
+		{
 			deplaceSoldat(soldat[caseActionnee], caseArrivee);
 			caseActionnee = -1;
 		}
