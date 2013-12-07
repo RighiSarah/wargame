@@ -129,10 +129,13 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				if(armagedon && soldat[case_cliquee] != null && !soldat[case_cliquee].estMort()) {
 					soldat[case_cliquee].setMort(true);
 					
-					if(soldat[case_cliquee] instanceof Heros) 
+					if(soldat[case_cliquee] instanceof Heros){
 						nbHerosRestant--;
-					else 
+						changeBrouillard(soldat[case_cliquee].getPosition(), soldat[case_cliquee].getPortee(), -1);
+					}
+					else{ 
 						nbMonstresRestant--;
+					}
 					
 					caseActionnee = -1;
 					
@@ -215,7 +218,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							&& tileset.getTile(carte[case_cliquee]).estPraticable() 
 							&& ( soldat[case_cliquee] == null || soldat[case_cliquee].estMort() ) && !soldat[caseActionnee].getAJoue()
 						) {
-							 deplaceSoldat(soldat[caseActionnee], new Position(case_cliquee));
+							 try {
+								deplaceSoldat(soldat[caseActionnee], new Position(case_cliquee));
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
 						}
 					}
 					
@@ -432,13 +439,17 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	}
 	
 
-	/**
-	 * Déplace un soldat sur la carte
-	 * @param sold Le soldat à déplacer
-	 * @param nouvelle_position La nouvelle position du soldat
+	/** 
+	 * Regenere le brouillard du au déplacement s'il s'agit d'un héros et deplace le soldat
+	 * @param sold Soldat a deplacer
+	 * @param nouvelle_position Case sur laquelle finira le soldat
+	 * @throws Exception Levée lorsque la nouvelle position est invalide
 	 */
-	public void deplaceSoldat(Soldat sold, Position nouvelle_position)
+	public void deplaceSoldat(Soldat sold, Position nouvelle_position) throws Exception
 	{
+		if(!nouvelle_position.estValide())
+			throw new Exception("La nouvelle position est invalide");
+		
 		/* Le brouillard est changé que lorsque c'est un héros qui joue */
 		boolean changer_brouillard = false;
 		if(sold instanceof Heros)
@@ -555,8 +566,13 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 						/* On récupère une position aléatoire valide. 
 						 * Si elle n'est pas null (donc impossible de se déplacer), alors on déplace le soldat vers cette nouvelle position */
 						Position nouvelle_position = trouvePositionAleatoire(m);
-						if(nouvelle_position != null)
-							deplaceSoldat(m, nouvelle_position);
+						if(nouvelle_position != null){
+							try {
+								deplaceSoldat(m, nouvelle_position);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
 					}
 					/* Sinon on choisit de se déplacer vers un des héros ciblés le plus proches possibles */
 					else{
@@ -591,13 +607,21 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 								&& soldat[nouvelle_position.getNumCase()] == null && 
 								tileset.getTile(carte[nouvelle_position.getNumCase()]).estPraticable()
 						){
-							deplaceSoldat(m, nouvelle_position);
+							try {
+								deplaceSoldat(m, nouvelle_position);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
 						/* Sinon on se déplace aléatoirement */
 						else{
 							nouvelle_position = trouvePositionAleatoire(m);
 							if(nouvelle_position != null)
-								deplaceSoldat(m, nouvelle_position);
+								try {
+									deplaceSoldat(m, nouvelle_position);
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
 						}
 					}
 				}
@@ -959,7 +983,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	 * @param distance La distance qui sépare les deux soldats
 	 * @return Vrai si une des deux armées a gagné, faux sinon
 	 */
-	public boolean faitCombattre(Soldat attaquant, Soldat defenseur, int distance){
+	public boolean faitCombattre(Soldat attaquant, Soldat defenseur, int distance) {		
 		boolean retour = false;
 		
 		/* On commence à faire tourner l'attaquant dans la direction du defenseur (juste la première direction, les images ne gérant pas les diagonales */
@@ -1166,7 +1190,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				&& soldat[caseArrivee.getNumCase()] == null
 				&& !soldat[caseActionnee].getAJoue()) 
 		{
-			deplaceSoldat(soldat[caseActionnee], caseArrivee);
+			try {
+				deplaceSoldat(soldat[caseActionnee], caseArrivee);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			caseActionnee = -1;
 		}
 	}

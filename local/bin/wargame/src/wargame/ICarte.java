@@ -7,11 +7,12 @@ import java.awt.Point;
  */
 public interface ICarte {
 	/** 
-	 * Regenere le brouillard du au déplacement et deplace le soldat
+	 * Regenere le brouillard du au déplacement s'il s'agit d'un héros et deplace le soldat
 	 * @param sold Soldat a deplacer
 	 * @param nouvelle_position Case sur laquelle finira le soldat
+	 * @throws Exception Levée lorsque la nouvelle position est invalide
 	 */
-	public void deplaceSoldat(Soldat sold, Position nouvelle_position);
+	public void deplaceSoldat(Soldat sold, Position nouvelle_position) throws Exception;
 	
 	/** Genere aléatoirement une carte. */
 	void generer();

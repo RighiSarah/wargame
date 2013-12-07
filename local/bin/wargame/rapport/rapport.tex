@@ -77,6 +77,7 @@ En étudiant de plus près le sujet, plusieurs classes décrivant plusieurs él�
          \item Carte qui représente la carte du jeu avec les actions associées
          \item Heros et Monstre qui comprennent les méthodes spécifiques à ces deux types d'objet
          \item Position permettant de connaître les positions des soldats sur la carte
+	 \item Historique permettant de conserver un historique des actions faites sur l'objet Carte (par exemple)
         \end{itemize}
 \end{itemize}
 
@@ -94,26 +95,33 @@ Pour ce faire, il nous fallait créer plusieurs classe :
      \item Gauche
    \end{itemize}
    Ainsi que de 4 animations de déplacements. Un charset est aussi caractérisé par une vitesse de déplacement et de visibilité sur la carte. Enfin Soldat hérite de cette classe.
+ \item Infobulle permettant de dessiner une infobulle sur la Carte
 \end{itemize}
 
 \paragraph{}
-Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant et animé. Il nous fallait donc en plus créer une classe Son.
+Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant et animé. 
+Il nous fallait donc en plus créer une classe Son. 
+Elle implémente des méthodes statiques permettant de jouer des bruitages, mais peut également être instanciée afin de gérer le son en arrière plan.
 
-% Schema des classes !!!
+\paragraph{}
+Nous avons créé le schéma UML des classes de notre projet, mais celui-ci étant trop imposant nous avons décidé de ne pas l'inclure dans notre rapport.
+Vous pouvez donc le trouver dans le même dossier que ce dernier.
 
 \section{Techniques}
   \subsection{Environnement de travail}
   Nous codons sous le système d'exploitation GNU/Linux avec la version 7 d'OpenJDK. \\
   Nous avons décidé d'utiliser Eclipse car c'est l'IDE dont nous avons appris à nous servir en TP.
-  De plus (quand on oublie ses nombreux crash, si on parvient à l'installer et si on a le temps suffisant pour l'exécuter), il fait bien son travail.
+  De plus (quand on oublie ses nombreux crash, si on parvient à l'installer et si on suffisamment de temps devant nous pour l'exécuter), il fait bien son travail.
   
   Concernant le partage des sources, nous avions déjà expérimenté l'outil de versionnage Git couplé à GitHub et cela avait très bien fonctionné.
-  Nous avons donc décidé de réutiliser cette méthode malgré la menace qu'un autre groupe puisse nous plagier. Mais bon, il fallait d'abord qu'ils sachent que nous faisions notre projet sous GitHub, puis trouver nos pseudo.
-  De plus, avec l'historique des commit nous pouvions faire preuve de notre bonne fois.
+  Nous avons donc décidé de réutiliser cette méthode malgré la menace qu'un autre groupe puisse nous plagier. 
+  Mais bon, il fallait d'abord qu'ils sachent que nous faisions notre projet sous GitHub, puis trouver nos pseudo.
+  De plus, avec l'historique des commit nous pouvions faire preuve de notre bonne foi.
 
 
 \subsection{Classes Java utilisées}
-  \subsubsection{Classes graphiques} Nous avons décidé d'utiliser Swing comme classes graphiques. % Merci Ronan de continuer
+  \subsubsection{Classes graphiques} Nous avons décidé d'utiliser Swing pour notre interface graphique.
+  Nous avons déjà décrit le fonctionnement dans la partie concernant l'analyse du projet.
   
   \subsubsection{Classes pour gérer le son}
   Pour gérer le son, nous avons dû plus ou moins ruser.
@@ -134,8 +142,8 @@ Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant
   
   Nous pouvons aussi citer Carte qui hérite d'un JPanel et la fenêtre principale qui hérite de JFrame.
   
-  Nous joignons avec le rapport le schéma UML de notre projet, intégrant les méthodes publiques et représetant les différents héritages.
-  Nous n'avons malheureusment pas pu incorporer le schéma dans le rapport car la taille de celui-ci est trop importante 
+  Nous joignons avec le rapport le schéma UML de notre projet, intégrant les méthodes publiques et représentant les différents héritages.
+  Nous n'avons malheureusement pas pu incorporer le schéma dans le rapport car la taille de celui-ci est trop importante 
   
   \subsection{Polymorphisme}
   Soldat implémente les principales méthodes de Monstre et Heros.
@@ -151,6 +159,8 @@ Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant
   La classe Son implémente aussi quelques gestions d'exceptions.
   En effet, nous vérifions qu'un son midi est bien trouvé, que celui-ci est bien chargé et qu'il n'y a pas d'erreur lorsqu'on le joue.
   De même, pour les sons wav nous vérifions à l'aide des exceptions que le son est chargé correctement.
+  
+  Nous créons de la même façon des exceptions lorsqu'on veut afficher le premier ou dernier message d'un historique vide, ou si nous tentons de déplacer un soldat hors de la carte.
 
   \subsection{Événements}
   Lors du déroulement du projet, nous nous sommes heurtés à un problème.
@@ -165,7 +175,7 @@ Nous nous sommes aussi dis que des sons rendraient le jeu beaucoup plus plaisant
     Le soucis était donc que Carte et FenetreJeu étaient liés. Et une modification du bouton de FenetreJeu entraînait une modification alors une modification Carte.
     \item Passer par un événement. Lorsque Carte a fini de faire jouer les monstres, il déclenche un événement que FenetreJeu attrape.
     Lorsqu'il reçoit cet événement, il réactive tout simplement ce bouton. Cette méthode était à notre sens la meilleur solution.
-    En effet, si nous décidions de ne plus avoir besoin de savoir quand les monstes avaient terminé leur tours, il nous suffisait pas exemple d'ignorer cet événement.
+    En effet, si nous décidions de ne plus avoir besoin de savoir quand les monstres avaient terminé leur tours, il nous suffisait pas exemple d'ignorer cet événement.
   \end{itemize}
  
 
@@ -182,7 +192,7 @@ Le joueur peut alors lancer une nouvelle partie, ou charger une de ses parties s
 Il peut aussi couper le son via le menu ou un raccourci clavier.
 
 Lorsqu'il est dans une partie, il possède l'historique des actions sur la partie bas-droite de la fenêtre. 
-Cette partie n'affiche qu'une ligne de l'historique. Il est possible de remonter ou de descendre dans en "scrollant" avec la souris.
+Cette partie n'affiche qu'une ligne de l'historique. Il est possible de remonter ou de descendre dans celui-ci en "scrollant" avec la souris.
 Le joueur peut aussi défiler dans l'historique via les boutons situés en haut de la fenêtre.
 Nous pouvons aussi avoir toutes les dernières actions effectuées en mettant la souris sur cette partie bas-droite.
 Une popup s'affichera alors sur la carte présentant l'historique complet.
@@ -192,29 +202,54 @@ Sinon, il peut choisir un endroit où sauvegarder sa partie via le bouton situé
 Il en est de même avec le chargement.
 
 Les héros sont sur la partie droite et les monstres sur la partie gauche. Ils sont tous placés aléatoirement sur la carte.
+Un brouillard est créé (et désactivable) en fonction des la position et de la portée des héros. Cela a pour but de cacher les ennemis hors de la zone des héros.
 
-Le joueur peut déplacer, reposer ou faire combattre chacun de ses heros.
+Le joueur peut déplacer, reposer ou faire combattre chacun de ses héros.
 Pour cela, il doit cliquer sur son héros. Nous avons aussi ajouté la possibilité pour le joueur de diriger ses héros au clavier.
 Il peut alors utiliser la touche TAB pour changer de héros sélectionné, puis les touches directionnelles pour déplacer son héros.
 Les cases où le joueur peut déplacer son héros sont en surbrillance.
 Lorsqu'il passe sa souris sur un soldat, une infobulle apparaît pour donner ses caractéristiques.
-Il est possible de reposer son heros en cliquant sur lui-même après l'avoir sélectionné, ou bien en ne déclenchant aucune action sur ce dernier à la fin du tour.
+Il est possible de reposer son héros en cliquant sur lui-même après l'avoir sélectionné, ou bien en ne déclenchant aucune action sur ce dernier à la fin du tour.
 Lorsque le joueur déplace ou fait combattre son soldat, des bruitages sont joués.
 En effet, si le soldat combat à plus d'une case d'un autre soldat, un bruit d'arc est exécuté.
 Si c'est du corps à corps c'est un bruit d'épée.
 
+Si le joueur a fait jouer tous ses soldats, le tour est automatiquement terminé. 
+Sinon, si le joueur clique sur le bouton fin de tour alors qu'il lui restait des héros à jouer, ces derniers se reposent automatiquement
+
 Lorsqu'un soldat meurt, selon que c'est un monstre ou un héros un bruitage de cri est exécuté.
 De plus, il tourne sur lui-même avant de disparaître.
 
-Concernant l'intelligence artificielle des monstres, celle-ci est basique.
-Si un monstre possède peu de points de vie, il se repose.
-Sinon s'il voit un ennemi à sa porté il l'attaque.
-Sinon il se déplace aléatoirement.
+Concernant l'intelligence artificielle des monstre, l'algorithme est le suivant :
+\begin{itemize}
+ \item Si un monstre possède peu de points de vie, il se repose.
+ \item Sinon s'il voit un ennemi à sa porté il l'attaque.
+ \item Sinon il se déplace.
+\end{itemize}
+Nous allons détailler un peu plus le déplacement d'un monstre.
+Lorsqu'un monstre attaque un héros, ce héros fait parti de cibles alors potentielles pour les monstres.
+C'est pourquoi lorsqu'un monstre doit se déplacer, si il n'y a aucun héros ciblés alors il se déplace aléatoirement. 
+Sinon il se déplace vers une des cibles la plus proche de lui sauf si le chemin est bloqué (dans ce cas il se déplace là aussi aléatoirement). 
+Cela a pour but de créer un attroupement de monstres vers les héros qui se font attaquer.
+Le joueur doit donc établir des stratégies, voir créer des "appâts" afin de triompher.
+Nous pensons aussi que ceci correspond au monde du Seigneur des Anneaux, les monstres se déplaçant souvent en groupe pour tuer.
 
 Enfin, lorsque le joueur perd ou gagne, un son est joué et un message apparaît à l'écran. Il ne peut alors plus exécuter d'actions.
 Il faut logiquement qu'il recommence un partie, ou qu'il quitte le jeu.
 
-% Enfin nous avons rajouté un menu triche...
+Nous avons aussi rajouté le fait de pouvoir tricher. 
+En actionnant le code Konami (haut haut bas bas gauche droite gauche droite puis entrée) il est possible d'avoir un menu spécial.
+Via ce dernier, on peut :
+\begin{itemize}
+ \item Gagner automatiquement la partie
+ \item Perdre automatiquement la partie
+ \item Tuer n'importe quel soldat sur lequel on clique
+ \item Ajouter un héros sur la case libre sur laquelle on clique
+ \item Ajouter un monstre sur la case libre sur laquelle on clique
+ \item Mettre tous les points de vie de tous les soldats à 1
+\end{itemize}
+
+
 
 \section{Organisation}
 Au commencement du projet Ronan a décidé de créer la base de l'interface de la carte.
@@ -225,8 +260,9 @@ Florian s'est alors chargé de créer la classe Son et de chercher les bruitages
 
 La carte créée, Nicolas pouvait créer une classe permettant d'afficher une sorte d'infobulle lorsque la souris passe sur un soldat.
 Via cette classe, des sortes d'infobulles qui montaient ou descendraient pour à la fin disparaître afin d'afficher l'augmentation des points de vies lors d'un repos ou la diminution de ces derniers après un combat par exemple.
+Il a aussi tenu à créer un menu de triche activable via le code Konami.
 
-En ce qui concerne le reste du projet, tout le monde modifiait tous les fichiers après que l'on se soit convenu des taches de chacun.
+En ce qui concerne le reste du projet, tout le monde modifiait tous les fichiers après que l'on se soit convenu des tâches de chacun.
 C'est ici que nous nous sommes encore rendu compte de l'avantage d'utiliser Git, dans le sens où Carte était un peu le "noyau" du projet et tout le monde devait au moins légèrement modifier cette classe afin d'incorporer les nouvelles fonctionnalités.
 
 \section{Ressources}
@@ -244,7 +280,7 @@ Dans cette conclusion, nous allons chacun notre tour donner notre impression sur
 Nous trouvons que notre interface graphique constitue le point fort de notre projet. En effet, nous l'avons beaucoup travaillé.
 Nous avons essayé de faire quelque chose de joli, en 2D avec des "effets" lorsqu'il y a des actions.
 
-Nous trouvons que le point faible du projet reste l'intelligence artificielle assez limitée des monstres.
+Nous trouvons que le point faible du projet peut-être l'intelligence artificielle, même si d'un point de vu logique les monstres du Seigneur des Anneaux sont pas bien intelligents.
 
 Nous aurions voulu créer une fenêtre d'options permettant au joueur de configurer le jeu comme il le souhaite (nombre de monstres, taille de la carte...).
 Malheureusement nous nous n'avions pas le temps libre pour implémenter cette fonctionnalité.
@@ -267,21 +303,20 @@ Malheureusement nous nous n'avions pas le temps libre pour implémenter cette fo
   Faire un jeu est assez plaisant, surtout qu'il s'agit d'un domaine que j'aime bien (les jeux de stratégie et le Seigneur des Anneaux).
   Je connaissais déjà la POO avant ce cours, mais pas aussi poussé et j'avais beaucoup moins la logique POO.
 
-  Au final je peux affirmer que la POO est un concept qui me plait beaucoup, car il est bien plus facile de séparer le travail lorsque nous travaillons en groupe.
+  Au final je peux affirmer que la POO est un concept qui me plaît beaucoup, car il est bien plus facile de séparer le travail lorsque nous travaillons en groupe.
   De plus, je trouve que le programme final est beaucoup plus facile à faire évoluer ou à corriger si on considère qu'il a été bien conçu au départ.
 
   \subsubsection{Reynaud Nicolas}
   Pour ma part, le choix du sujet et donc le projet était très intéressant.
-  Ceci nous a permis de voir des aspectes peut ou pas vue en cours. Comme par exemple créer une file de message.
-  Qui plus est, j'ai trouvé que coder sous éclipse était vraiment très pratique et m'a permis de coder plus rapidement. Bien que celui-ci ne soit pas très stable
-  et fort couteux en ressource.
+  Ceci nous a permis de voir des aspects peu ou pas vue en cours comme par exemple de créer une file de message.
+  Qui plus est, j'ai trouvé que coder sous Eclipse était vraiment très pratique et m'a permis de coder plus rapidement. 
+  Bien que celui-ci ne soit pas très stable et fort coûteux en ressource.
 
-  Ensuite, j'ai également apprécié la ``liberté'' que nous avions sur le projet. Ceci m'a permis d'inclure une chose que j'apprécis énormément,
-  les cheats code [ que je vous invite a découvrir / tester ]. Mais également de sans cesse chercher des améliorations. Et de les implémenter assez rapidement 
-  [ comme l'animation de gain/perte de point de vie].
+  Ensuite, j'ai également apprécié la "liberté" que nous avions sur le projet. 
+  Ceci m'a permis d'inclure une chose que j'apprécie énormément : les codes triche (que je vous invite a découvrir et à tester).
+  Mais cela m'a également permis de sans cesse chercher des améliorations puis de les implémenter (comme l'animation de gain/perte de point de vie).
 
-  En somme, j'ai réellement apprécié ce sujet tant par l'aspect technique [ coder en Java et de façon assez rapide pour chaque module ], 
-  que sur l'aspect relationnel [ Codage en groupe ].
+  En somme, j'ai réellement apprécié ce sujet tant par l'aspect technique (coder en Java et de façon assez rapide pour chaque module), que sur l'aspect relationnel (codage en groupe).
 
   
 
