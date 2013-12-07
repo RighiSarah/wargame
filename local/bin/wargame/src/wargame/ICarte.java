@@ -9,9 +9,9 @@ public interface ICarte {
 	/** 
 	 * Regenere le brouillard du au déplacement et deplace le soldat
 	 * @param sold Soldat a deplacer
-	 * @param caseArrivee Case sur laquel finira le soldat
+	 * @param nouvelle_position Case sur laquelle finira le soldat
 	 */
-	public void deplaceSoldat(Soldat sold,int caseArrivee);
+	public void deplaceSoldat(Soldat sold, Position nouvelle_position);
 	
 	/** Genere aléatoirement une carte. */
 	void generer();

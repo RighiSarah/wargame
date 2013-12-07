@@ -1,6 +1,7 @@
 package wargame;
 
 import java.awt.Point;
+import java.util.ArrayList;
 
 import wargame.Charset.Direction;
 
@@ -104,33 +105,36 @@ public class Position extends Point implements IConfig{
 	
 	
 	/**
-	 * Méthode retournant la direction vers une autre position. Si c'est en diagonale, ce sera une des deux directions.
+	 * Méthode retournant les directions vers une autre position. Si c'est en diagonale, ce sera une liste de deux directions (au lieu d'une)
 	 * Ex : diagonale haut droite, la méthode retournera soit haut soit droite
 	 * @param pos La position dont on se demande la direction
-	 * @return Une direction 
+	 * @return Une liste de direction (par exemple, juste HAUT ou bien HAUT, DROITE pour une direction en haut à droite
 	 */
-	public Direction direction(Position pos){
+	public ArrayList<Direction> direction(Position pos){
 		int sx = x;
 		int sy = y;
 		int dx = pos.x;
 		int dy = pos.y;
 		
-		Direction direction = Direction.HAUT;
+		ArrayList<Direction> directions = new ArrayList<Direction>();
 
 		if(dx > sx) {
-			direction = Direction.DROITE;
+			directions.add(Direction.DROITE);
 		}
 		else if(dx < sx) {
-			direction = Direction.GAUCHE;
+			directions.add(Direction.GAUCHE);
 		}
 		if(dy > sy) {
-			direction = Direction.BAS;
+			directions.add(Direction.BAS);
 		}
 		else if(dy < sy) {
-			direction = Direction.HAUT;
+			directions.add(Direction.HAUT);
 		}
 		
-		return direction;
+		if(directions.isEmpty())
+			directions.add(Direction.HAUT);
+		
+		return directions;
 	}
 	
 	/**

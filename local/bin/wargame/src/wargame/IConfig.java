@@ -122,10 +122,7 @@ public interface IConfig
 	/** Nombre maximum de message dans la file de l'historique */
 	int TAILLE_MAX_HISTORIQUE = 50;
 
-	/** 
-	 * Configure l'affichage réel du brouillard.
-	 * L'affichage Reel étant l'affichage en forme de losange
-	 */
+	/** Configure l'affichage réel du brouillard (affichage en forme de losange) */
 	boolean AFFICHAGE_REEL_BROUILLARD = false;
     
 }

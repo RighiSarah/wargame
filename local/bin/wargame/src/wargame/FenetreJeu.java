@@ -131,7 +131,7 @@ public class FenetreJeu extends JFrame
 	
 	
 	private int caseActuelle = 0;
-	private boolean Konami = false;
+	private boolean konami = false;
 	
 	private JMenu menuTriche;
 	private JMenuItem itemGagner;
@@ -587,7 +587,7 @@ public class FenetreJeu extends JFrame
 		menuTriche.addSeparator();
 		menuTriche.add(itemMortSubite);
 		
-		menuTriche.setVisible(Konami);
+		menuTriche.setVisible(konami);
         
 		menu.add(menuTriche);
 		
@@ -738,8 +738,8 @@ public class FenetreJeu extends JFrame
 			caseActuelle++;
 			
 			if(caseActuelle == touchesKonami.length) {
-				Konami = !Konami;
-				menuTriche.setVisible(Konami);
+				konami = !konami;
+				menuTriche.setVisible(konami);
 				caseActuelle = 0;
 				return true;
 			}

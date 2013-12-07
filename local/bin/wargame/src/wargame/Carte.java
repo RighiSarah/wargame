@@ -52,6 +52,9 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 
 	/** Héros. */
 	private ArrayList<Heros> heros;
+	
+	/** Héros ciblés par les monstres */
+	private ArrayList<Heros> herosCibles = new ArrayList<Heros>();
 
 	/** Table de jeu de la carte. */
 	private Soldat []soldat;
@@ -213,7 +216,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							&& tileset.getTile(carte[case_cliquee]).estPraticable() 
 							&& ( soldat[case_cliquee] == null || soldat[case_cliquee].estMort() ) && !soldat[caseActionnee].getAJoue()
 						) {
-							 deplaceSoldat(soldat[caseActionnee],case_cliquee);
+							 deplaceSoldat(soldat[caseActionnee], new Position(case_cliquee));
 						}
 					}
 					
@@ -241,26 +244,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		});
 	}
 	
-	/** 
-	 * Regenere le brouillard du au déplacement et deplace le soldat
-	 * @param sold Soldat a deplacer
-	 * @param caseArrivee Case sur laquel finira le soldat
-	 */
-	public void deplaceSoldat(Soldat sold, int caseArrivee) {
-		carteListener.historique(sold.getNom() + " se déplace en " + new Position(caseActionnee) );
-
-		/* On supprime le brouillard du perso */
-		changeBrouillard(sold.getPosition(), sold.getPortee(), -1);		
-		
-		soldat[caseArrivee] = soldat[sold.getPosition().getNumCase()];
-		soldat[sold.getPosition().getNumCase()] = null;
-
-		/* On déplace le soldat à la nouvelle position */
-		deplaceSoldat(soldat[caseArrivee], new Position(caseArrivee));
 	
-		/* Étant donné que le mouvement n'est pas encore fini, la position n'est pas mise à jour, cependant on sait qu'il sera à la position case_cliquee */
-		changeBrouillard(new Position(caseArrivee), soldat[caseArrivee].getPortee(), 1);
-	}
 	
 	/**
 	 * Méthode permettant d'associer un listener
@@ -421,10 +405,10 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		}
 	}
 	
-	/** Méthode permetant de crée ( ou retirer ) le brouillard autour d'un soldat
+	/** Méthode permetant de créer (ou retirer) le brouillard autour d'un soldat
 	 * 
 	 * @param pos Position du soldat
-	 * @param distance Distance a laquel le soldat peut voir
+	 * @param distance Distance à laquelle le soldat peut voir
 	 * @param inc Si inc = 1 alors on crée du brouillard, sinon si inc = -1, on retire du brouillard
 	 */
 	
@@ -448,20 +432,34 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		}
 	}
 	
-	/** Déplace un soldat sur la carte.
-	 * @param soldat    Soldat à deplacer.
-	 * @param direction Direction du soldat.
-	 * @param x         Offset X d'origine.
-	 * @param y         Offset Y d'origine.
+
+	/**
+	 * Déplace un soldat sur la carte
+	 * @param sold Le soldat à déplacer
+	 * @param nouvelle_position La nouvelle position du soldat
 	 */
-	private void deplaceSoldat(Soldat soldat, Position nouvelle_position)
+	public void deplaceSoldat(Soldat sold, Position nouvelle_position)
 	{
+		/* Le brouillard est changé que lorsque c'est un héros qui joue */
+		boolean changer_brouillard = false;
+		if(sold instanceof Heros)
+			changer_brouillard = true;
+		
+		carteListener.historique(sold.getNom() + " se déplace en " + new Position(caseActionnee) );
+
+		/* On supprime le brouillard du héros ? */
+		if(changer_brouillard)
+			changeBrouillard(sold.getPosition(), sold.getPortee(), -1);		
+		
+		soldat[nouvelle_position.getNumCase()] = soldat[sold.getPosition().getNumCase()];
+		soldat[sold.getPosition().getNumCase()] = null;	
+		
 		Son.joueCourir();
-		soldat.setAJoue(true);
+		sold.setAJoue(true);
 		nbSoldatAJouer--;
 		
-		int sx = soldat.getPosition().x;
-		int sy = soldat.getPosition().y;
+		int sx = sold.getPosition().x;
+		int sy = sold.getPosition().y;
 		int dx = nouvelle_position.x;
 		int dy = nouvelle_position.y;
 		int x = 0;
@@ -486,11 +484,16 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 			direction = Direction.HAUT;
 		}
 
-		soldat.setSeDeplace(true);
-		soldat.setDirection(direction);
+		sold.setSeDeplace(true);
+		sold.setDirection(direction);
 
-		soldat.offsetX = x;
-		soldat.offsetY = y;
+		sold.offsetX = x;
+		sold.offsetY = y;
+		
+		if(changer_brouillard){
+			/* Étant donné que le mouvement n'est pas encore fini, la position n'est pas mise à jour, cependant on sait qu'il sera à la position case_cliquee */
+			changeBrouillard(new Position(nouvelle_position), soldat[nouvelle_position.getNumCase()].getPortee(), 1);
+		}
 	}
 
 
@@ -525,60 +528,80 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	 */
 	public void joueMonstres()
 	{
+		/* On prévient que l'on déplace les monstres, on arrête le tour du joueur */
 		carteListener.deplaceMonstre();
 		tourJoueur = false;
-			
-		for(int i=0; i < monstre.size(); i++) 
-		{
-			Monstre m = monstre.get(i);
-					
+		/* Les héros ciblés sont remis à zéro */
+		herosCibles.clear();
+		
+		for(Monstre m : monstre) 
+		{		
+			/* Si le monstre est bien vivant */
 			if(m != null && !m.estMort() && m.estVisible())
 			{					
 				Position p;
-				/* Repos */
+				/* Si on a peu de PV on fait un repos */
 				if(m.getPourcentageVie() < 10)
 					m.repos(true);
 				/* Combat avec un héros aux alentours */
 				else if((p = herosAlentour(m.getPosition(), m.getPortee())) != null){
-					if(faitCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition())))
-						return;
+					/* On ajoute aux héros ciblés ce héros trouvé */
+					herosCibles.add((Heros)soldat[p.getNumCase()]);
+					faitCombattre(m, soldat[p.getNumCase()], p.distance(m.getPosition()));
 				}
 				/* Sinon déplacement */
-				else {							
-					Position positions[] = new Position[9];
-					Position temp = new Position();
-					
-					int nb_position_trouve = 0;
-					
-					/* On parcourt toutes les positions possibles autour du soldat */
-					for(int x = -1; x <= 1; x++)
-						for(int y = -1; y <= 1; y++)							
-						{					
-							temp.x = m.getPosition().x + x;
-							temp.y = m.getPosition().y + y;
-							
-							/* Si la position est valide (dans la carte)
-							 * Et si il n'y a pas déjà de soldat sur cette position
-							 * Et si la case est praticable (pas d'arbre ou de rocher)
-							 * Le soldat ne pourra pas fais du surplace car soldat[temp.getNumCase()] ne renverra pas null */
-							if (temp.estValide() && soldat[temp.getNumCase()] == null && 
-									tileset.getTile(carte[temp.getNumCase()]).estPraticable())
-							{
-								positions[nb_position_trouve] = new Position(temp.getNumCase());
-								nb_position_trouve++;
+				else {		
+					/* S'il n'y a aucun héros ciblé, on déplace aléatoirement */
+					if(herosCibles.isEmpty()){
+						/* On récupère une position aléatoire valide. 
+						 * Si elle n'est pas null (donc impossible de se déplacer), alors on déplace le soldat vers cette nouvelle position */
+						Position nouvelle_position = trouvePositionAleatoire(m);
+						if(nouvelle_position != null)
+							deplaceSoldat(m, nouvelle_position);
+					}
+					/* Sinon on choisit de se déplacer vers un des héros ciblés le plus proches possibles */
+					else{
+						Heros heros_cible = herosCibles.get(0);
+						int distance_heros_cible = heros_cible.getPosition().distance(m.getPosition());
+						
+						/* On choisit l'un des héros ciblés les plus proches */
+						for(int j = 1; j<herosCibles.size(); j++){
+							Heros heros_cible_temp = herosCibles.get(j);
+							int distance_temp;
+							if((distance_temp = heros_cible_temp.getPosition().distance(m.getPosition())) < distance_heros_cible){
+								heros_cible = heros_cible_temp;
+								distance_heros_cible = distance_temp;
 							}
 						}
-					
-					/* Si on a trouvé des positions valides, on en choisit une au hasard */
-					if(nb_position_trouve > 0)
-					{
-						temp = positions[Aleatoire.nombreAleatoire(0, nb_position_trouve - 1)];
-						soldat[m.getPosition().getNumCase()] = null;
-						soldat[temp.getNumCase()] = m;
-						deplaceSoldat(m, temp);
+							
+						Position nouvelle_position = new Position(m.getPosition());
+						/* On calcule la nouvelle position en fonction de la direction à prendre pour rejoindre le héros ciblé */
+						for(Direction dir : m.getPosition().direction(heros_cible.getPosition())){
+							if(dir == Direction.HAUT)
+								nouvelle_position.setLocation(nouvelle_position.x, nouvelle_position.y-1);
+							else if(dir == Direction.GAUCHE)
+								nouvelle_position.setLocation(nouvelle_position.x-1, nouvelle_position.y);
+							else if(dir == Direction.DROITE)
+								nouvelle_position.setLocation(nouvelle_position.x+1, nouvelle_position.y);
+							else if(dir == Direction.BAS)
+								nouvelle_position.setLocation(nouvelle_position.x, nouvelle_position.y+1);
+						}
+						
+						/* Si la nouvelle position est valable, on s'y déplace */
+						if(nouvelle_position != null && nouvelle_position.estValide() 
+								&& soldat[nouvelle_position.getNumCase()] == null && 
+								tileset.getTile(carte[nouvelle_position.getNumCase()]).estPraticable()
+						){
+							deplaceSoldat(m, nouvelle_position);
+						}
+						/* Sinon on se déplace aléatoirement */
+						else{
+							nouvelle_position = trouvePositionAleatoire(m);
+							if(nouvelle_position != null)
+								deplaceSoldat(m, nouvelle_position);
+						}
 					}
 				}
-		
 			}
 		}
 		
@@ -649,6 +672,45 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		} while(!pos.estValide() || soldat[pos.getNumCase()] != null || !tile.estPraticable());
 
 		return pos;
+	}
+	
+	/**
+	 * Méthode permettant de chercher une position aléatoire valide autour d'un soldat
+	 * @param s Le soldat autour duquel chercher la position
+	 * @return null si toutes les positions autour du soldat ne sont pas valide, une position aléatoire sinon
+	 */
+	public Position trouvePositionAleatoire(Soldat s){
+		Position positions[] = new Position[9];
+		Position temp = new Position();
+		
+		int nb_position_trouve = 0;
+		
+		/* On parcourt toutes les positions possibles autour du soldat */
+		for(int x = -1; x <= 1; x++)
+			for(int y = -1; y <= 1; y++)							
+			{					
+				temp.x = s.getPosition().x + x;
+				temp.y = s.getPosition().y + y;
+				
+				/* Si la position est valide (dans la carte)
+				 * Et si il n'y a pas déjà de soldat sur cette position
+				 * Et si la case est praticable (pas d'arbre ou de rocher)
+				 * On rappelle que le soldat ne pourra pas fais du surplace car soldat[temp.getNumCase()] ne renverra pas null */
+				if (temp.estValide() && soldat[temp.getNumCase()] == null && 
+						tileset.getTile(carte[temp.getNumCase()]).estPraticable())
+				{
+					positions[nb_position_trouve] = new Position(temp.getNumCase());
+					nb_position_trouve++;
+				}
+			}
+		
+		/* Si on a trouvé des positions valides, on en choisit une au hasard */
+		if(nb_position_trouve > 0)
+			temp = positions[Aleatoire.nombreAleatoire(0, nb_position_trouve - 1)];
+		else
+			temp = null;
+		
+		return temp;
 	}
 
 	/** Sauvegarde une carte.
@@ -893,8 +955,8 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	public boolean faitCombattre(Soldat attaquant, Soldat defenseur, int distance){
 		boolean retour = false;
 		
-		/* On commence à faire tourner l'attaquant dans la direction du defenseur */
-		attaquant.setDirection(attaquant.getPosition().direction(defenseur.getPosition()));
+		/* On commence à faire tourner l'attaquant dans la direction du defenseur (juste la première direction, les images ne gérant pas les diagonales */
+		attaquant.setDirection(attaquant.getPosition().direction(defenseur.getPosition()).get(0));
 		
 		int v = attaquant.combat(defenseur, distance);
 		
@@ -1096,7 +1158,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 				&& tileset.getTile(carte[caseArrivee.getNumCase()]).estPraticable() 
 				&& soldat[caseArrivee.getNumCase()] == null
 				&& !soldat[caseActionnee].getAJoue()) {
-			deplaceSoldat(soldat[caseActionnee], caseArrivee.getNumCase());
+			deplaceSoldat(soldat[caseActionnee], caseArrivee);
 			caseActionnee = -1;
 		}
 	}
