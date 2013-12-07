@@ -423,10 +423,11 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 	
 	/** Méthode permetant de crée ( ou retirer ) le brouillard autour d'un soldat
 	 * 
-	 * @param numCase Position du soldat
+	 * @param pos Position du soldat
 	 * @param distance Distance a laquel le soldat peut voir
 	 * @param inc Si inc = 1 alors on crée du brouillard, sinon si inc = -1, on retire du brouillard
 	 */
+	
 	private void changeBrouillard(Position pos, int distance, int inc) {
 		int x = 0, y = 0;
 		
@@ -435,9 +436,14 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		for(y = distance; y >= - distance; y--) {
 			for(x = distance; x >= -distance; x--) {
 				tmp = new Position(pos.x + x ,pos.y + y);
-				
-				if(tmp.estValide())
-					brouillard[tmp.getNumCase()] += inc;
+				if(tmp.estValide()) {
+					if(IConfig.AFFICHAGE_REEL_BROUILLARD) {
+						if(pos.distance(tmp) <= distance)
+							brouillard[tmp.getNumCase()] += inc;
+					}
+					else
+						brouillard[tmp.getNumCase()] += inc;
+				}
 			}
 		}
 	}
@@ -756,7 +762,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 							int dyc = dy + j;
 							int caseVoisine = dyc * IConfig.LARGEUR_CARTE + dxc;
 		
-							if(new Position(dxc, dyc).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && soldat[caseVoisine] == null)
+							if(new Position(caseVoisine).estValide() && tileset.getTile(carte[caseVoisine]).estPraticable() && soldat[caseVoisine] == null)
 								dessineRectangle(g, dxc, dyc, IConfig.SOLDAT_DEPLACEMENT_POSSIBLE);
 						}
 					}
@@ -778,7 +784,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		for(int i = 0; i < soldat.length; i++)
 			if(soldat[i] != null && !soldat[i].estMort())
 				soldat[i].dessineVie(g);
-
+		
 		/* Affichage du brouillard, que l'on affiche avant l'infobulle */
 		dessinerBrouillard(g, brouillard);
 		

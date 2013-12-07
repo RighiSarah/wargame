@@ -52,7 +52,7 @@ public interface IConfig
 	int POSITION_Y = 50;
 
 	/** Nombre de Héros. */
-	int NB_HEROS = 1; 
+	int NB_HEROS = 10; 
 	
 	/** Nombre de Monstres. */
 	int NB_MONSTRES = 15; 
@@ -80,6 +80,9 @@ public interface IConfig
     
     /** Couleur des cases de déplacement possible */
     Color SOLDAT_DEPLACEMENT_POSSIBLE = new Color(255, 0, 0, DEFAULT_ALPHA);
+    
+    /** Couleur des cases qui font partie de la vision d'un soldat */
+    Color SOLDAT_VISION_POSSIBLE = new Color(0, 0, 0, DEFAULT_ALPHA);
     
 	/** Couleurs du message de l'infobulle */
 	Color MESSAGE_POSITIF = new Color(60, 150, 10, 255);
@@ -118,5 +121,11 @@ public interface IConfig
 	 
 	/** Nombre maximum de message dans la file de l'historique */
 	int TAILLE_MAX_HISTORIQUE = 50;
+
+	/** 
+	 * Configure l'affichage réel du brouillard.
+	 * L'affichage Reel étant l'affichage en forme de losange
+	 */
+	boolean AFFICHAGE_REEL_BROUILLARD = false;
     
 }
