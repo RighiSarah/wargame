@@ -13,7 +13,7 @@ public interface IConfig
 	
 	/* Chemins : attention de bien préciser le / de fin */
 	/** Chemin du dossier des musiques */
-	String CHEMIN_MUSIQUE = "musique/"; 
+	String CHEMIN_MUSIQUE = "musique/";
 	/** Chemin du dossier des images */
 	String CHEMIN_IMAGE = "image/";
 	/** Chemin du dossier de sauvegardes */
