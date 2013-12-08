@@ -752,10 +752,8 @@ public class FenetreJeu extends JFrame
 	
 	public static void main(String[] args) throws InvalidMidiDataException, IOException, MidiUnavailableException
 	{
-//		System.out.println(System.getProperty("user.dir"));
-		System.out.println(FenetreJeu.class.getClass().getResource("/image/hobbit.png").toString());
-//		FenetreJeu fenetre = new FenetreJeu();
-//		fenetre.setVisible(true);
+		FenetreJeu fenetre = new FenetreJeu();
+		fenetre.setVisible(true);
 	}	
 }
 

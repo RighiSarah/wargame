@@ -13,11 +13,11 @@ public interface IConfig
 	
 	/* Chemins : attention de bien préciser le / de fin */
 	/** Chemin du dossier des musiques */
-	String CHEMIN_MUSIQUE = "musique/";
+	String CHEMIN_MUSIQUE = FenetreJeu.class.getClass().getResource("/musique/").toString();
 	/** Chemin du dossier des images */
-	String CHEMIN_IMAGE = "image/";
+	String CHEMIN_IMAGE = FenetreJeu.class.getClass().getResource("/image/").toString();
 	/** Chemin du dossier de sauvegardes */
-	String CHEMIN_SAUVEGARDE = "sauvegarde/";
+	String CHEMIN_SAUVEGARDE = FenetreJeu.class.getClass().getResource("/sauvegarde/").toString();
 	
 	/** Nombre de sauvegardes possibles. */
 	int NB_SAUVEGARDES = 10;
