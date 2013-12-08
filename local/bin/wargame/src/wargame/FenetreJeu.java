@@ -332,6 +332,10 @@ public class FenetreJeu extends JFrame
 	    sauvegarder.addMenuListener(new MenuListener() {
 			public void menuSelected(MenuEvent e) 
 			{
+				File dir = new File(IConfig.CHEMIN_SAUVEGARDE);
+				if(!dir.exists())
+					dir.mkdir();
+					
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
 					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");

@@ -17,7 +17,7 @@ public interface IConfig
 	/** Chemin du dossier des images */
 	String CHEMIN_IMAGE = "/image/";
 	/** Chemin du dossier de sauvegardes */
-	String CHEMIN_SAUVEGARDE = "sauvegarde/"; /* Non inclu dans le jar */
+	String CHEMIN_SAUVEGARDE = "wargame_sauvegarde/"; /* Non inclu dans le jar */
 	
 	/** Nombre de sauvegardes possibles. */
 	int NB_SAUVEGARDES = 10;
