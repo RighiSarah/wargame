@@ -778,6 +778,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		try {
 			FileInputStream fichier = new FileInputStream(chemin);
 			ObjectInputStream ois = new ObjectInputStream(fichier);
+			
 
 			tour = (int)ois.read();
 			nbHerosRestant = (int)ois.read();

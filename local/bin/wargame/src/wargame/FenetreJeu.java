@@ -228,6 +228,7 @@ public class FenetreJeu extends JFrame
 		    	public void actionPerformed(ActionEvent arg0) 
 		    	{
 					carte.charge(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + NUM + ".ser");
+
 				    menu.add(Box.createHorizontalGlue()); 
 				    menu.add(finTour);
 				    setJMenuBar(menu);
@@ -334,9 +335,9 @@ public class FenetreJeu extends JFrame
 				for(int i = 0; i < IConfig.NB_SAUVEGARDES; i++)
 				{
 					File f = new File(IConfig.CHEMIN_SAUVEGARDE + IConfig.NOM_SAUVEGARDE + i + ".ser");
-		    	
+					
 					if(f.exists())
-						sauvegarde[i].setText(getDate(f));		    
+						sauvegarde[i].setText(getDate(f));					
 				}
 			}
 
