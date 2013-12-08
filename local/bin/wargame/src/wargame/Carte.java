@@ -110,7 +110,7 @@ public class Carte extends JPanel implements ICarte, ActionListener, Serializabl
 		brouillard = new char [IConfig.LARGEUR_CARTE * IConfig.LARGEUR_CARTE];
 		
 		/* Image de présentation, avant donc que la carte ne soit générée */
-		imagePresentation = new JLabel(new ImageIcon( IConfig.CHEMIN_IMAGE + "image_presentation2.png"));
+		imagePresentation = new JLabel(new ImageIcon( this.getClass().getResource(IConfig.CHEMIN_IMAGE + "image_presentation2.png")));
 		this.add(imagePresentation);
 
 		/* Capture d'évènements de la souris. */

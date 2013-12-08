@@ -1,7 +1,6 @@
 package wargame;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -27,18 +26,18 @@ public class Monstre extends Soldat
 		{
 			case GOBELIN:				
 				if(imageGobelin == null) 
-					imageGobelin = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_GOBELIN));
+					imageGobelin = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_GOBELIN));
 				image = imageGobelin;
 				break;
 			case ORC:				
 				if(imageOrc == null) 
-					imageOrc = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_ORC));
+					imageOrc = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_ORC));
 				image = imageOrc;
 				break;
 				
 			case SQUELETTE:				
 				if(imageSquelette == null) 
-					imageSquelette = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_SQUELETTE));
+					imageSquelette = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_SQUELETTE));
 				image = imageSquelette;
 				break;
 			default: break;

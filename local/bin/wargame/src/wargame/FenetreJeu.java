@@ -173,7 +173,7 @@ public class FenetreJeu extends JFrame
 	{
 		/* Création du titre et de l'icone */
 		this.setTitle("Wargame");
-        this.setIconImage(new ImageIcon(IConfig.CHEMIN_IMAGE + "icone.png").getImage());
+        this.setIconImage(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "icone.png")).getImage());
         
 		/* Création d'une carte vide. */
 		carte = new Carte();
@@ -262,7 +262,22 @@ public class FenetreJeu extends JFrame
 	    nouveau.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{ 
+				if(carte.isGeneree()){
+					sonArriere.stopSonArriere();
+					try {
+						sonArriere.chargeSonArriere();
+					} catch (InvalidMidiDataException e1) {
+						e1.printStackTrace();
+					}
+					try {
+						sonArriere.joueSonArriere();
+					} catch (MidiUnavailableException e1) {
+						e1.printStackTrace();
+					}
+				}
+				
 				carte.generer();	
+				
 				historique.reset();
 				sauvegarder.setEnabled(true);
 				
@@ -368,25 +383,25 @@ public class FenetreJeu extends JFrame
 	    sousMenu = new JPanel();
 	    sousMenu.setPreferredSize(new Dimension(carte.getWidth(), 35));
 	    
-	    boutonCharger = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "load.png"));
+	    boutonCharger = new JButton(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "load.png")));
 	    boutonCharger.setToolTipText("Charger"); 
 	    
-		boutonSauvegarder = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "save.png"));
+		boutonSauvegarder = new JButton(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "save.png")));
 		boutonSauvegarder.setToolTipText("Sauvegarder"); 
 		
-		navigerHistoriquePremier = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "first.png"));
+		navigerHistoriquePremier = new JButton(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "first.png")));
 		navigerHistoriquePremier.setToolTipText("Revenir au premier message de l'historique"); 
 		
-		navigerHistoriquePrecedent = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "previous.png"));
+		navigerHistoriquePrecedent = new JButton(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "previous.png")));
 		navigerHistoriquePrecedent.setToolTipText("Message précédent de l'historique"); 
 		
-		navigerHistoriqueSuivant = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "next.png"));
+		navigerHistoriqueSuivant = new JButton(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "next.png")));
 		navigerHistoriqueSuivant.setToolTipText("Message suivant de l'historique"); 
 		
-		navigerHistoriqueDernier = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "last.png"));
+		navigerHistoriqueDernier = new JButton(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "last.png")));
 		navigerHistoriqueDernier.setToolTipText("Dernier message de l'historique"); 
 		
-		exit = new JButton(new ImageIcon(IConfig.CHEMIN_IMAGE + "exit.png"));
+		exit = new JButton(new ImageIcon(this.getClass().getResource(IConfig.CHEMIN_IMAGE + "exit.png")));
 		exit.setToolTipText("Quitter le jeu"); 
 		 
 		/* Pour éviter les répétitions */

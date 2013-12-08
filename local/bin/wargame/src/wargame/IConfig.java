@@ -13,11 +13,11 @@ public interface IConfig
 	
 	/* Chemins : attention de bien préciser le / de fin */
 	/** Chemin du dossier des musiques */
-	String CHEMIN_MUSIQUE = FenetreJeu.class.getClass().getResource("/musique/").toString();
+	String CHEMIN_MUSIQUE = "/musique/";
 	/** Chemin du dossier des images */
-	String CHEMIN_IMAGE = FenetreJeu.class.getClass().getResource("/image/").toString();
+	String CHEMIN_IMAGE = "/image/";
 	/** Chemin du dossier de sauvegardes */
-	String CHEMIN_SAUVEGARDE = FenetreJeu.class.getClass().getResource("/sauvegarde/").toString();
+	String CHEMIN_SAUVEGARDE = "/sauvegarde/";
 	
 	/** Nombre de sauvegardes possibles. */
 	int NB_SAUVEGARDES = 10;
@@ -120,7 +120,7 @@ public interface IConfig
 	int DELAI_TOUCHE = 100;
 	 
 	/** Nombre maximum de message dans la file de l'historique */
-	int TAILLE_MAX_HISTORIQUE = 50;
+	int TAILLE_MAX_HISTORIQUE = 500;
 
 	/** Configure l'affichage réel du brouillard (affichage en forme de losange) */
 	boolean AFFICHAGE_REEL_BROUILLARD = false;

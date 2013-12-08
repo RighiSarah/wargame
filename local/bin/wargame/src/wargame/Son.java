@@ -2,10 +2,7 @@ package wargame;
 
 import java.applet.Applet;
 import java.applet.AudioClip;
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaEventListener;
@@ -116,7 +113,7 @@ public final class Son {
 		int num = 1 + (int)(Math.random() * (IConfig.NOMBRE_MUSIQUE_ARRIERE_PLAN));
 		try {
 			/* On charge une autre séquence */
-			sequence = MidiSystem.getSequence(new File(IConfig.CHEMIN_MUSIQUE + "arriere_plan" + num + ".mid"));
+			sequence = MidiSystem.getSequence(this.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "arriere_plan" + num + ".mid"));
 	
 			try {
 				sequencer.setSequence(sequence);
@@ -133,12 +130,8 @@ public final class Son {
 		stopSonArriere();
 		if(musiqueEvenement != null)
 			musiqueEvenement.stop();
-		
-		try {
-			musiqueEvenement = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "perdre.wav"));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+
+		musiqueEvenement = Applet.newAudioClip(this.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "perdre.wav"));
 
 		musiqueEvenement.play();
 	}
@@ -149,11 +142,7 @@ public final class Son {
 		if(musiqueEvenement != null)
 			musiqueEvenement.stop();
 		
-		try {
-			musiqueEvenement = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "gagner.wav"));
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
+		musiqueEvenement = Applet.newAudioClip(this.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "gagner.wav"));
 
 		musiqueEvenement.play();
 	}
@@ -173,11 +162,7 @@ public final class Son {
 		
 		/* Si le bruit n'a pas été déjà chargé, alors on le charge */
 		if(bruitArc == null)
-			try {
-				bruitArc = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "arc.wav"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			bruitArc = Applet.newAudioClip(Son.class.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "arc.wav"));
 
 		bruitArc.play();
 	}
@@ -190,11 +175,7 @@ public final class Son {
 			return;
 		
 		if(bruitEpee == null)
-			try {
-				bruitEpee = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "epee.wav"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			bruitEpee = Applet.newAudioClip(Son.class.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "epee.wav"));
 
 		bruitEpee.play();
 	}	
@@ -207,11 +188,7 @@ public final class Son {
 			return;
 		
 		if(bruitCourir == null)
-			try {
-				bruitCourir = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "courir.wav"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			bruitCourir = Applet.newAudioClip(Son.class.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "courir.wav"));
 
 		bruitCourir.play();
 	}
@@ -224,11 +201,7 @@ public final class Son {
 			return;
 		
 		if(bruitMarcher == null)
-			try {
-				bruitMarcher = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "marcher.wav"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			bruitMarcher = Applet.newAudioClip(Son.class.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "marcher.wav"));
 
 		bruitMarcher.play();
 	}
@@ -241,11 +214,7 @@ public final class Son {
 			return;
 		
 		if(bruitMortHeros == null)
-			try {
-				bruitMortHeros = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort_heros.wav"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			bruitMortHeros = Applet.newAudioClip(Son.class.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "mort_heros.wav"));
 
 		bruitMortHeros.play();
 	}
@@ -258,11 +227,7 @@ public final class Son {
 			return;
 		
 		if(bruitMortMonstre == null)
-			try {
-				bruitMortMonstre = Applet.newAudioClip(new URL("file:" + IConfig.CHEMIN_MUSIQUE + "mort_monstre.wav"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			bruitMortMonstre = Applet.newAudioClip(Son.class.getClass().getResource(IConfig.CHEMIN_MUSIQUE + "mort_monstre.wav"));
 
 		bruitMortMonstre.play();
 	}

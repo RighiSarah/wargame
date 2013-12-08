@@ -3,8 +3,8 @@ package wargame;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
 
 /** Classe de chargement de Tileset. */
@@ -28,9 +28,8 @@ public class Tileset
 	 */
 	public Tileset(String filename) throws IOException
 	{
-		File f = new File(IConfig.CHEMIN_IMAGE + filename);	
-		image = ImageIO.read(f); /* IOException ? */
-		
+		image = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + filename));
+
 		LARGEUR = image.getWidth() / IConfig.NB_PIX_CASE;
 		HAUTEUR = image.getHeight() / IConfig.NB_PIX_CASE;
 		

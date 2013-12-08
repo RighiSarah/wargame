@@ -2,7 +2,6 @@ package wargame;
 
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -27,27 +26,27 @@ public class Heros extends Soldat
 		{
 			case HUMAIN:				
 				if(imageHumain == null) 
-					imageHumain = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_HUMAIN));
+					imageHumain = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_HUMAIN));
 				
 				image = imageHumain;
 				break;
 			case ELFE:				
 				if(imageElfe == null) 
-					imageElfe = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_ELFE));
+					imageElfe = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_ELFE));
 				
 				image = imageElfe;
 				break;
 				
 			case SOLDAT:				
 				if(imageSoldat == null) 
-					imageSoldat = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_SOLDAT));
+					imageSoldat = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_SOLDAT));
 				
 				image = imageSoldat;
 				break;
 				
 			case HOBBIT:				
 				if(imageHobbit == null) 
-					imageHobbit = ImageIO.read(new File(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_HOBBIT));
+					imageHobbit = ImageIO.read(this.getClass().getResource(IConfig.CHEMIN_IMAGE + IConfig.IMAGE_HOBBIT));
 				
 				image = imageHobbit;
 				break;
