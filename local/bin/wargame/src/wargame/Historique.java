@@ -10,9 +10,15 @@ import javax.swing.JLabel;
 public class Historique extends JLabel implements IConfig
 {
 	private static final long serialVersionUID = 7045910608318694418L;
+
+	/** Liste des messages de l'historique */
 	private LinkedList<HistoriqueMessage> fileHistorique;
+	/** Nombre de messages dans la liste */
 	private int nbMessage;
+	/** Numéro du message actuellement affiché */
 	private int numMessage;
+	/** Numéro du message d'historique (ou numéro de l'action du joueur) */
+	private int numHistorique;
 	
 	/**
 	 * Constructeur par défaut
@@ -20,7 +26,7 @@ public class Historique extends JLabel implements IConfig
 	public Historique(){
 		super();
 		fileHistorique = new LinkedList<HistoriqueMessage>();
-		nbMessage = 0;
+		nbMessage = numMessage = numHistorique = 0;
 	}
 	
 	/**
@@ -31,7 +37,7 @@ public class Historique extends JLabel implements IConfig
 	public Historique(String texte, int alignement_horizontal){
 		super(texte, alignement_horizontal);
 		fileHistorique = new LinkedList<HistoriqueMessage>();
-		nbMessage = 0;
+		nbMessage = numMessage = numHistorique = 0;
 	}
 
 
@@ -45,7 +51,7 @@ public class Historique extends JLabel implements IConfig
 		/** Constructeur par défaut, avec comme paramètre le texte du message */
 		HistoriqueMessage(String msg) {
 			this.message = msg;
-			this.numero = nbMessage;
+			this.numero = numHistorique;
 		}	
 		
 		/**
@@ -68,6 +74,8 @@ public class Historique extends JLabel implements IConfig
 		
 		HistoriqueMessage m = new HistoriqueMessage(message);
 		numMessage = nbMessage++;
+		numHistorique++;
+		
 		fileHistorique.add(m);
 		this.setText(m.toString());
 	}
@@ -176,7 +184,7 @@ public class Historique extends JLabel implements IConfig
 	 * Méthode permettant de remettre à zéro l'historique
 	 */
 	public void reset(){
-		nbMessage = numMessage = 0;
+		nbMessage = numMessage = numHistorique = 0;
 		fileHistorique.clear();
 		this.setText(""); 
 	}

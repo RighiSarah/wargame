@@ -120,7 +120,7 @@ public interface IConfig
 	int DELAI_TOUCHE = 100;
 	 
 	/** Nombre maximum de message dans la file de l'historique */
-	int TAILLE_MAX_HISTORIQUE = 500;
+	int TAILLE_MAX_HISTORIQUE = 50;
 
 	/** Configure l'affichage réel du brouillard (affichage en forme de losange) */
 	boolean AFFICHAGE_REEL_BROUILLARD = false;
